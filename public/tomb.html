@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TOMBOLA</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+
+    <style type="text/css">
+        #Button1 {
+            width: 101px;
+        }
+
+        #regolamento {
+
+            visibility: hidden;
+        }
+
+        #btnvia {
+            width: 101px;
+            visibility: hidden;
+        }
+
+        #btnestrai {
+            width: 101px;
+            visibility: hidden;
+        }
+
+        #dashboard {
+            visibility: hidden;
+        }
+
+        #person {
+            visibility: hidden;
+            font-size: 32x;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #messaggio_ {
+
+            font-size: 48px;
+            color: blue;
+            font-weight: bold;
+            visibility: hidden;
+        }
+
+        #estratta {
+            visibility: hidden;
+
+            font-size: 40px;
+            color: purple;
+            font-weight: bold;
+            border: 2px solid #202020;
+            padding: 20px;
+
+            width: fit-content
+        }
+
+        #container {
+
+            visibility: hidden;
+
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            padding: 10px;
+        }
+
+        #container>div {
+
+            padding: 20px;
+
+            text-align: center;
+        }
+
+        .nocontainerdiv {
+            flex-grow: 1;
+            width: 33%;
+            height: 100px;
+        }
+
+        table {
+            border: 2px solid gray;
+
+            border-collapse: collapse;
+            margin: 10px
+        }
+
+
+        td {
+
+            color: #303030;
+            font-weight: bolder;
+            font-size: 1.5em;
+            width: 1.8em;
+            height: 1.8em;
+            border: 3px solid black;
+            text-align: center;
+            vertical-align: middle;
+
+        }
+
+        .tbl td {
+
+color: #303030;
+font-weight: normal;
+font-size: 1em;
+
+height: 1em;
+border: 1px solid green;
+text-align: left;
+vertical-align: middle;
+
+}
+
+        .back0 {
+            background: hsl(0, 85%, 80%);
+        }
+
+        .back1 {
+            background: hsl(60, 75%, 85%);
+        }
+
+        .back2 {
+            background: hsl(30, 75%, 85%);
+        }
+
+        .back3 {
+            background: hsl(180, 75%, 85%)
+        }
+
+        .back4 {
+            background: hsl(240, 75%, 85%);
+        }
+
+        .back5 {
+            background: hsl(120, 75%, 85%);
+        }
+
+        .back10 {
+            background: hsla(00, 75%, 55%, 0.8);
+        }
+
+        [data-href] {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="person">
+        <p id="mionumero">0</p>
+        <div id="nickn"></div>
+
+    </div>
+
+
+    <div id="dashboard">
+
+        <div id="regolamento">
+
+            <label for="mincartelle">Cartelle minimo</label> <input name="mincartelle" id="minc" type="number" min="0"
+                max="4" value="1" />
+            <label for="maxcartelle">Cartelle massimo</label> <input name="maxcartelle" type="number" id="maxc" min="1"
+                max="4" value="2" />
+
+            <label for="prezzocartelle">Cartelle prezzo</label> <input name="prezzocartelle" type="number" id="cpre"
+                min="1" max="10" value="3" />
+
+            <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto" value="ON" />
+
+            <button onclick="InviaRegolamento()">Invia Regolamento</button>
+
+
+        </div>
+        <div>
+            <ul id="lista">
+
+            </ul>
+        </div>
+        <div id="buttons">
+
+            <button id="tabella" onclick="chiedi_tabella()">Tabella</button>
+            <button id="btnvia" onclick="via()">Via!</button>
+            <button id="btnestrai" onclick="estraiNumero()">Estrai Numero</button>
+
+        </div>
+    </div>
+
+    <div id="messaggio_">
+
+        Ciao
+
+    </div>
+    <div id="estratta">
+
+        000
+
+    </div>
+
+    <div id="tabhtml">
+
+
+    </div>
+
+    <div id="container"></div>
+
+
+
+    <script>
+
+        var socket;
+
+        var myNumber = 0;
+        var status = -2
+
+        var mynick = "";
+        var colori = []
+        var mieicolori = []
+
+        var amministratore = 0
+
+        var messaggi = ["l'ambo", "il terno", "la quaterna", "la cinquina", " la tombola", "per il tombolino"]
+
+        var regolam = {}
+        var comprate = 0
+        var estratte = []
+        var pallina
+        var mieCartelle = []
+      //  var fagioli = []
+       var fagioli = new Array(36*27).fill(0);
+        var rbruc = new Array(20).fill(0)
+        var tbruc = new Array(12).fill(0)
+
+        let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
+
+
+        function InviaRegolamento() {
+
+            var checkedValue = document.getElementById("cauto").checked;
+            msg = { minC: document.getElementById("minc").value, maxC: document.getElementById("maxc").value, prezzo: document.getElementById("cpre").value, auto: checkedValue }
+
+            socket.emit("regolamento", msg)
+            document.getElementById("regolamento").style.visibility = "hidden"
+
+        }
+
+        function init() {
+
+            $(document).attr('title', mynick);
+
+            document.getElementById("person").style.visibility = "visible"
+            document.getElementById("messaggio_").style.visibility = "visible"
+            document.getElementById("estratta").style.visibility = "visible"
+            document.getElementById("container").style.visibility = "visible"
+            document.getElementById("nickn").innerHTML = mynick
+
+        }
+
+        function connetti() {
+
+            var strnick = new String($("#txtnick").val());
+            var regexp = /[a-zA-Z0-9]+/gi;
+
+
+            socket = io.connect();
+            socket.nickname = strnick.match(regexp);
+
+            socket.on('start', function (msg) {
+
+           
+                status = msg
+                messaggia("Si va per " + messaggi[status], 0)
+                if (amministratore == 1) {
+                    //  document.getElementById("btnvia").style.visibility = "visible"
+                    document.getElementById("btnestrai").style.visibility = "visible"
+                    document.getElementById("btnvia").innerHTML = "Via " + status
+
+                    document.getElementById("btnvia").style.visibility = "hidden"
+
+                }
+            });
+            socket.on('numero', function (msg) {
+
+                $("#mionumero").html(myNumber);
+                socket.emit('join', socket.nickname);
+                $("#cmdConnetti").hide();
+                init()
+
+
+            });
+
+            socket.on('regolamento', function (msg) {
+
+                status = -1
+
+                regolam = msg
+
+                    // mostraregolamento
+                //   mostraCartelle()
+
+            });
+
+            socket.on('amministratore', function (msg) {
+
+
+                amministratore = 1
+                document.getElementById("regolamento").style.visibility = "visible"
+
+                if (status >= 0) return
+                document.getElementById("dashboard").style.visibility = "visible"
+                document.getElementById("btnvia").style.visibility = "visible"
+
+            });
+
+            socket.on('andato', function () { });
+            socket.on('lista', function (msg) {
+                var utenti = msg.split("-");
+                $("#lista").empty();
+                for (var i = 0; i < utenti.length - 1; i++)
+                    $("#lista").append("<li>" + utenti[i] + "</li>");
+
+
+
+            });
+            socket.on('cartelle', function (msg) {
+               
+                colori = msg.colori
+                if (comprate < regolam.maxC) mostraCartelle(msg.cartelle, colori)
+
+
+            });
+
+            socket.on('combinaz', function (msg) {
+
+                messaggia(msg.nick + " ha fatto " + msg.comb + "!! ", 1)
+
+                document.getElementById("btnestrai").style.visibility = "hidden"
+                document.getElementById("btnvia").style.visibility = "visible"
+
+            });
+
+
+            socket.on('estratta', function (msg) {
+
+                messaggia("", 0)
+                pallina = msg
+                estratte.push(pallina)
+                document.getElementById("estratta").innerHTML = pallina.toString()
+
+                let comb = status * 1 + 2
+
+
+                /*  switch (status * 1) {
+ 
+                     case 0: comb = 2; break;//ambo
+                     case 1: comb = 3; break;
+                     case 2: comb = 4; break;
+                     case 3: comb = 5; break;
+                     case 4: comb = 6; break;//tombola
+                     case 5: comb = 7; break;//tombolino
+ 
+                 } */
+
+                if (regolam.auto) {
+                    mettifagiolo(pallina)
+                    if (verifica(comb)) socket.emit("chiama", combinaz[comb])
+
+
+                }
+
+
+
+
+
+
+
+            });
+
+
+            socket.on('comprate', function (msg) {
+
+
+                comprate = Math.floor(msg.cartelle.length / 27)
+                mieicolori = msg.colori
+                mieCartelle = [...msg.cartelle]
+                fagioli = new Array(36*27).fill(0);
+
+                if (comprate >= regolam.maxC) mostraCartelle(msg.cartelle, mieicolori)
+
+            });
+
+            socket.on('tabhtml', function (msg) {
+
+document.getElementById("tabhtml").innerHTML=msg
+
+});
+
+
+
+            mynick = socket.nickname;
+        }
+
+
+        function mostraCartelle(cartelle, colori_) {
+
+            if (status < -1) return
+
+            document.getElementById("container").innerHTML = ""
+
+
+            let rimaste = cartelle.length / 27
+
+            let cart = []
+
+            for (let c = 0; c < rimaste; c++)
+
+                cart.push(cartelle.slice(c * 27, c * 27 + 27))
+
+
+
+            cart.forEach((c, idx) => { creaDiv(toHTML(c, colori_[idx], idx, fagioli.slice(27 * idx, 27 * idx + 27), rbruc.slice(3 * idx, 3 * idx + 3)), "container", status, idx) })
+
+        }
+
+
+        function toHTML(tabella, n, idx, fag, bruc) {
+
+     
+            let strh = "<table>"
+
+            for (let r = 0; r < 3; r++) {
+                if (bruc[r] == 10)
+                    strh += "<tr  style='cursor: pointer;' onclick=" + "check(" + r + "," + idx + ")>"; else
+                    strh += "<tr  style='border-color:#c00000;cursor: pointer; '  >";
+
+                for (let c = 0; c < 9; c++) {
+
+                    let co = ""
+                    if (tabella[r * 9 + c] != 0) co = tabella[r * 9 + c]
+                    if (fag) {
+                        //  console.log(fag[r * 9 + c])
+                        if (fag[r * 9 + c] == 0) strh += "<td class='" + "back" + n + "' onclick=" + "'check(" + (r * 9 + c) + "," + idx + ")'>" + co + "</td>";
+                        else strh += "<td class='" + "back10' >" + co + "</td>"
+                    }
+
+                }
+                strh += "</tr>"
+            }
+            strh += "</table>"
+
+            return strh
+        }
+
+
+
+        function creaDiv(html, parent, status_, num) {
+
+            let nodo = document.createElement("div")
+
+            nodo.innerHTML = html
+
+
+            if (status_ * 1 == -1 && comprate < 2) {
+
+                let nodobutt = document.createElement("div")
+                nodobutt.innerHTML = "<button onclick='compra(" + num + ")'" + ">Compra</button>"
+                nodo.appendChild(nodobutt)
+
+            }
+            document.getElementById(parent).appendChild(nodo)
+        }
+
+        function compra(num) {
+
+            socket.emit("compra", { mynumber: myNumber, cartella: num })
+        }
+
+        function via() {
+
+            if (status < -1) return
+            socket.emit("via", status)
+            //  document.getElementById("btnvia").remove()
+            document.getElementById("btnestrai").style.visibility = "visible"
+
+        }
+
+        function estraiNumero() {
+
+            socket.emit("estrai", {})
+
+        }
+
+        function mettifagiolo(pall) {
+
+
+            mieCartelle.forEach((c, idx) => {
+
+                if (estratti.indexOf(c) > -1) fagioli[idx] = 1
+            })
+
+            mostraCartelle(mieCartelle, mieicolori)
+
+        }
+
+        function verifica(comb) {
+
+
+            let righe = new Array(Math.floor(mieCartelle.length / 27) * 3).fill(0);
+
+            let fag = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            mieCartelle.forEach((c, idx) => {
+
+                let riga = Math.floor((idx % 27) / 9)
+                let cart = Math.floor((idx / 27))
+                riga += 3 * cart
+
+
+                if (c > 0 && fagioli[idx] == 1) {
+                    righe[riga]++
+                    fag[cart]++
+                }
+
+
+            })
+
+
+            let verif = 0
+
+            if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && rbruc[r] == 0) { verif = 1; rbruc[r] = 1;  };
+            if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && tbruc[r] == 0) { verif = 1; tbruc[r] = 1; }
+
+
+
+            return verif
+
+        }
+
+        function messaggia(mess, append) {
+            if (append)
+                document.getElementById("messaggio_").innerHTML += mess;
+            else
+                document.getElementById("messaggio_").innerHTML = mess;
+        }
+
+
+        function check(riga_, ncart_) {
+
+
+
+            let comb = status * 1 + 2
+
+            if (estratte.indexOf(mieCartelle[27 * ncart_ + riga_]) > -1) {
+                fagioli[27 * ncart_ + riga_] = 1
+                mostraCartelle(mieCartelle, mieicolori)
+                if (verifica(comb)) socket.emit("chiama", combinaz[comb])
+
+            }
+
+        }
+        function chiedi_tabella() {
+
+            socket.emit("tabella", {})
+
+
+}
+    </script>
+
+
+
+    <input id="cmdConnetti" type="button" value="Connetti" onclick="connetti()" />
+    <input id="txtnick" type="text" value="nick" pattern="[a-zA-Z0-9]+" />
+
+</body>
+
+</html>

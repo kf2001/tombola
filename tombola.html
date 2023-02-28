@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tombola</title>
+
+    <style>
+
+
+#container {
+
+    display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px;
+}
+
+#container>div {
+
+    padding: 20px;
+ 
+  text-align: center;
+}
+
+.nocontainerdiv {
+  flex-grow: 1;
+  width: 33%;
+  height: 100px;
+}
+
+        table {
+            border: 2px solid gray;
+
+            border-collapse: collapse;
+            margin: 10px
+        }
+
+
+        td {
+
+
+            
+            color: #202020;
+          
+            font-weight: bolder;
+            font-size: 1.5em;
+            width: 1.8em;
+            height: 1.8em;
+            border: 2px solid black;
+            text-align: center;
+            vertical-align: middle;
+
+        }
+
+        .back0  {
+
+            background: hsl(0, 50%, 70%);
+
+        }
+
+        .back1 {
+
+            background: hsl(36, 50%, 70%);
+
+        }
+
+        .back2 {
+
+            background:  hsl(72, 50%, 70%);
+
+        }
+
+        .back3  {
+
+            background: hsl(108, 50%, 70%)
+
+        }
+
+        .back4  {
+
+            background:  hsl(144, 50%, 70%);
+
+        }
+
+        .back5  {
+
+            background:  hsl(180, 50%, 70%)
+            
+            ;
+
+        }
+
+        .back6  {
+
+            background:  hsl(216, 50%, 70%);
+
+        }
+
+        .back7 {
+
+            background:  hsl(252, 50%, 70%);
+
+        }
+
+        .back8  {
+
+            background-color:  hsl(288, 50%, 70%);
+
+        }
+
+        .back9  {
+
+            background-color:  hsl(324, 50%, 70%);
+
+        }
+
+       
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <button onclick="crea()">Crea!</button>
+    <script src="./tombola.js"></script>
+</body>
+
+</html>
