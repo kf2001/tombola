@@ -2,10 +2,10 @@
   "name": "tombola",
   "version": "1.0.0",
   "description": "gioco della tombola con Web Socket",
-  "main": "node tomb_server.js",
+  "main": "tomb_server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tomb_server.js"
+    "start": "node tomb_server.js"
   },
   "author": "",
   "license": "ISC",
