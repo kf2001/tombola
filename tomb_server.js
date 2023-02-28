@@ -177,9 +177,9 @@ function comprataCartella(numCartella, numGioc, sck) {
 
 function casuale(n) { return Math.floor(n * Math.random()) }
 
+const port = process.env.PORT || 8040;
 
-var portnumber = 8040;
 
-httpServer.listen(portnumber);
+httpServer.listen(port);
 
-console.log("Server in ascolto alla porta " + portnumber);
+console.log("Server in ascolto alla porta " + port);
