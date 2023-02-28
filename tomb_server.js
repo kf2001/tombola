@@ -11,8 +11,6 @@ var amministratore = 0
 var allClients = [];
 var nicks = "";
 
-var sequenza=[50,2]
-
 let cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
 let colori = []
