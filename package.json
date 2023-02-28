@@ -4,7 +4,8 @@
   "description": "gioco della tombola con Web Socket",
   "main": "tomb_server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tomb_server.js"
   },
   "author": "",
   "license": "ISC",
