@@ -8,8 +8,26 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
     <style type="text/css">
-        #btnestrai {
-            width: 101px;
+        input {
+
+            font-size: 2em;
+            margin: .2em;
+        }
+
+        label {
+
+            font-size: 2em;
+            margin: .2em;
+        }
+
+
+        #login {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            margin: -50px 0 0 -50px;
 
         }
 
@@ -18,7 +36,7 @@
 
         #messaggio_ {
 
-            font-size: 48px;
+            font-size: 2em;
             color: blue;
             font-weight: bold;
 
@@ -27,34 +45,28 @@
         #estratta {
 
 
-            font-size: 40px;
+            font-size: 2.2em;
             color: purple;
             font-weight: bold;
             border: 2px solid #202020;
-            padding: 20px;
+            padding: 0.20em;
 
             width: fit-content
         }
 
-        #container {
+        #tcontainer,  #mcontainer {
 
             display: grid;
             grid-template-columns: auto auto auto auto;
             padding: 10px;
         }
 
-        #container>div {
+        #tcontainer>div,#mcontainer>div  {
 
             padding: 20px;
-
             text-align: center;
         }
 
-        .nocontainerdiv {
-            flex-grow: 1;
-            width: 33%;
-            height: 100px;
-        }
 
         table {
             border: 2px solid gray;
@@ -128,11 +140,10 @@
 <body>
     <div id="app">
 
-        <div if="loggato>">
+        <div v-if="loggato">
 
 
             <div v-if="amministratore" id="dashboard">
-
 
 
                 <div v-if="status==-2" id="regolamento">
@@ -148,19 +159,25 @@
                     <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
                         value="ON" />
 
-                    <button onclick="InviaRegolamento()">Invia Regolamento</button>
+                    <el-button type="primary" onclick="InviaRegolamento()">Invia Regolamento</el-button>
+                    <!-- <button onclick="InviaRegolamento()">Invia Regolamento</button> -->
 
 
                 </div>
 
                 <div id="buttons">
 
-                    <div v-if="estrai"> <button id="btnestrai" onclick="estraiNumero()">Estrai Numero</button>
+                    <div v-if="estrai">
+
+                        <el-button type="danger" onclick="estraiNumero()">Estrai Numero</el-button>
+                        <!-- <button onclick="estraiNumero()">Estrai Numero</button> -->
                     </div>
-                    <div v-if="!estrai"> <button id="btnvia" onclick="via()">Via!</button>
+                    <div v-if="!estrai">
+                        <el-button type="success" onclick="via()">Via!</el-button>
+                        <!-- <button id="btnvia" onclick="">Via!</button> -->
                     </div>
 
-                    <button id="tabella" onclick="chiedi_tabella()">Tabella</button>
+                    <!-- <button id="tabella" onclick="chiedi_tabella()">Tabella</button> -->
 
 
                 </div>
@@ -182,14 +199,22 @@
 
             </div>
 
-            <div id="container"></div>
+            <div id="titcompra" v-if="!finecompera">
+
+               Compra cartelle
+            </div>
+
+            <div id="mcontainer"></div>
+            <div id="tcontainer"></div>
 
         </div>
 
         <div v-if="!loggato" id="login">
 
-            <input id="cmdConnetti" type="button" value="Connetti" onclick="connetti()" />
-            <input id="txtnick" type="text" value="nick" pattern="[a-zA-Z0-9]+" />
+
+
+            <input id="txtnick" type="text" value="nick" pattern="[a-zA-Z0-9]+" /><br />
+            <el-button type="primary" onclick="connetti()">Connetti</el-button>
 
         </div>
 
@@ -205,7 +230,7 @@
         var socket;
 
         var myNumber = 0;
-        //    var status = -2
+        var status = -2
 
         var mynick = "";
         var colori = []
@@ -255,11 +280,12 @@
 
             socket.on('start', function (msg) {
 
-
+               app.finecompera=true
                 status = msg
                 app.status = msg
                 messaggia("Si va per " + messaggi[status], 0)
                 app.estrai = true
+               // socket.emit("miecartelle", {})
 
             });
             socket.on('numero', function (msg) {
@@ -279,6 +305,8 @@
                 app.status = -1
                 regolam = msg
 
+                socket.emit('tuttecartelle',{})
+
                 // mostraregolamento
                 //   mostraCartelle()
 
@@ -290,6 +318,8 @@
                 amministratore = true
                 app.amministratore = true
 
+                let tacclk = setInterval(chiedi_tabella, 1000)
+
 
             });
 
@@ -297,10 +327,10 @@
             socket.on('lista', function (msg) {
 
             });
-            socket.on('cartelle', function (msg) {
-
+            socket.on('tuttecartelle', function (msg) {
+             
                 colori = msg.colori
-                if (comprate < regolam.maxC) mostraCartelle(msg.cartelle, colori)
+                mostraCartelle(msg.cartelle, colori,0)
 
 
             });
@@ -333,15 +363,17 @@
             });
 
 
-            socket.on('comprate', function (msg) {
+            socket.on('miecartelle', function (msg) {
 
 
                 comprate = Math.floor(msg.cartelle.length / 27)
+                app.comprate=comprate
+                if(app.comprate==regolam.maxC) app.finecompera=true
                 mieicolori = msg.colori
                 mieCartelle = [...msg.cartelle]
                 fagioli = new Array(36 * 27).fill(0);
-
-                if (comprate >= regolam.maxC) mostraCartelle(msg.cartelle, mieicolori)
+               
+                 mostraCartelle(msg.cartelle, mieicolori, 1);
 
             });
 
@@ -358,13 +390,13 @@
         }
 
 
-        function mostraCartelle(cartelle, colori_) {
+        function mostraCartelle(cartelle, colori_, mie) {
 
-            if (status < -1) return
+        let cont="tcontainer"
+        if(mie) cont="mcontainer"
+            document.getElementById(cont).innerHTML = ""
 
-            document.getElementById("container").innerHTML = ""
-
-
+          
             let rimaste = cartelle.length / 27
 
             let cart = []
@@ -375,7 +407,7 @@
 
 
 
-            cart.forEach((c, idx) => { creaDiv(toHTML(c, colori_[idx], idx, fagioli.slice(27 * idx, 27 * idx + 27), rbruc.slice(3 * idx, 3 * idx + 3)), "container", status, idx) })
+            cart.forEach((c, idx) => { creaDiv(toHTML(c, colori_[idx], idx, fagioli.slice(27 * idx, 27 * idx + 27), rbruc.slice(3 * idx, 3 * idx + 3)), cont, status, idx) })
 
         }
 
@@ -410,20 +442,13 @@
 
 
 
-        function creaDiv(html, parent, status_, num) {
+        function creaDiv(html, parent) {
 
             let nodo = document.createElement("div")
 
             nodo.innerHTML = html
 
-
-            if (status_ * 1 == -1 && comprate < 2) {
-
-                let nodobutt = document.createElement("div")
-                nodobutt.innerHTML = "<button onclick='compra(" + num + ")'" + ">Compra</button>"
-                nodo.appendChild(nodobutt)
-
-            }
+         
             document.getElementById(parent).appendChild(nodo)
         }
 
@@ -451,10 +476,10 @@
 
             mieCartelle.forEach((c, idx) => {
 
-                if (estratti.indexOf(c) > -1) fagioli[idx] = 1
+                if (estratte.indexOf(c) > -1) fagioli[idx] = 1
             })
 
-            mostraCartelle(mieCartelle, mieicolori)
+            mostraCartelle(mieCartelle, mieicolori, 1)
 
         }
 
@@ -501,18 +526,21 @@
 
         function check(riga_, ncart_) {
 
-
+            if (status < 0 && comprate < regolam.maxC) socket.emit("compra", { mynumber: myNumber, cartella: ncart_ });
+            if (status < 0) return;
 
             let comb = status * 1 + 2
 
             if (estratte.indexOf(mieCartelle[27 * ncart_ + riga_]) > -1) {
                 fagioli[27 * ncart_ + riga_] = 1
-                mostraCartelle(mieCartelle, mieicolori)
+                mostraCartelle(mieCartelle, mieicolori, 1)
                 if (verifica(comb)) socket.emit("chiama", combinaz[comb])
 
             }
-
         }
+
+
+        
         function chiedi_tabella() {
 
             socket.emit("tabella", {})
@@ -525,6 +553,8 @@
             socket.emit("disconnetti", sid)
 
         }
+
+
     </script>
 
 
@@ -541,7 +571,9 @@
                 message: 'Hello Vue!',
                 loggato: false,
                 status: -2,
+                comprate:0,
                 amministratore: false,
+                finecompera:false,
                 estrai: false,
                 messaggio: "",
                 pallina: "",

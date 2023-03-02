@@ -18,6 +18,7 @@ for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
 
 let estratti = []
 let palline = []
+let vincstr=["a", "t", "q", "c", "T", "Z"]
 
 for (let r = 0; r < 90; r++) palline.push(r + 1)
 let rimasti = [...palline]
@@ -67,7 +68,7 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
 
 
-            socket.vincite.push(msg.charAt(0))
+            socket.vincite+=vincstr[status]
 
             //Verifica combinazione
 
@@ -93,6 +94,19 @@ io.sockets.on('connection', function (socket) {
 
 
         });
+
+        socket.on('miecartelle', function (msg) {
+
+           socket.emit('miecartelle', { cartelle: socket.cartelle, colori: socket.colori });
+
+
+        });
+        socket.on('tuttecartelle', function (msg) {
+
+            socket.emit('tuttecartelle', { cartelle: cartelle, colori: colori });
+ 
+ 
+         });
 
         socket.on('estrai', function () {
 
@@ -156,17 +170,11 @@ io.sockets.on('connection', function (socket) {
             socket.nickname = msg;
             socket.cartelle = []
             socket.colori = []
-            socket.vincite = []
+            socket.vincite = ""
             socket.ip=socket.conn.remoteAddress
             if (amministratore == 0) { amministratore = 1; socket.amministratore = socket.nickname; socket.emit("amministratore", 1) }
 
 
-            nicks = "";
-
-            allClients.forEach(function (s) {
-                nicks += s.nickname + "-";
-            });
-            io.sockets.emit('lista', nicks);
 
             if (activeClients == maxClients) {
                 var nn = 1;
@@ -187,8 +195,8 @@ function comprataCartella(numCartella, numGioc, sck) {
     sck.cartelle = [...sck.cartelle, ...comprata]
     sck.colori.push(colore)
 
-    io.sockets.emit('cartelle', { cartelle: cartelle, colori: colori });
-    sck.emit('comprate', { cartelle: sck.cartelle, colori: sck.colori });
+    io.sockets.emit('tuttecartelle', { cartelle: cartelle, colori: colori });
+    sck.emit('miecartelle', { cartelle: sck.cartelle, colori: sck.colori });
 
 
 }
