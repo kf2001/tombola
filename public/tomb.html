@@ -8,17 +8,6 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
     <style type="text/css">
-        #Button1 {
-            width: 101px;
-        }
-
-        #regolamento {}
-
-        #btnvia {
-            width: 101px;
-
-        }
-
         #btnestrai {
             width: 101px;
 
@@ -26,12 +15,6 @@
 
         #dashboard {}
 
-        #person {
-
-            font-size: 32x;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
 
         #messaggio_ {
 
@@ -144,70 +127,64 @@
 
 <body>
     <div id="app">
-        {{ status }} - {{ amministratore }}
+
+        <div if="loggato>">
+
+
+            <div v-if="amministratore" id="dashboard">
 
 
 
+                <div v-if="status==-2" id="regolamento">
 
-        <div id="person">
-            <p id="mionumero">0</p>
-        
+                    <label for="mincartelle">Cartelle minimo</label> <input name="mincartelle" id="minc" type="number"
+                        min="0" max="4" value="1" />
+                    <label for="maxcartelle">Cartelle massimo</label> <input name="maxcartelle" type="number" id="maxc"
+                        min="1" max="4" value="2" />
 
-        </div>
+                    <label for="prezzocartelle">Cartelle prezzo</label> <input name="prezzocartelle" type="number"
+                        id="cpre" min="1" max="10" value="3" />
+
+                    <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
+                        value="ON" />
+
+                    <button onclick="InviaRegolamento()">Invia Regolamento</button>
 
 
-        <div v-if="amministratore" id="dashboard">
+                </div>
+
+                <div id="buttons">
+
+                    <div v-if="estrai"> <button id="btnestrai" onclick="estraiNumero()">Estrai Numero</button>
+                    </div>
+                    <div v-if="!estrai"> <button id="btnvia" onclick="via()">Via!</button>
+                    </div>
+
+                    <button id="tabella" onclick="chiedi_tabella()">Tabella</button>
 
 
+                </div>
+            </div>
 
-            <div v-if="status==-2" id="regolamento">
+            <div id="messaggio_">
 
-                <label for="mincartelle">Cartelle minimo</label> <input name="mincartelle" id="minc" type="number"
-                    min="0" max="4" value="1" />
-                <label for="maxcartelle">Cartelle massimo</label> <input name="maxcartelle" type="number" id="maxc"
-                    min="1" max="4" value="2" />
+                {{messaggio}}
 
-                <label for="prezzocartelle">Cartelle prezzo</label> <input name="prezzocartelle" type="number" id="cpre"
-                    min="1" max="10" value="3" />
+            </div>
+            <div id="estratta">
 
-                <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
-                    value="ON" />
+                {{pallina}}
 
-                <button onclick="InviaRegolamento()">Invia Regolamento</button>
+            </div>
+
+            <div id="tabhtml" v-html="tabhtml">
 
 
             </div>
-            <div>
-                <ul id="lista">
 
-                </ul>
-            </div>
-            <div id="buttons">
-
-                <button id="tabella" onclick="chiedi_tabella()">Tabella</button>
-                <button id="btnvia" onclick="via()">Via!</button>
-                <button id="btnestrai" onclick="estraiNumero()">Estrai Numero</button>
-
-            </div>
-        </div>
-
-        <div id="messaggio_">
-
-            {{messaggio}}
+            <div id="container"></div>
 
         </div>
-        <div id="estratta">
-
-            {{pallina}}
-
-        </div>
-
-        <div id="tabhtml" v-html="tabhtml">
-          
-
-        </div>
-
-        <div id="container"></div>
 
         <div v-if="!loggato" id="login">
 
@@ -282,7 +259,8 @@
                 status = msg
                 app.status = msg
                 messaggia("Si va per " + messaggi[status], 0)
-              
+                app.estrai = true
+
             });
             socket.on('numero', function (msg) {
 
@@ -317,12 +295,6 @@
 
             socket.on('andato', function () { });
             socket.on('lista', function (msg) {
-                var utenti = msg.split("-");
-                $("#lista").empty();
-                for (var i = 0; i < utenti.length - 1; i++)
-                    $("#lista").append("<li>" + utenti[i] + "</li>");
-
-
 
             });
             socket.on('cartelle', function (msg) {
@@ -336,6 +308,7 @@
             socket.on('combinaz', function (msg) {
 
                 messaggia(msg.nick + " ha fatto " + msg.comb + "!! ", 1)
+                app.estrai = false
 
             });
 
@@ -345,7 +318,7 @@
                 messaggia("", 0)
                 pallina = msg
                 estratte.push(pallina)
-          
+
                 app.pallina = pallina
                 let comb = status * 1 + 2
 
@@ -375,8 +348,8 @@
             socket.on('tabhtml', function (msg) {
 
 
-                app.tabhtml=msg
-              
+                app.tabhtml = msg
+
             });
 
 
@@ -461,10 +434,9 @@
 
         function via() {
 
-            if (status < -1) return
+
             socket.emit("via", status)
-            //  document.getElementById("btnvia").remove()
-            document.getElementById("btnestrai").style.visibility = "visible"
+
 
         }
 
@@ -521,7 +493,7 @@
 
         function messaggia(mess, append) {
             if (append)
-                app.messaggio += msg;
+                app.messaggio += mess;
             else
                 app.messaggio = mess;
         }
@@ -570,9 +542,10 @@
                 loggato: false,
                 status: -2,
                 amministratore: false,
+                estrai: false,
                 messaggio: "",
-                pallina: "", 
-                tabhtml:""
+                pallina: "",
+                tabhtml: ""
 
             }
         })
