@@ -12,6 +12,7 @@ var password = "olop"
 var joins = "1010"
 var allClients = [];
 var ips = []
+var combfatte=[false, false, false,  false, false, false]
 
 let cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
@@ -69,11 +70,16 @@ io.sockets.on('connection', function (socket) {
         socket.on('chiama', function (msg) {
 
 
-            io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
+            if(combfatte[status]==false){
+                 io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
 
+  socket.vincite += vincstr[status]
 
-            socket.vincite += vincstr[status]
+  
+  if (regolam.vincunico==true) combfatte[status]=true
 
+            }
+        
             //Verifica combinazione
 
 
@@ -89,6 +95,8 @@ io.sockets.on('connection', function (socket) {
 
 
         socket.on('via', function (msg) {
+
+
 
             status++
 
@@ -166,38 +174,42 @@ io.sockets.on('connection', function (socket) {
             });
 
             regolam = msg;
+            console.log(regolam)
             status = -1
 
         });
 
         socket.on('join', function (msg) {
-
+console.log(msg)
             socket.nickname = msg.nick;
             socket.pwwd = msg.pwd;
-            socket.joins = msg.joins
+            socket.joins = msg.join
             socket.cartelle = []
             socket.colori = []
             socket.vincite = ""
             socket.guadagno = 0
             socket.ip = socket.conn.remoteAddress
 
-            let vv = casuale(2)
-            if (ips.indexOf(socket.ip) > -1 && 0) socket.disconnect(); else {
+           
+            if (ips.indexOf(socket.ip) > -1 && regolam.ipmult==false) socket.disconnect(); else {
 
+
+               
                 ips.push(socket.ip)
 
                 if (amministratore == 0) {
 
-                 
+                  
                     if (msg.pwd != password) { socket.disconnect();  console.log( msg.pwd);return; }
                     amministratore = 1; socket.amministratore = socket.nickname; joins = socket.joins;
                     socket.emit("amministratore", 1);
 
                 } else {
+                    console.log(9999)
 
-                    console.log(333)
+                   console.log(socket.joins, joins)
                     if (socket.joins != joins) socket.disconnect();
-                    console.log(444)
+                 
 
                 }
 
@@ -233,7 +245,9 @@ function calcolaPremi() {
     let premi_ = []
 
     allClients.forEach(function (s) {
-        piatto += 3// Math.floor(s.cartelle / 27) * regolam.prezzo;
+
+       
+        piatto += Math.floor(s.cartelle.length / 27) * (regolam.prezzo*1);
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) fatti[v]++
     });

@@ -44,7 +44,7 @@
         #estratta {
 
 
-            font-size: 2.2em;
+            font-size: 2.7em;
             color: purple;
             font-weight: bold;
             border: 2px solid #202020;
@@ -223,10 +223,10 @@
 
           
       <p>    <label for="txtnick">Nick</label>
-            <input id="txtnick" type="text" value="nick" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
+            <input id="txtnick" type="text" value="" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
             <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button><br /></p>
       <p>    <label >Password</label><br />
-            <input id="txtpwd" type="text" value="" pattern="[a-zA-Z0-9]+" /><br />
+            <input id="txtpwd" type="password" value="" pattern="[a-zA-Z0-9]+" /><br />
         
 </p>  
        <p>  <label >Join</label><br />    <input id="txtjoin" type="text" value="" pattern="[a-zA-Z0-9]+" /><br />
@@ -267,13 +267,19 @@
         var fagioli = new Array(36 * 27).fill(0);
         var rbruc = new Array(20).fill(0)
         var tbruc = new Array(12).fill(0)
+
+        var inviatoregolam=false
         
 
         let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
 
 
-        function InviaRegolamento() {
+        function InviaRegolamento() {   
+            
+            
+          if(inviatoregolam)  socket.emit("regolamento", msg)
 
+          inviatoregolam=true
             var checkedValue = document.getElementById("cauto").checked;
             var vincunico = document.getElementById("vincunico").checked;
             var ipmult = document.getElementById("ipmult").checked;
@@ -282,8 +288,7 @@
         
         }
 
-            socket.emit("regolamento", msg)
-
+         
 
         }
 
