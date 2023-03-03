@@ -15,14 +15,13 @@
         }
 
         label {
-
             font-size: 1.5em;
             margin: .2em;
         }
 
 
         #login {
-            width: 100px;
+            width: 600px;
             height: 100px;
             position: absolute;
             top: 20%;
@@ -161,6 +160,12 @@
                     <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
                         value="ON" />
 
+                        <label for="ipmult">IP multipli</label> <input name="ipmult" type="checkbox" id="ipmult"
+                        value="ON" />
+
+                        <label for="vincunico">Vincitore unico</label> <input name="vincunico" type="checkbox" id="vincunico"
+                        value="ON" />
+
                     <el-button type="primary" onclick="InviaRegolamento()">Invia Regolamento</el-button>
                     <!-- <button onclick="InviaRegolamento()">Invia Regolamento</button> -->
 
@@ -209,14 +214,25 @@
             <div id="mcontainer"></div>
             <div id="tcontainer" v-if="status<0"></div>
 
+            <div id="tabpremi" v-html="premitab" v-if="status>=0"></div>
+
+
         </div>
 
         <div v-if="!loggato" id="login">
 
+          
+      <p>    <label for="txtnick">Nick</label>
+            <input id="txtnick" type="text" value="nick" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
+            <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button><br /></p>
+      <p>    <label >Password</label><br />
+            <input id="txtpwd" type="text" value="" pattern="[a-zA-Z0-9]+" /><br />
+        
+</p>  
+       <p>  <label >Join</label><br />    <input id="txtjoin" type="text" value="" pattern="[a-zA-Z0-9]+" /><br />
+          
+</p>
 
-
-            <input id="txtnick" type="text" value="nick" pattern="[a-zA-Z0-9]+" /><br />
-            <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button>
 
         </div>
 
@@ -251,6 +267,7 @@
         var fagioli = new Array(36 * 27).fill(0);
         var rbruc = new Array(20).fill(0)
         var tbruc = new Array(12).fill(0)
+        
 
         let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
 
@@ -258,7 +275,12 @@
         function InviaRegolamento() {
 
             var checkedValue = document.getElementById("cauto").checked;
-            msg = { minC: document.getElementById("minc").value, maxC: document.getElementById("maxc").value, prezzo: document.getElementById("cpre").value, auto: checkedValue }
+            var vincunico = document.getElementById("vincunico").checked;
+            var ipmult = document.getElementById("ipmult").checked;
+            msg = { minC: document.getElementById("minc").value, maxC: document.getElementById("maxc").value, 
+            prezzo: document.getElementById("cpre").value, auto: checkedValue , vincunico:vincunico, ipmult:ipmult
+        
+        }
 
             socket.emit("regolamento", msg)
 
@@ -276,6 +298,9 @@
             var strnick = new String($("#txtnick").val());
             var regexp = /[a-zA-Z0-9]+/gi;
 
+            let pwwd=new String($("#txtpwd").val());
+            let joins=new String($("#txtjoin").val());
+
 
             socket = io.connect();
             socket.nickname = strnick.match(regexp);
@@ -292,8 +317,13 @@
             });
             socket.on('numero', function (msg) {
 
+                let pwwd=new String($("#txtpwd").val());
+                let joins=new String($("#txtjoin").val());
+
+
                 $("#mionumero").html(myNumber);
-                socket.emit('join', socket.nickname);
+             //   socket.emit('join', socket.nickname);
+             socket.emit('join', {nick:socket.nickname, pwd:pwwd, join:joins});
                 app.loggato = true
 
                 init()
@@ -303,7 +333,10 @@
 
             socket.on('premi', function (msg) {
 
-                console.log(msg)
+                //    console.log(msg)
+
+                app.premitab = msg
+
 
             });
 
@@ -585,7 +618,8 @@
                 estrai: false,
                 messaggio: "",
                 pallina: "",
-                tabhtml: ""
+                tabhtml: "",
+                premitab: ""
 
             }
         })

@@ -8,8 +8,10 @@ const io = new Server(httpServer, { /* options */ });
 
 const fs = require("fs")
 var amministratore = 0
+var password = "olop"
+var joins = "1010"
 var allClients = [];
-var nicks = "";
+var ips = []
 
 let cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
@@ -90,15 +92,12 @@ io.sockets.on('connection', function (socket) {
 
             status++
 
-
-            let msgp = calcolaPremi()
-            console.log(msgp)
-
-            if (status < 7) io.sockets.emit('start', status);
+            if (status < 6) io.sockets.emit('start', status);
 
             else {
                 let msgp = calcolaPremi()
-                io.sockets.emit('premi', msgp);
+                let tabh = tabpremi()
+                io.sockets.emit('premi', tabh);
             }
 
 
@@ -138,9 +137,9 @@ io.sockets.on('connection', function (socket) {
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
                 strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
-                strh += "<td>" + s.id + "</td>"
+                strh += "<td>" + s.id.substr(0, 5) + "</td>"
                 strh += "<td>" + s.vincite + "</td>"
-                strh += "<td>" + s.ip + "</td>"
+                strh += "<td>" + s.ip.replace(/f/g, "").replace(/:/g, ""); + "</td>"
 
                 strh += "<td><button onclick='disconn(" + idx + ")'>Disconnetti</button></td>"
             });
@@ -166,40 +165,48 @@ io.sockets.on('connection', function (socket) {
                 s.emit('regolamento', msg);
             });
 
-            allClients.forEach(function (s) {
-                s.vincite = "atqT";
-            });
-
-            console.log(calcolaPremi())
-
-
             regolam = msg;
             status = -1
-            allClients.forEach(function (s) {
-                s.emit('cartelle', { cartelle: cartelle, colori: colori });
-            });
-
 
         });
 
         socket.on('join', function (msg) {
 
-            socket.nickname = msg;
+            socket.nickname = msg.nick;
+            socket.pwwd = msg.pwd;
+            socket.joins = msg.joins
             socket.cartelle = []
             socket.colori = []
             socket.vincite = ""
             socket.guadagno = 0
             socket.ip = socket.conn.remoteAddress
-            if (amministratore == 0) { amministratore = 1; socket.amministratore = socket.nickname; socket.emit("amministratore", 1) }
+
+            let vv = casuale(2)
+            if (ips.indexOf(socket.ip) > -1 && 0) socket.disconnect(); else {
+
+                ips.push(socket.ip)
+
+                if (amministratore == 0) {
+
+                 
+                    if (msg.pwd != password) { socket.disconnect();  console.log( msg.pwd);return; }
+                    amministratore = 1; socket.amministratore = socket.nickname; joins = socket.joins;
+                    socket.emit("amministratore", 1);
+
+                } else {
+
+                    console.log(333)
+                    if (socket.joins != joins) socket.disconnect();
+                    console.log(444)
+
+                }
 
 
 
-            if (activeClients == maxClients) {
-                var nn = 1;
-                io.sockets.clients().forEach(function (s) {
-                    s.emit('start', nn++);
-                });
+
             }
+
+
         });
     }
 });
@@ -223,7 +230,7 @@ function calcolaPremi() {
 
     let piatto = 0
     let fatti = [1, 1, 1, 1, 1, 1]
-let premi_=[]
+    let premi_ = []
 
     allClients.forEach(function (s) {
         piatto += 3// Math.floor(s.cartelle / 27) * regolam.prezzo;
@@ -231,8 +238,6 @@ let premi_=[]
             if (s.vincite.indexOf(vincstr[v]) > -1) fatti[v]++
     });
 
-    console.log(1, piatto)
-    console.log(2, fatti)
 
     let valore = [0, 0, 0, 0, 0, 0]
     for (let v = 0; v < 6; v++)
@@ -252,16 +257,36 @@ let premi_=[]
 
     });
 
-    console.log(premi_)
-    console.log("-----")
+
     return premi_
+
+}
+
+function tabpremi() {
+
+    let strh = "<table class='tbl'>"
+    strh += "<tr><th>nome</th> <th>cartelle</th> <th>tomb</th><th>vincita</th>  "
+    allClients.forEach(function (s, idx) {
+        strh += "<tr>"
+        strh += "<td>" + s.nickname + "</td>"
+        strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
+        strh += "<td>" + s.vincite + "</td>"
+        strh += "<td>" + s.guadagno + "</td>"
+
+
+    });
+    strh += "</table>"
+
+    return strh
+
+
 
 }
 
 function casuale(n) { return Math.floor(n * Math.random()) }
 
 
-const port = process.env.PORT || 8040;
+const port = process.env.PORT || 8041;
 
 
 httpServer.listen(port);
