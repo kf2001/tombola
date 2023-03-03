@@ -18,7 +18,7 @@ for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
 
 let estratti = []
 let palline = []
-let vincstr=["a", "t", "q", "c", "T", "Z"]
+let vincstr = ["a", "t", "q", "c", "T", "Z"]
 
 for (let r = 0; r < 90; r++) palline.push(r + 1)
 let rimasti = [...palline]
@@ -36,6 +36,8 @@ var maxClients = 10;
 
 maxClients = 100;
 var status = -2
+var premi = [1, 2, 3, 4, 10, 5]
+var regolam = {}
 
 console.log("started")
 
@@ -68,7 +70,7 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
 
 
-            socket.vincite+=vincstr[status]
+            socket.vincite += vincstr[status]
 
             //Verifica combinazione
 
@@ -87,26 +89,33 @@ io.sockets.on('connection', function (socket) {
         socket.on('via', function (msg) {
 
             status++
-            allClients.forEach(function (s) {
-                s.emit('start', status);
 
-            });
+
+            let msgp = calcolaPremi()
+            console.log(msgp)
+
+            if (status < 7) io.sockets.emit('start', status);
+
+            else {
+                let msgp = calcolaPremi()
+                io.sockets.emit('premi', msgp);
+            }
 
 
         });
 
         socket.on('miecartelle', function (msg) {
 
-           socket.emit('miecartelle', { cartelle: socket.cartelle, colori: socket.colori });
+            socket.emit('miecartelle', { cartelle: socket.cartelle, colori: socket.colori });
 
 
         });
         socket.on('tuttecartelle', function (msg) {
 
             socket.emit('tuttecartelle', { cartelle: cartelle, colori: colori });
- 
- 
-         });
+
+
+        });
 
         socket.on('estrai', function () {
 
@@ -125,7 +134,7 @@ io.sockets.on('connection', function (socket) {
 
             let strh = "<table class='tbl'>"
             strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th>  "
-            allClients.forEach(function (s,idx) {
+            allClients.forEach(function (s, idx) {
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
                 strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
@@ -133,7 +142,7 @@ io.sockets.on('connection', function (socket) {
                 strh += "<td>" + s.vincite + "</td>"
                 strh += "<td>" + s.ip + "</td>"
 
-                strh += "<td><button onclick='disconn("+idx+")'>Disconnetti</button></td>"
+                strh += "<td><button onclick='disconn(" + idx + ")'>Disconnetti</button></td>"
             });
             strh += "</table>"
 
@@ -145,11 +154,10 @@ io.sockets.on('connection', function (socket) {
 
             console.log(msg)
 
-         allClients[msg].disconnect()
+            allClients[msg].disconnect()
 
 
         });
-
 
 
         socket.on('regolamento', function (msg) {
@@ -157,6 +165,15 @@ io.sockets.on('connection', function (socket) {
             allClients.forEach(function (s) {
                 s.emit('regolamento', msg);
             });
+
+            allClients.forEach(function (s) {
+                s.vincite = "atqT";
+            });
+
+            console.log(calcolaPremi())
+
+
+            regolam = msg;
             status = -1
             allClients.forEach(function (s) {
                 s.emit('cartelle', { cartelle: cartelle, colori: colori });
@@ -171,7 +188,8 @@ io.sockets.on('connection', function (socket) {
             socket.cartelle = []
             socket.colori = []
             socket.vincite = ""
-            socket.ip=socket.conn.remoteAddress
+            socket.guadagno = 0
+            socket.ip = socket.conn.remoteAddress
             if (amministratore == 0) { amministratore = 1; socket.amministratore = socket.nickname; socket.emit("amministratore", 1) }
 
 
@@ -198,6 +216,45 @@ function comprataCartella(numCartella, numGioc, sck) {
     io.sockets.emit('tuttecartelle', { cartelle: cartelle, colori: colori });
     sck.emit('miecartelle', { cartelle: sck.cartelle, colori: sck.colori });
 
+
+}
+
+function calcolaPremi() {
+
+    let piatto = 0
+    let fatti = [1, 1, 1, 1, 1, 1]
+let premi_=[]
+
+    allClients.forEach(function (s) {
+        piatto += 3// Math.floor(s.cartelle / 27) * regolam.prezzo;
+        for (let v = 0; v < 6; v++)
+            if (s.vincite.indexOf(vincstr[v]) > -1) fatti[v]++
+    });
+
+    console.log(1, piatto)
+    console.log(2, fatti)
+
+    let valore = [0, 0, 0, 0, 0, 0]
+    for (let v = 0; v < 6; v++)
+        valore[v] = premi[v] * piatto / fatti[v]
+
+    console.log(3, valore)
+    allClients.forEach(function (s) {
+        let guad = 0
+        for (let v = 0; v < 6; v++)
+            if (s.vincite.indexOf(vincstr[v]) > -1) guad += valore[v]
+
+        s.guadagno = guad
+        console.log(2, guad)
+
+        let prem = { nick: s.nickname, vinto: s.guadagno }
+        premi_.push(prem)
+
+    });
+
+    console.log(premi_)
+    console.log("-----")
+    return premi_
 
 }
 

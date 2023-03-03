@@ -10,13 +10,13 @@
     <style type="text/css">
         input {
 
-            font-size: 2em;
+            font-size: 1.5em;
             margin: .2em;
         }
 
         label {
 
-            font-size: 2em;
+            font-size: 1.5em;
             margin: .2em;
         }
 
@@ -54,14 +54,16 @@
             width: fit-content
         }
 
-        #tcontainer,  #mcontainer {
+        #tcontainer,
+        #mcontainer {
 
             display: grid;
             grid-template-columns: auto auto auto auto;
             padding: 10px;
         }
 
-        #tcontainer>div,#mcontainer>div  {
+        #tcontainer>div,
+        #mcontainer>div {
 
             padding: 20px;
             text-align: center;
@@ -201,11 +203,11 @@
 
             <div id="titcompra" v-if="!finecompera">
 
-               Compra cartelle
+                Compra cartelle
             </div>
 
             <div id="mcontainer"></div>
-            <div id="tcontainer"></div>
+            <div id="tcontainer" v-if="status<0"></div>
 
         </div>
 
@@ -214,7 +216,7 @@
 
 
             <input id="txtnick" type="text" value="nick" pattern="[a-zA-Z0-9]+" /><br />
-            <el-button type="primary" onclick="connetti()">Connetti</el-button>
+            <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button>
 
         </div>
 
@@ -280,12 +282,12 @@
 
             socket.on('start', function (msg) {
 
-               app.finecompera=true
+                app.finecompera = true
                 status = msg
                 app.status = msg
                 messaggia("Si va per " + messaggi[status], 0)
                 app.estrai = true
-               // socket.emit("miecartelle", {})
+                // socket.emit("miecartelle", {})
 
             });
             socket.on('numero', function (msg) {
@@ -299,13 +301,19 @@
 
             });
 
+            socket.on('premi', function (msg) {
+
+                console.log(msg)
+
+            });
+
             socket.on('regolamento', function (msg) {
 
                 status = -1
                 app.status = -1
                 regolam = msg
 
-                socket.emit('tuttecartelle',{})
+                socket.emit('tuttecartelle', {})
 
                 // mostraregolamento
                 //   mostraCartelle()
@@ -328,9 +336,9 @@
 
             });
             socket.on('tuttecartelle', function (msg) {
-             
+
                 colori = msg.colori
-                mostraCartelle(msg.cartelle, colori,0)
+                mostraCartelle(msg.cartelle, colori, 0)
 
 
             });
@@ -367,13 +375,13 @@
 
 
                 comprate = Math.floor(msg.cartelle.length / 27)
-                app.comprate=comprate
-                if(app.comprate==regolam.maxC) app.finecompera=true
+                app.comprate = comprate
+                if (app.comprate == regolam.maxC) app.finecompera = true
                 mieicolori = msg.colori
                 mieCartelle = [...msg.cartelle]
                 fagioli = new Array(36 * 27).fill(0);
-               
-                 mostraCartelle(msg.cartelle, mieicolori, 1);
+
+                mostraCartelle(msg.cartelle, mieicolori, 1);
 
             });
 
@@ -392,11 +400,11 @@
 
         function mostraCartelle(cartelle, colori_, mie) {
 
-        let cont="tcontainer"
-        if(mie) cont="mcontainer"
+            let cont = "tcontainer"
+            if (mie) cont = "mcontainer"
             document.getElementById(cont).innerHTML = ""
 
-          
+
             let rimaste = cartelle.length / 27
 
             let cart = []
@@ -448,7 +456,7 @@
 
             nodo.innerHTML = html
 
-         
+
             document.getElementById(parent).appendChild(nodo)
         }
 
@@ -540,7 +548,7 @@
         }
 
 
-        
+
         function chiedi_tabella() {
 
             socket.emit("tabella", {})
@@ -571,9 +579,9 @@
                 message: 'Hello Vue!',
                 loggato: false,
                 status: -2,
-                comprate:0,
+                comprate: 0,
                 amministratore: false,
-                finecompera:false,
+                finecompera: false,
                 estrai: false,
                 messaggio: "",
                 pallina: "",
