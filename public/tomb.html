@@ -6,135 +6,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-
-    <style type="text/css">
-        input {
-
-            font-size: 1.5em;
-            margin: .2em;
-        }
-
-        label {
-            font-size: 1.5em;
-            margin: .2em;
-        }
+    <link rel="stylesheet" href="./stili.css">
 
 
-        #login {
-            width: 600px;
-            height: 100px;
-            position: absolute;
-            top: 20%;
-            left: 20%;
-            margin: -50px 0 0 -50px;
 
-        }
-
-        #dashboard {}
-
-
-        #messaggio_ {
-
-            font-size: 2em;
-            color: blue;
-            font-weight: bold;
-
-        }
-
-        #estratta {
-
-
-            font-size: 2.7em;
-            color: purple;
-            font-weight: bold;
-            border: 2px solid #202020;
-            padding: 0.20em;
-
-            width: fit-content
-        }
-
-        #tcontainer,
-        #mcontainer {
-
-            display: grid;
-            grid-template-columns: auto auto auto auto;
-            padding: 10px;
-        }
-
-        #tcontainer>div,
-        #mcontainer>div {
-
-            padding: 20px;
-            text-align: center;
-        }
-
-
-        table {
-            border: 2px solid gray;
-
-            border-collapse: collapse;
-            margin: 10px
-        }
-
-
-        td {
-
-            color: #303030;
-            font-weight: bolder;
-            font-size: 1.5em;
-            width: 1.8em;
-            height: 1.8em;
-            border: 3px solid black;
-            text-align: center;
-            vertical-align: middle;
-
-        }
-
-        .tbl td {
-
-            color: #303030;
-            font-weight: normal;
-            font-size: 1em;
-
-            height: 1em;
-            border: 1px solid green;
-            text-align: left;
-            vertical-align: middle;
-
-        }
-
-        .back0 {
-            background: hsl(0, 85%, 80%);
-        }
-
-        .back1 {
-            background: hsl(60, 75%, 85%);
-        }
-
-        .back2 {
-            background: hsl(30, 75%, 85%);
-        }
-
-        .back3 {
-            background: hsl(180, 75%, 85%)
-        }
-
-        .back4 {
-            background: hsl(240, 75%, 85%);
-        }
-
-        .back5 {
-            background: hsl(120, 75%, 85%);
-        }
-
-        .back10 {
-            background: hsla(00, 75%, 55%, 0.8);
-        }
-
-        [data-href] {
-            cursor: pointer;
-        }
-    </style>
 
 </head>
 
@@ -160,11 +35,11 @@
                     <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
                         value="ON" />
 
-                        <label for="ipmult">IP multipli</label> <input name="ipmult" type="checkbox" id="ipmult"
+                    <label for="ipmult">IP multipli</label> <input name="ipmult" type="checkbox" id="ipmult"
                         value="ON" />
 
-                        <label for="vincunico">Vincitore unico</label> <input name="vincunico" type="checkbox" id="vincunico"
-                        value="ON" />
+                    <label for="vincunico">Vincitore unico</label> <input name="vincunico" type="checkbox"
+                        id="vincunico" value="ON" />
 
                     <el-button type="primary" onclick="InviaRegolamento()">Invia Regolamento</el-button>
                     <!-- <button onclick="InviaRegolamento()">Invia Regolamento</button> -->
@@ -207,7 +82,7 @@
             </div>
 
             <div id="titcompra" v-if="!finecompera">
-           
+
             </div>
 
             <div id="mcontainer"></div>
@@ -220,19 +95,59 @@
 
         </div>
 
+
         <div v-if="!loggato" id="login">
 
-          
-      <p>    <label for="txtnick">Nick</label>
-            <input id="txtnick" type="text" value="" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
-            <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button><br /></p>
-      <p>    <label >Password</label><br />
-            <input id="txtpwd" type="password" value="olop" pattern="[a-zA-Z0-9]+" /><br />
-        
-</p>  
-       <p>  <label >Join</label><br />    <input id="txtjoin" type="text" value="1010" pattern="[a-zA-Z0-9]+" /><br />
-          
-</p>
+           
+            <el-form ref="form" :model="form"  :label-position="labelPosition" label-width="180px">
+                <el-form-item label="Nick">
+                    <el-input v-model="form.nick" ></el-input>
+                </el-form-item>
+
+                <el-form-item label="Join">
+                    <el-input v-model="form.join" ></el-input>
+                </el-form-item>
+                <el-form-item label="Cartelle max">
+                    <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+                </el-form-item>
+
+                <el-form-item label="Prezzo cartella">
+                    <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                </el-form-item>
+
+
+                <el-form-item label="Automatico">
+                    <el-switch v-model="form.auto"></el-switch>
+                </el-form-item>
+                <el-form-item label="IP multipli">
+                    <el-switch v-model="form.ipmult"></el-switch>
+                </el-form-item>
+                <el-form-item label="Vinc. Unico">
+                    <el-switch v-model="form.vincunico"></el-switch>
+                </el-form-item>
+                <el-form-item>
+                  
+                  
+                  </el-form-item>
+
+            </el-form> 
+             <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+        </div>
+
+        <div v-if="0==1" id="login2">
+
+
+            <p> <label for="txtnick">Nick</label>
+                <input id="txtnick" type="text" value="" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
+                <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button><br />
+            </p>
+            <p> <label>Password</label><br />
+                <input id="txtpwd" type="password" value="olop" pattern="[a-zA-Z0-9]+" /><br />
+
+            </p>
+            <p> <label>Join</label><br /> <input id="txtjoin" type="text" value="1010" pattern="[a-zA-Z0-9]+" /><br />
+
+            </p>
 
 
         </div>
@@ -244,388 +159,7 @@
 
 
 
-    <script>
-
-        var socket;
-
-        var myNumber = 0;
-        var status = -2
-
-        var mynick = "";
-        var colori = []
-        var mieicolori = []
-
-        //  var amministratore = 0
-
-        var messaggi = ["l'ambo", "il terno", "la quaterna", "la cinquina", " la tombola", "per il tombolino"]
-
-        var regolam = {}
-        var comprate = 0
-        var estratte = []
-        var pallina
-        var mieCartelle = []
-        //  var fagioli = []
-        var fagioli = new Array(36 * 27).fill(0);
-        var rbruc = new Array(20).fill(0)
-        var tbruc = new Array(12).fill(0)
-
-        var inviatoregolam=false
-        
-
-        let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
-
-
-        function InviaRegolamento() {   
-            
-            
-          if(inviatoregolam)  socket.emit("regolamento", msg)
-
-          inviatoregolam=true
-            var checkedValue = document.getElementById("cauto").checked;
-            var vincunico = document.getElementById("vincunico").checked;
-            var ipmult = document.getElementById("ipmult").checked;
-            msg = { minC: document.getElementById("minc").value, maxC: document.getElementById("maxc").value, 
-            prezzo: document.getElementById("cpre").value, auto: checkedValue , vincunico:vincunico, ipmult:ipmult
-        
-        }
-
-         
-
-        }
-
-        function init() {
-
-            $(document).attr('title', mynick);
-
-        }
-
-        function connetti() {
-
-            var strnick = new String($("#txtnick").val());
-            var regexp = /[a-zA-Z0-9]+/gi;
-
-            let pwwd=new String($("#txtpwd").val());
-            let joins=new String($("#txtjoin").val());
-
-
-            socket = io.connect();
-            socket.nickname = strnick.match(regexp);
-
-            socket.on('start', function (msg) {
-
-                app.finecompera = true
-                status = msg
-                app.status = msg
-                messaggia("Si va per " + messaggi[status], 0)
-                app.estrai = true
-                // socket.emit("miecartelle", {})
-
-            });
-            socket.on('numero', function (msg) {
-
-                let pwwd=new String($("#txtpwd").val());
-                let joins=new String($("#txtjoin").val());
-
-
-                $("#mionumero").html(myNumber);
-             //   socket.emit('join', socket.nickname);
-             socket.emit('join', {nick:socket.nickname, pwd:pwwd, join:joins});
-                app.loggato = true
-
-                init()
-
-
-            });
-
-            socket.on('premi', function (msg) {
-
-                //    console.log(msg)
-
-                app.premitab = msg
-
-
-            });
-
-            socket.on('regolamento', function (msg) {
-
-                status = -1
-                app.status = -1
-                regolam = msg
-
-                socket.emit('tuttecartelle', {})
-
-                // mostraregolamento
-                //   mostraCartelle()
-
-            });
-
-            socket.on('amministratore', function (msg) {
-
-
-                amministratore = true
-                app.amministratore = true
-
-                let tacclk = setInterval(chiedi_tabella, 1000)
-
-
-            });
-
-            socket.on('andato', function () { });
-            socket.on('lista', function (msg) {
-
-            });
-            socket.on('tuttecartelle', function (msg) {
-
-               
-                mostraCartelle(msg.cartelle,msg.colori, new Array(36*27).fill(0), 0)
-
-
-            });
-
-            socket.on('combinaz', function (msg) {
-
-                messaggia(msg.nick + " ha fatto " + msg.comb + "!! ", 1)
-                app.estrai = false
-
-            });
-
-
-            socket.on('estratta', function (msg) {
-
-                messaggia("", 0)
-                pallina = msg
-                estratte.push(pallina)
-
-                app.pallina = pallina
-                let comb = status * 1 + 2
-
-                if (regolam.auto) {
-                    mettifagiolo(pallina)
-                    if (verifica(comb)) socket.emit("chiama", combinaz[comb])
-
-
-                }
-
-
-            });
-
-            socket.on('cartellegioc', function (msg) {
-
-               
-mostraCartelle(msg.cartelle, msg.colori,msg.fagioli,  2);
-
-});
-            socket.on('miecartelle', function (msg) {
-
-
-                comprate = Math.floor(msg.cartelle.length / 27)
-                app.comprate = comprate
-                if (app.comprate == regolam.maxC) app.finecompera = true
-                mieicolori = msg.colori
-                mieCartelle = [...msg.cartelle]
-                let fagg = new Array(36 * 27).fill(0);
-
-                mostraCartelle(msg.cartelle, mieicolori, fagg,1);
-
-            });
-
-            socket.on('tabhtml', function (msg) {
-
-
-                app.tabhtml = msg
-
-            });
-
-
-
-            mynick = socket.nickname;
-        }
-
-
-        function mostraCartelle(cartelle, colori_,fagg_, mie) {
-
-            let cont = "tcontainer"
-            if (mie==1) cont = "mcontainer"
-            if (mie==2) cont = "gcontainer"
-            document.getElementById(cont).innerHTML = ""
-
-
-            let rimaste = cartelle.length / 27
-
-            let cart = []
-
-            for (let c = 0; c < rimaste; c++)
-
-                cart.push(cartelle.slice(c * 27, c * 27 + 27))
-
-
-
-            cart.forEach((c, idx) => { creaDiv(toHTML(c, colori_[idx], idx, fagg_.slice(27 * idx, 27 * idx + 27), rbruc.slice(3 * idx, 3 * idx + 3)), cont, status, idx) })
-
-        }
-
-
-        function toHTML(tabella, n, idx, fag, bruc) {
-
-
-            let strh = "<table>"
-
-            for (let r = 0; r < 3; r++) {
-                if (bruc[r] == 10)
-                    strh += "<tr  style='cursor: pointer;' onclick=" + "check(" + r + "," + idx + ")>"; else
-                    strh += "<tr  style='border-color:#c00000;cursor: pointer; '  >";
-
-                for (let c = 0; c < 9; c++) {
-
-                    let co = ""
-                    if (tabella[r * 9 + c] != 0) co = tabella[r * 9 + c]
-                    if (fag) {
-                        //  console.log(fag[r * 9 + c])
-                        if (fag[r * 9 + c] == 0) strh += "<td class='" + "back" + n + "' onclick=" + "'check(" + (r * 9 + c) + "," + idx + ")'>" + co + "</td>";
-                        else strh += "<td class='" + "back10' >" + co + "</td>"
-                    }
-
-                }
-                strh += "</tr>"
-            }
-            strh += "</table>"
-
-            return strh
-        }
-
-
-
-        function creaDiv(html, parent) {
-
-            let nodo = document.createElement("div")
-
-            nodo.innerHTML = html
-
-
-            document.getElementById(parent).appendChild(nodo)
-        }
-
-        function compra(num) {
-
-            socket.emit("compra", { mynumber: myNumber, cartella: num })
-        }
-
-        function via() {
-
-
-            socket.emit("via", status)
-
-
-        }
-
-        function estraiNumero() {
-
-            socket.emit("estrai", {})
-
-        }
-
-        function mettifagiolo(pall) {
-
-console.log(999999)
-            mieCartelle.forEach((c, idx) => {
-
-                if (estratte.indexOf(c) > -1) fagioli[idx] = 1
-            })
-
-            socket.emit('fagioli', fagioli)
-
-            mostraCartelle(mieCartelle, mieicolori,fagioli, 1)
-
-        }
-
-        function verifica(comb) {
-
-
-            let righe = new Array(Math.floor(mieCartelle.length / 27) * 3).fill(0);
-
-            let fag = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            mieCartelle.forEach((c, idx) => {
-
-                let riga = Math.floor((idx % 27) / 9)
-                let cart = Math.floor((idx / 27))
-                riga += 3 * cart
-
-
-                if (c > 0 && fagioli[idx] == 1) {
-                    righe[riga]++
-                    fag[cart]++
-                }
-
-
-            })
-
-
-            let verif = 0
-
-            if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && rbruc[r] == 0) { verif = 1; rbruc[r] = 1; };
-            if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && tbruc[r] == 0) { verif = 1; tbruc[r] = 1; }
-
-
-
-            return verif
-
-        }
-
-        function messaggia(mess, append) {
-            if (append)
-                app.messaggio += mess;
-            else
-                app.messaggio = mess;
-        }
-
-
-        function check(riga_, ncart_) {
-
-            if (status < 0 && comprate < regolam.maxC) socket.emit("compra", { mynumber: myNumber, cartella: ncart_ });
-            if (status < 0) return;
-
-            let comb = status * 1 + 2
-
-            if (estratte.indexOf(mieCartelle[27 * ncart_ + riga_]) > -1) {
-                fagioli[27 * ncart_ + riga_] = 1
-                socket.emit('fagioli', fagioli)
-                mostraCartelle(mieCartelle, mieicolori,fagioli,  1)
-                if (verifica(comb)) socket.emit("chiama", combinaz[comb])
-
-            }
-        }
-
-
-
-        function chiedi_tabella() {
-
-            socket.emit("tabella", {})
-
-
-        }
-
-        function chat(sid) {
-
-            socket.emit("togglechat", sid)
-            console.log(888)
-        }
-
-        
-        function cartgioc(sid) {
-console.log(777)
-
-            socket.emit("chiedicartelle", sid)
-}
-
-function disconn(sid) {
-
-socket.emit("chiedidisconn", sid)
-
-}
-
-    </script>
-
-
+    <script src="./script.js"></script>
 
 
     <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
@@ -646,8 +180,25 @@ socket.emit("chiedidisconn", sid)
                 messaggio: "",
                 pallina: "",
                 tabhtml: "",
-                premitab: ""
+                premitab: "",
+                labelPosition:"left",
+                form: {
+                  
+                    nick: "",
+                    join: "",
+                    maxC: 2,
+                    prezzo: 3,
+                    auto: false,
+                    ipmult: true,
+                    vincunico: false
 
+
+                }, 
+             
+
+                    
+                },   methods: { 
+                   
             }
         })
     </script>
