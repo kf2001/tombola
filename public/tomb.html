@@ -227,10 +227,10 @@
             <input id="txtnick" type="text" value="" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
             <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button><br /></p>
       <p>    <label >Password</label><br />
-            <input id="txtpwd" type="password" value="" pattern="[a-zA-Z0-9]+" /><br />
+            <input id="txtpwd" type="password" value="olop" pattern="[a-zA-Z0-9]+" /><br />
         
 </p>  
-       <p>  <label >Join</label><br />    <input id="txtjoin" type="text" value="" pattern="[a-zA-Z0-9]+" /><br />
+       <p>  <label >Join</label><br />    <input id="txtjoin" type="text" value="1010" pattern="[a-zA-Z0-9]+" /><br />
           
 </p>
 
@@ -411,7 +411,7 @@
 
             socket.on('cartellegioc', function (msg) {
 
-                console.log(msg)
+               
 mostraCartelle(msg.cartelle, msg.colori,msg.fagioli,  2);
 
 });
@@ -445,7 +445,8 @@ mostraCartelle(msg.cartelle, msg.colori,msg.fagioli,  2);
         function mostraCartelle(cartelle, colori_,fagg_, mie) {
 
             let cont = "tcontainer"
-            if (mie) cont = "mcontainer"
+            if (mie==1) cont = "mcontainer"
+            if (mie==2) cont = "gcontainer"
             document.getElementById(cont).innerHTML = ""
 
 
@@ -525,7 +526,7 @@ mostraCartelle(msg.cartelle, msg.colori,msg.fagioli,  2);
 
         function mettifagiolo(pall) {
 
-
+console.log(999999)
             mieCartelle.forEach((c, idx) => {
 
                 if (estratte.indexOf(c) > -1) fagioli[idx] = 1
@@ -587,6 +588,7 @@ mostraCartelle(msg.cartelle, msg.colori,msg.fagioli,  2);
 
             if (estratte.indexOf(mieCartelle[27 * ncart_ + riga_]) > -1) {
                 fagioli[27 * ncart_ + riga_] = 1
+                socket.emit('fagioli', fagioli)
                 mostraCartelle(mieCartelle, mieicolori,fagioli,  1)
                 if (verifica(comb)) socket.emit("chiama", combinaz[comb])
 

@@ -173,21 +173,20 @@ io.sockets.on('connection', function (socket) {
 
         });
         socket.on('togglechat', function (msg) {
-            console.log(7990)
+
             if (socket.id != sockamm.id) return;
             allClients[msg].chatenable = !allClients[msg].chatenable
 
-            console.log(76670)
 
         });
         socket.on('chiedicartelle', function (msg) {
 
-            console.log(7770)
 
             if (socket.id != sockamm.id) return;
 
-            console.log(5666)
-            allClients[msg].emit('cartellegioc', { cartelle: socket.cartelle, colori: socket.colori, fagioli: socket.fagioli });
+            let sck = allClients[msg]
+
+            socket.emit('cartellegioc', { cartelle: sck.cartelle, colori: sck.colori, fagioli: sck.fagioli });
 
         });
 
