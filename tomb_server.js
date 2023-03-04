@@ -12,7 +12,8 @@ var password = "olop"
 var joins = "1010"
 var allClients = [];
 var ips = []
-var combfatte=[false, false, false,  false, false, false]
+var sockamm = {}
+var combfatte = [false, false, false, false, false, false]
 
 let cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
@@ -70,16 +71,16 @@ io.sockets.on('connection', function (socket) {
         socket.on('chiama', function (msg) {
 
 
-            if(combfatte[status]==false){
-                 io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
+            if (combfatte[status] == false) {
+                io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
 
-  socket.vincite += vincstr[status]
+                socket.vincite += vincstr[status]
 
-  
-  if (regolam.vincunico==true) combfatte[status]=true
+
+                if (regolam.vincunico == true) combfatte[status] = true
 
             }
-        
+
             //Verifica combinazione
 
 
@@ -96,6 +97,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('via', function (msg) {
 
+            if (socket.id != sockamm.id) return;
 
 
             status++
@@ -126,6 +128,9 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('estrai', function () {
 
+            if (socket.id != sockamm.id) return;
+
+
             let pallina = casuale(rimasti.length)
 
             let estratta = rimasti.splice(pallina, 1)[0]
@@ -140,7 +145,7 @@ io.sockets.on('connection', function (socket) {
         socket.on('tabella', function () {
 
             let strh = "<table class='tbl'>"
-            strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th>  "
+            strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th>  "
             allClients.forEach(function (s, idx) {
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
@@ -148,8 +153,12 @@ io.sockets.on('connection', function (socket) {
                 strh += "<td>" + s.id.substr(0, 5) + "</td>"
                 strh += "<td>" + s.vincite + "</td>"
                 strh += "<td>" + s.ip.replace(/f/g, "").replace(/:/g, ""); + "</td>"
+                strh += "<td>" + s.chatenable + "</td>"
+
 
                 strh += "<td><button onclick='disconn(" + idx + ")'>Disconnetti</button></td>"
+                strh += "<td><button onclick='chat(" + idx + ")'>Toggle chat</button></td>"
+                strh += "<td><button onclick='cartgioc(" + idx + ")'>Cartelle</button></td>"
             });
             strh += "</table>"
 
@@ -157,17 +166,42 @@ io.sockets.on('connection', function (socket) {
 
         });
 
-        socket.on('disconnetti', function (msg) {
+        socket.on('chiedidisconn', function (msg) {
 
-            console.log(msg)
-
+            if (socket.id != sockamm.id) return;
             allClients[msg].disconnect()
 
+        });
+        socket.on('togglechat', function (msg) {
+            console.log(7990)
+            if (socket.id != sockamm.id) return;
+            allClients[msg].chatenable = !allClients[msg].chatenable
+
+            console.log(76670)
+
+        });
+        socket.on('chiedicartelle', function (msg) {
+
+            console.log(7770)
+
+            if (socket.id != sockamm.id) return;
+
+            console.log(5666)
+            allClients[msg].emit('cartellegioc', { cartelle: socket.cartelle, colori: socket.colori, fagioli: socket.fagioli });
 
         });
 
 
+
+        socket.on('fagioli', function (msg) {
+
+            socket.fagioli = [...msg]
+
+        });
+
         socket.on('regolamento', function (msg) {
+
+            if (socket.id != sockamm.id) return;
 
             allClients.forEach(function (s) {
                 s.emit('regolamento', msg);
@@ -180,36 +214,36 @@ io.sockets.on('connection', function (socket) {
         });
 
         socket.on('join', function (msg) {
-console.log(msg)
+
             socket.nickname = msg.nick;
             socket.pwwd = msg.pwd;
             socket.joins = msg.join
             socket.cartelle = []
+            socket.fagioli = new Array(36 * 27).fill(0);
             socket.colori = []
+            socket.chatenable = true
             socket.vincite = ""
             socket.guadagno = 0
             socket.ip = socket.conn.remoteAddress
 
-           
-            if (ips.indexOf(socket.ip) > -1 && regolam.ipmult==false) socket.disconnect(); else {
+            if (ips.indexOf(socket.ip) > -1 && regolam.ipmult == false) socket.disconnect(); else {
 
 
-               
                 ips.push(socket.ip)
 
                 if (amministratore == 0) {
 
-                  
-                    if (msg.pwd != password) { socket.disconnect();  console.log( msg.pwd);return; }
-                    amministratore = 1; socket.amministratore = socket.nickname; joins = socket.joins;
+                    if (msg.pwd != password) { socket.disconnect(); return; }
+                    amministratore = 1;
+                    socket.amministratore = socket.nickname;
+                    joins = socket.joins; sockamm = socket;
                     socket.emit("amministratore", 1);
 
                 } else {
-                    console.log(9999)
 
-                   console.log(socket.joins, joins)
+                    console.log(socket.joins, joins)
                     if (socket.joins != joins) socket.disconnect();
-                 
+
 
                 }
 
@@ -246,8 +280,8 @@ function calcolaPremi() {
 
     allClients.forEach(function (s) {
 
-       
-        piatto += Math.floor(s.cartelle.length / 27) * (regolam.prezzo*1);
+
+        piatto += Math.floor(s.cartelle.length / 27) * (regolam.prezzo * 1);
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) fatti[v]++
     });
@@ -299,10 +333,10 @@ function tabpremi() {
 
 function casuale(n) { return Math.floor(n * Math.random()) }
 
+let portc = casuale(50) + 8040
+const port = process.env.PORT || portc;
 
-const port = process.env.PORT || 8041;
 
-
-httpServer.listen(port);
+httpServer.listen(portc);
 
 console.log("Server in ascolto alla porta " + port);

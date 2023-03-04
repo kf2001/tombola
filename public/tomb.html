@@ -207,12 +207,13 @@
             </div>
 
             <div id="titcompra" v-if="!finecompera">
-
-                Compra cartelle
+           
             </div>
 
             <div id="mcontainer"></div>
             <div id="tcontainer" v-if="status<0"></div>
+
+            <div id="gcontainer"></div>
 
             <div id="tabpremi" v-html="premitab" v-if="status>=0"></div>
 
@@ -375,8 +376,8 @@
             });
             socket.on('tuttecartelle', function (msg) {
 
-                colori = msg.colori
-                mostraCartelle(msg.cartelle, colori, 0)
+               
+                mostraCartelle(msg.cartelle,msg.colori, new Array(36*27).fill(0), 0)
 
 
             });
@@ -408,7 +409,12 @@
 
             });
 
+            socket.on('cartellegioc', function (msg) {
 
+                console.log(msg)
+mostraCartelle(msg.cartelle, msg.colori,msg.fagioli,  2);
+
+});
             socket.on('miecartelle', function (msg) {
 
 
@@ -417,9 +423,9 @@
                 if (app.comprate == regolam.maxC) app.finecompera = true
                 mieicolori = msg.colori
                 mieCartelle = [...msg.cartelle]
-                fagioli = new Array(36 * 27).fill(0);
+                let fagg = new Array(36 * 27).fill(0);
 
-                mostraCartelle(msg.cartelle, mieicolori, 1);
+                mostraCartelle(msg.cartelle, mieicolori, fagg,1);
 
             });
 
@@ -436,7 +442,7 @@
         }
 
 
-        function mostraCartelle(cartelle, colori_, mie) {
+        function mostraCartelle(cartelle, colori_,fagg_, mie) {
 
             let cont = "tcontainer"
             if (mie) cont = "mcontainer"
@@ -453,7 +459,7 @@
 
 
 
-            cart.forEach((c, idx) => { creaDiv(toHTML(c, colori_[idx], idx, fagioli.slice(27 * idx, 27 * idx + 27), rbruc.slice(3 * idx, 3 * idx + 3)), cont, status, idx) })
+            cart.forEach((c, idx) => { creaDiv(toHTML(c, colori_[idx], idx, fagg_.slice(27 * idx, 27 * idx + 27), rbruc.slice(3 * idx, 3 * idx + 3)), cont, status, idx) })
 
         }
 
@@ -525,7 +531,9 @@
                 if (estratte.indexOf(c) > -1) fagioli[idx] = 1
             })
 
-            mostraCartelle(mieCartelle, mieicolori, 1)
+            socket.emit('fagioli', fagioli)
+
+            mostraCartelle(mieCartelle, mieicolori,fagioli, 1)
 
         }
 
@@ -579,7 +587,7 @@
 
             if (estratte.indexOf(mieCartelle[27 * ncart_ + riga_]) > -1) {
                 fagioli[27 * ncart_ + riga_] = 1
-                mostraCartelle(mieCartelle, mieicolori, 1)
+                mostraCartelle(mieCartelle, mieicolori,fagioli,  1)
                 if (verifica(comb)) socket.emit("chiama", combinaz[comb])
 
             }
@@ -594,12 +602,24 @@
 
         }
 
-        function disconn(sid) {
+        function chat(sid) {
 
-            socket.emit("disconnetti", sid)
-
+            socket.emit("togglechat", sid)
+            console.log(888)
         }
 
+        
+        function cartgioc(sid) {
+console.log(777)
+
+            socket.emit("chiedicartelle", sid)
+}
+
+function disconn(sid) {
+
+socket.emit("chiedidisconn", sid)
+
+}
 
     </script>
 
