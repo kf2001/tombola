@@ -97,11 +97,21 @@
 
         <div v-if="!loggato" id="prelogin">
 
-            <p><input type="radio" id="r1" v-model="creajoin" value="1"></input> <label for="r1"
+          <!--   <p><input type="radio" id="r1" v-model="creajoin" value="1"></input> <label for="r1"
                     class="labelo">CREA</label> </p>
 
             <p> <input type="radio" id="r2" v-model="creajoin" value="2"></input> <label for="r2"
-                    class="labelo">JOIN</label> </p>
+                    class="labelo">JOIN</label> </p> -->
+
+                    <div class="radio-toolbar">
+                        <p>  <input type="radio" id="radioApple" v-model="creajoin" value="1" checked>
+                        <label for="radioApple">CREA</label>
+                    
+                        <p>  <input type="radio" id="radioBanana"  v-model="creajoin" value="2">
+                        <label for="radioBanana">JOIN</label>
+                    
+                       
+                    </div>
 
         </div>
 
