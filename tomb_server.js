@@ -8,7 +8,7 @@ const io = new Server(httpServer, { /* options */ });
 
 const fs = require("fs")
 var amministratore = 0
-var password = "olop"
+
 var joins = "1010"
 var allClients = [];
 var ips = []
@@ -215,7 +215,7 @@ io.sockets.on('connection', function (socket) {
         socket.on('join', function (msg) {
 
             socket.nickname = msg.nick;
-            socket.pwwd = msg.pwd;
+           
             socket.joins = msg.join
             socket.cartelle = []
             socket.fagioli = new Array(36 * 27).fill(0);
@@ -232,17 +232,15 @@ io.sockets.on('connection', function (socket) {
 
                 if (amministratore == 0) {
 
-                    if (msg.pwd != password) { socket.disconnect(); return; }
+                  
                     amministratore = 1;
                     socket.amministratore = socket.nickname;
                     joins = socket.joins; sockamm = socket;
                     socket.emit("amministratore", 1);
 
                 } else {
-
-                    console.log(socket.joins, joins)
+                 
                     if (socket.joins != joins) socket.disconnect();
-
 
                 }
 

@@ -95,62 +95,54 @@
 
         </div>
 
+        <div v-if="!loggato" id="prelogin">
+
+            <p><input type="radio" id="r1" v-model="creajoin" value="1"></input> <label for="r1"
+                    class="labelo">CREA</label> </p>
+
+            <p> <input type="radio" id="r2" v-model="creajoin" value="2"></input> <label for="r2"
+                    class="labelo">JOIN</label> </p>
+
+        </div>
 
         <div v-if="!loggato" id="login">
 
-           
-            <el-form ref="form" :model="form"  :label-position="labelPosition" label-width="180px">
+
+            <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
                 <el-form-item label="Nick">
-                    <el-input v-model="form.nick" ></el-input>
+                    <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
+                    <el-input v-model="form.nick"></el-input>
+                    <!-- </el-tooltip> -->
                 </el-form-item>
 
                 <el-form-item label="Join">
-                    <el-input v-model="form.join" ></el-input>
+                    <el-input v-model="form.join"></el-input>
                 </el-form-item>
-                <el-form-item label="Cartelle max">
-                    <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
-                </el-form-item>
+                <div v-if="creajoin==1">
+                    <el-form-item label="Cartelle max">
+                        <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+                    </el-form-item>
 
-                <el-form-item label="Prezzo cartella">
-                    <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
-                </el-form-item>
+                    <el-form-item label="Prezzo cartella">
+                        <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                    </el-form-item>
 
 
-                <el-form-item label="Automatico">
-                    <el-switch v-model="form.auto"></el-switch>
-                </el-form-item>
-                <el-form-item label="IP multipli">
-                    <el-switch v-model="form.ipmult"></el-switch>
-                </el-form-item>
-                <el-form-item label="Vinc. Unico">
-                    <el-switch v-model="form.vincunico"></el-switch>
-                </el-form-item>
-                <el-form-item>
-                  
-                  
-                  </el-form-item>
-
-            </el-form> 
-             <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+                    <el-form-item label="Automatico">
+                        <el-switch v-model="form.auto"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="IP multipli">
+                        <el-switch v-model="form.ipmult"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="Vinc. Unico">
+                        <el-switch v-model="form.vincunico"></el-switch>
+                    </el-form-item>
+                </div>
+            </el-form>
+            <el-button type="primary" onclick="OKRegolam()">OK</el-button>
         </div>
 
-        <div v-if="0==1" id="login2">
 
-
-            <p> <label for="txtnick">Nick</label>
-                <input id="txtnick" type="text" value="" name="txtnick" pattern="[a-zA-Z0-9]+" /><br />
-                <el-button type="primary" onclick="connetti()" id="logb">Connetti</el-button><br />
-            </p>
-            <p> <label>Password</label><br />
-                <input id="txtpwd" type="password" value="olop" pattern="[a-zA-Z0-9]+" /><br />
-
-            </p>
-            <p> <label>Join</label><br /> <input id="txtjoin" type="text" value="1010" pattern="[a-zA-Z0-9]+" /><br />
-
-            </p>
-
-
-        </div>
 
 
 
@@ -172,6 +164,8 @@
             data: {
                 message: 'Hello Vue!',
                 loggato: false,
+                preloggato: false,
+                creajoin: 2,
                 status: -2,
                 comprate: 0,
                 amministratore: false,
@@ -181,9 +175,9 @@
                 pallina: "",
                 tabhtml: "",
                 premitab: "",
-                labelPosition:"left",
+                labelPosition: "left",
                 form: {
-                  
+
                     nick: "",
                     join: "",
                     maxC: 2,
@@ -193,12 +187,12 @@
                     vincunico: false
 
 
-                }, 
-             
+                },
 
-                    
-                },   methods: { 
-                   
+
+
+            }, methods: {
+
             }
         })
     </script>

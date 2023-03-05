@@ -5,7 +5,9 @@ var socket;
 var myNumber = 0;
 var status = -2
 
-var mynick = "";
+var myNick = "";
+var Room = "";
+
 var colori = []
 var mieicolori = []
 
@@ -32,20 +34,31 @@ let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tom
 function InviaRegolamento() {
 
 
-    if (inviatoregolam) socket.emit("regolamento", msg)
+     socket.emit("regolamento", regolam)
 
 }
 function OKRegolam() {
 
    
+ myNick=app.form.nick
+ Room=app.form.join
+
+
+    var regexp =/^[a-zA-Z0-9]{3,10}$/gi;
+
+    if(!regexp.test(app.form.nick)) {
+   
+    return
+    }
+
+
   regolam=  {
         maxC: app.form.maxC ,
         prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult:app.form.ipmult
 
     }
 
-    console.log(regolam)
-
+ connetti()
 
 }
 
@@ -58,15 +71,9 @@ function init() {
 
 function connetti() {
 
-    var strnick = new String($("#txtnick").val());
-    var regexp = /[a-zA-Z0-9]+/gi;
-
-    let pwwd = new String($("#txtpwd").val());
-    let joins = new String($("#txtjoin").val());
-
-
+   
     socket = io.connect();
-    socket.nickname = strnick.match(regexp);
+    socket.nickname = myNick;
 
     socket.on('start', function (msg) {
 
@@ -75,18 +82,14 @@ function connetti() {
         app.status = msg
         messaggia("Si va per " + messaggi[status], 0)
         app.estrai = true
-        // socket.emit("miecartelle", {})
-
+     
     });
     socket.on('numero', function (msg) {
 
-        let pwwd = new String($("#txtpwd").val());
-        let joins = new String($("#txtjoin").val());
+      
+        let joins = Room;
 
-
-        $("#mionumero").html(myNumber);
-        //   socket.emit('join', socket.nickname);
-        socket.emit('join', { nick: socket.nickname, pwd: pwwd, join: joins });
+        socket.emit('join', { nick: socket.nickname,  join: joins });
         app.loggato = true
 
         init()
@@ -111,8 +114,7 @@ function connetti() {
 
         socket.emit('tuttecartelle', {})
 
-        // mostraregolamento
-        //   mostraCartelle()
+     
 
     });
 
@@ -128,9 +130,7 @@ function connetti() {
     });
 
     socket.on('andato', function () { });
-    socket.on('lista', function (msg) {
-
-    });
+  
     socket.on('tuttecartelle', function (msg) {
 
 
