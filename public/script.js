@@ -253,34 +253,31 @@ function toHTML(tabella, n, idx, fag, bruc) {
     return strh
 }
 
-<<<<<<< HEAD
 function tabellone(estratte_) {
 
-if(estratte_.length==0)return;
+
+
+
+    if (estratte_.length == 0) return;
     var canvas = document.createElement('canvas');
 
     canvas.id = "tabellone";
     canvas.width = "900";
     canvas.height = "360";
-=======
-function tabellone(nn) {
-
 
     var canvas = document.createElement('canvas');
 
     canvas.id = "tabellone";
     canvas.width = 600;
     canvas.height = 600;
->>>>>>> 27623ea83cf3eea95cc68d031f52ed4658d32007
+
     canvas.style.zIndex = 8;
     canvas.style.position = "absolute";
     canvas.style.border = "1px solid";
 
 
-<<<<<<< HEAD
-
     var ctx = canvas.getContext("2d");
-    
+
     ctx.fillStyle = "#40404";
     ctx.font = "40px Arial bold";
     ctx.textBaseline = "middle";
@@ -294,46 +291,19 @@ function tabellone(nn) {
         ctx.rect(lato * colonna, lato * riga, lato, lato)
 
 
-        if(estratte_.indexOf(i+1)>-1) {
+        if (estratte_.indexOf(i + 1) > -1) {
             ctx.fillStyle = "#C00000";
 
-        } else   ctx.fillStyle = "#C0C0C0";
+        } else ctx.fillStyle = "#C0C0C0";
         ctx.fillText((i + 1), lato * colonna + lato / 2, lato * riga + lato / 2)
- ctx.stroke()
+        ctx.stroke()
     }
 
- document.getElementById("tabcanvas").innerHTML="";
-    document.getElementById("tabcanvas").appendChild(canvas);
-
-=======
-    /*     var body = document.getElementsByTagName("body")[0];
-        body.appendChild(canvas);
-        
-     */
-
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
-    ctx.font = "30px Arial";
-    let lato = canvas.width / 15
-    for (let i = 0; i < 90; i++) {
-
-        let riga = Math.floor((i ) / 15)
-        let colonna = i % 15
-
-        ctx.rect( lato * colonna+lato/2, lato * riga+lato/2,lato, lato)
-       ctx.fillText((i+1), lato * colonna, lato * riga)
-
-ctx.stroke()
-
-    }
-
+    document.getElementById("tabcanvas").innerHTML = "";
     document.getElementById("tabcanvas").appendChild(canvas);
 
 
 
-
-
->>>>>>> 27623ea83cf3eea95cc68d031f52ed4658d32007
 }
 
 
@@ -355,8 +325,8 @@ function compra(num) {
 function via() {
 
 
-    if(status==-2)  socket.emit("regolamento", regolam); else
-    socket.emit("via", status)
+    if (status == -2) socket.emit("regolamento", regolam); else
+        socket.emit("via", status)
 
 
 }
