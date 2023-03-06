@@ -1,0 +1,42 @@
+script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+
+
+ctx.beginPath()
+          ctx.fillStyle = "red";
+          ctx.strokeStyle="#cc0000"
+          ctx.lineWidth = 30
+
+         // ctx.arc(100, 100, 50, 0, 2*Math.PI);
+          ctx.ellipse(100, 100, 70, 70, 0, 0, 2*Math.PI)
+          ctx.stroke()
+          ctx.fillStyle = "blue";
+          ctx.ellipse(100, 100, 50, 50, 0, 0, 2*Math.PI)
+       //   ctx.arc(100, 100, 80, 0, 2*Math.PI);
+      ctx.fill()
+          
+          ctx.fillStyle = "beige";
+          ctx.strokeStyle="#cc0000"
+
+         ctx.ellipse(100, 100, 40, 40, 0, 0, 2*Math.PI)
+ctx.fill()
+
+ctx.fillStyle = "#cc0000";
+ctx.shadowColor = '#808080';
+ ctx.shadowBlur = 10;
+ ctx.shadowOffsetX = -2;
+ ctx.shadowOffsetY = -2;
+ctx.font = "bold 100px mono";
+ctx.textBaseline = "middle";
+ctx.textAlign= "center";
+ctx.fillText("54",100, 100)
+
+   
+        
+
+    
+
+</script>

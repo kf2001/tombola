@@ -267,7 +267,7 @@ function tabellone(nn) {
 
 
     var canvas = document.createElement('canvas');
-
+git pull
     canvas.id = "tabellone";
     canvas.width = 600;
     canvas.height = 600;
