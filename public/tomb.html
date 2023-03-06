@@ -17,6 +17,8 @@
 
 
     <div id="app">
+        <div id="tabcanvas" ></div>
+        
         <div id="menu" v-if="status>-1">
             <template>
                 <el-tabs v-model="activeTab" :tab-position="'left'" @tab-click="handleClick">
@@ -31,7 +33,9 @@
 
       
         <div v-if="loggato">
-  <div id="tabcanvas" v-show="activeTab=='Tabellone'">
+
+          
+  <!-- <div id="tabcanvas" v-show="activeTab=='Tabellone'"> -->
 
           
         </div>

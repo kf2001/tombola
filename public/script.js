@@ -253,6 +253,53 @@ function toHTML(tabella, n, idx, fag, bruc) {
     return strh
 }
 
+
+function disegna_tessera(ctx, x, y, lato, num) {
+
+
+    var canvas = document.createElement('canvas');
+
+
+    // let x=100
+    // let y=100
+    // let lato=30
+
+    lato = 7*lato / 16
+    ctx.beginPath()
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "#cc0000"
+    ctx.lineWidth = lato / 3
+
+        ;
+     ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+    ctx.stroke() 
+   /*  ctx.fillStyle = "blue";
+    ctx.ellipse(x, y, lato * .6, lato * .6, 0, 0, 2 * Math.PI) */
+
+    ctx.fill()
+
+    ctx.fillStyle = "beige";
+    //ctx.strokeStyle = "beige"
+
+    //ctx.ellipse(x, y, lato * .4, lato * .4, 0, 0, 2 * Math.PI)
+    ctx.fill()
+
+    ctx.fillStyle = "#cc0000";
+    /* ctx.shadowColor = '#808080';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = -2;
+    ctx.shadowOffsetY = -2; */
+    ctx.font = "bold 32px mono";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.fillText(num, x, y)
+
+}
+
+
+
+
+
 function tabellone(estratte_) {
 
 
@@ -265,11 +312,6 @@ function tabellone(estratte_) {
     canvas.width = "900";
     canvas.height = "360";
 
-    var canvas = document.createElement('canvas');
-
-    canvas.id = "tabellone";
-    canvas.width = 600;
-    canvas.height = 600;
 
     canvas.style.zIndex = 8;
     canvas.style.position = "absolute";
@@ -284,19 +326,30 @@ function tabellone(estratte_) {
     ctx.textAlign = "center";
     let lato = canvas.width / 15
     for (let i = 0; i < 90; i++) {
+        ctx.strokeStyle = "#40404"
+        ctx.fillStyle = "#40404";
+        ctx.font = "40px Arial bold";
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.lineWidth = 1
 
         let riga = Math.floor((i) / 15)
         let colonna = i % 15
-        ctx.fillStyle = "#40404";
+        ctx.fillStyle = "#404040";
         ctx.rect(lato * colonna, lato * riga, lato, lato)
-
-
-        if (estratte_.indexOf(i + 1) > -1) {
-            ctx.fillStyle = "#C00000";
-
-        } else ctx.fillStyle = "#C0C0C0";
-        ctx.fillText((i + 1), lato * colonna + lato / 2, lato * riga + lato / 2)
+        ctx.strokeStyle = "#404040"
         ctx.stroke()
+        if (estratte_.indexOf(i + 1) > -1) {
+
+            disegna_tessera(ctx, lato * colonna + lato / 2, lato * riga + lato / 2, lato, (i + 1))
+
+
+        } else {
+          
+             ctx.fillText((i + 1), lato * colonna + lato / 2, lato * riga + lato / 2)
+
+
+        }
     }
 
     document.getElementById("tabcanvas").innerHTML = "";
