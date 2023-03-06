@@ -17,11 +17,11 @@
 
 
     <div id="app">
-        <div id="tabcanvas" ></div>
-        
+        <div id="tabcanvas"></div>
+
         <div id="menu" v-if="status>-1">
             <template>
-                <el-tabs v-model="activeTab" :tab-position="'left'" @tab-click="handleClick">
+                <el-tabs v-model="activeTab" :tab-position="'right'" @tab-click="handleClick">
                     <el-tab-pane label="Mie" name="Mie">Mie</el-tab-pane>
                     <el-tab-pane label="User" name="User">User</el-tab-pane>
                     <el-tab-pane label="Tabellone" name="Tabellone">Tabellone</el-tab-pane>
@@ -31,14 +31,14 @@
 
         </div>
 
-      
+
         <div v-if="loggato">
 
-          
-  <!-- <div id="tabcanvas" v-show="activeTab=='Tabellone'"> -->
 
-          
-        </div>
+            <div id="tabcanvas" v-show="activeTab=='Tabellone'">
+
+
+            </div>
 
 
             <div v-if="amministratore" id="dashboard">
@@ -68,14 +68,9 @@
                 {{messaggio}}
 
             </div>
-            <div id="estratta">
-
-                {{pallina}}
-
-            </div>
+            <div id="cpallina">00 </div>
 
             <div id="tabhtml" v-html="tabhtml">
-
 
             </div>
 
@@ -147,13 +142,10 @@
         </div>
 
 
-
-
-
     </div>
 
 
-   
+
 
 
 
@@ -201,13 +193,13 @@
 
             }, methods: {
                 handleClick(tab, event) {
-                    console.log(tab, event);
+
                 }
 
             }
         })
 
-        tabellone(8)
+
     </script>
 
 </body>

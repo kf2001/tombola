@@ -157,7 +157,9 @@ function connetti() {
 
         app.pallina = pallina
         let comb = status * 1 + 2
-        tabellone(estratte)
+      if(status>-1)  tabellone(estratte)
+
+        tessera(pallina)
 
         if (regolam.auto) {
             mettifagiolo(pallina)
@@ -254,16 +256,59 @@ function toHTML(tabella, n, idx, fag, bruc) {
 }
 
 
-function disegna_tessera(ctx, x, y, lato, num) {
+
+function tessera(num) {
 
 
     var canvas = document.createElement('canvas');
 
+    canvas.width = "200";
+    canvas.height = "200";
 
-    // let x=100
-    // let y=100
-    // let lato=30
 
+    canvas.style.zIndex = 8;
+    canvas.style.position = "absolute";
+    canvas.style.border = "1px solid";
+
+
+    var ctx = canvas.getContext("2d");
+
+    let lato = 7* 100/ 16
+    ctx.beginPath()
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "#cc0000"
+    ctx.lineWidth = lato / 3
+
+        ;
+     ctx.ellipse(100, 100, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+    ctx.stroke() 
+
+
+    ctx.fill()
+
+    ctx.fillStyle = "beige";
+   
+    ctx.fill()
+
+    ctx.fillStyle = "#cc0000";
+   
+    ctx.font = "bold 32px mono";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.fillText(num, 100, 100)
+
+    document.getElementById("cpallina").innerHTML = "";
+    document.getElementById("cpallina").appendChild(canvas);
+
+
+}
+
+
+
+function disegna_tessera(ctx, x, y, lato, num) {
+
+
+    var canvas = document.createElement('canvas');
     lato = 7*lato / 16
     ctx.beginPath()
     ctx.fillStyle = "red";
