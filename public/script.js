@@ -34,35 +34,35 @@ let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tom
 function InviaRegolamento() {
 
 
-     socket.emit("regolamento", regolam)
+    socket.emit("regolamento", regolam)
 
 }
 function OKRegolam() {
 
-   
- myNick=app.form.nick
- Room=app.form.join
+
+    myNick = app.form.nick
+    Room = app.form.join
 
 
-    var regexp =/^[a-zA-Z0-9]{3,10}$/gi;
+    var regexp = /^[a-zA-Z0-9]{3,10}$/gi;
 
-    if(!regexp.test(app.form.nick)) {
-   
-    return
+    if (!regexp.test(app.form.nick)) {
+
+        return
     }
 
 
-  regolam=  {
-        maxC: app.form.maxC ,
-        prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult:app.form.ipmult
+    regolam = {
+        maxC: app.form.maxC,
+        prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult: app.form.ipmult
 
     }
 
- connetti()
+    connetti()
 
 }
 
- 
+
 function init() {
 
     $(document).attr('title', mynick);
@@ -71,7 +71,7 @@ function init() {
 
 function connetti() {
 
-   
+
     socket = io.connect();
     socket.nickname = myNick;
 
@@ -82,14 +82,14 @@ function connetti() {
         app.status = msg
         messaggia("Si va per " + messaggi[status], 0)
         app.estrai = true
-     
+
     });
     socket.on('numero', function (msg) {
 
-      
+
         let joins = Room;
 
-        socket.emit('join', { nick: socket.nickname,  join: joins });
+        socket.emit('join', { nick: socket.nickname, join: joins });
         app.loggato = true
 
         init()
@@ -99,7 +99,7 @@ function connetti() {
 
     socket.on('premi', function (msg) {
 
-       
+
 
         app.premitab = msg
 
@@ -114,7 +114,7 @@ function connetti() {
 
         socket.emit('tuttecartelle', {})
 
-     
+
 
     });
 
@@ -130,7 +130,7 @@ function connetti() {
     });
 
     socket.on('andato', function () { });
-  
+
     socket.on('tuttecartelle', function (msg) {
 
 
@@ -250,6 +250,47 @@ function toHTML(tabella, n, idx, fag, bruc) {
     return strh
 }
 
+function tabellone(nn) {
+
+
+    var canvas = document.createElement('canvas');
+
+    canvas.id = "tabellone";
+    canvas.width = 600;
+    canvas.height = 600;
+    canvas.style.zIndex = 8;
+    canvas.style.position = "absolute";
+    canvas.style.border = "1px solid";
+
+
+    /*     var body = document.getElementsByTagName("body")[0];
+        body.appendChild(canvas);
+        
+     */
+
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+    ctx.font = "30px Arial";
+    let lato = canvas.width / 15
+    for (let i = 0; i < 90; i++) {
+
+        let riga = Math.floor((i ) / 15)
+        let colonna = i % 15
+
+        ctx.rect( lato * colonna+lato/2, lato * riga+lato/2,lato, lato)
+       ctx.fillText((i+1), lato * colonna, lato * riga)
+
+ctx.stroke()
+
+    }
+
+    document.getElementById("tabcanvas").appendChild(canvas);
+
+
+
+
+
+}
 
 
 function creaDiv(html, parent) {

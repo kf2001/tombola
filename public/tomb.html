@@ -22,30 +22,6 @@
             <div v-if="amministratore" id="dashboard">
 
 
-                <div v-if="status==-2" id="regolamento">
-
-                    <label for="mincartelle">Cartelle minimo</label> <input name="mincartelle" id="minc" type="number"
-                        min="0" max="4" value="1" />
-                    <label for="maxcartelle">Cartelle massimo</label> <input name="maxcartelle" type="number" id="maxc"
-                        min="1" max="4" value="2" />
-
-                    <label for="prezzocartelle">Cartelle prezzo</label> <input name="prezzocartelle" type="number"
-                        id="cpre" min="1" max="10" value="3" />
-
-                    <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
-                        value="ON" />
-
-                    <label for="ipmult">IP multipli</label> <input name="ipmult" type="checkbox" id="ipmult"
-                        value="ON" />
-
-                    <label for="vincunico">Vincitore unico</label> <input name="vincunico" type="checkbox"
-                        id="vincunico" value="ON" />
-
-                    <el-button type="primary" onclick="InviaRegolamento()">Invia Regolamento</el-button>
-                    <!-- <button onclick="InviaRegolamento()">Invia Regolamento</button> -->
-
-
-                </div>
 
                 <div id="buttons">
 
@@ -153,7 +129,11 @@
         </div>
 
 
+<div id="tabcanvas">
 
+
+
+</div>
 
 
     </div>
@@ -205,6 +185,8 @@
 
             }
         })
+
+        tabellone(8)
     </script>
 
 </body>
