@@ -200,6 +200,8 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('regolamento', function (msg) {
 
+
+            console.log(66666)
             if (socket.id != sockamm.id) return;
 
             allClients.forEach(function (s) {

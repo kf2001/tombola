@@ -34,35 +34,35 @@ let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tom
 function InviaRegolamento() {
 
 
-     socket.emit("regolamento", regolam)
+    socket.emit("regolamento", regolam)
 
 }
 function OKRegolam() {
 
-   
- myNick=app.form.nick
- Room=app.form.join
+
+    myNick = app.form.nick
+    Room = app.form.join
 
 
-    var regexp =/^[a-zA-Z0-9]{3,10}$/gi;
+    var regexp = /^[a-zA-Z0-9]{3,10}$/gi;
 
-    if(!regexp.test(app.form.nick)) {
-   
-    return
+    if (!regexp.test(app.form.nick)) {
+
+        return
     }
 
 
-  regolam=  {
-        maxC: app.form.maxC ,
-        prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult:app.form.ipmult
+    regolam = {
+        maxC: app.form.maxC,
+        prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult: app.form.ipmult
 
     }
 
- connetti()
+    connetti()
 
 }
 
- 
+
 function init() {
 
     $(document).attr('title', mynick);
@@ -71,7 +71,7 @@ function init() {
 
 function connetti() {
 
-   
+
     socket = io.connect();
     socket.nickname = myNick;
 
@@ -82,14 +82,14 @@ function connetti() {
         app.status = msg
         messaggia("Si va per " + messaggi[status], 0)
         app.estrai = true
-     
+
     });
     socket.on('numero', function (msg) {
 
-      
+
         let joins = Room;
 
-        socket.emit('join', { nick: socket.nickname,  join: joins });
+        socket.emit('join', { nick: socket.nickname, join: joins });
         app.loggato = true
 
         init()
@@ -99,7 +99,7 @@ function connetti() {
 
     socket.on('premi', function (msg) {
 
-       
+
 
         app.premitab = msg
 
@@ -112,9 +112,11 @@ function connetti() {
         app.status = -1
         regolam = msg
 
+        console.log(999999)
+
         socket.emit('tuttecartelle', {})
 
-     
+
 
     });
 
@@ -130,7 +132,7 @@ function connetti() {
     });
 
     socket.on('andato', function () { });
-  
+
     socket.on('tuttecartelle', function (msg) {
 
 
@@ -155,6 +157,7 @@ function connetti() {
 
         app.pallina = pallina
         let comb = status * 1 + 2
+        tabellone(estratte)
 
         if (regolam.auto) {
             mettifagiolo(pallina)
@@ -250,6 +253,47 @@ function toHTML(tabella, n, idx, fag, bruc) {
     return strh
 }
 
+function tabellone(estratte_) {
+
+if(estratte_.length==0)return;
+    var canvas = document.createElement('canvas');
+
+    canvas.id = "tabellone";
+    canvas.width = "900";
+    canvas.height = "360";
+    canvas.style.zIndex = 8;
+    canvas.style.position = "absolute";
+    canvas.style.border = "1px solid";
+
+
+
+    var ctx = canvas.getContext("2d");
+    
+    ctx.fillStyle = "#40404";
+    ctx.font = "40px Arial bold";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    let lato = canvas.width / 15
+    for (let i = 0; i < 90; i++) {
+
+        let riga = Math.floor((i) / 15)
+        let colonna = i % 15
+        ctx.fillStyle = "#40404";
+        ctx.rect(lato * colonna, lato * riga, lato, lato)
+
+
+        if(estratte_.indexOf(i+1)>-1) {
+            ctx.fillStyle = "#C00000";
+
+        } else   ctx.fillStyle = "#C0C0C0";
+        ctx.fillText((i + 1), lato * colonna + lato / 2, lato * riga + lato / 2)
+ ctx.stroke()
+    }
+
+ document.getElementById("tabcanvas").innerHTML="";
+    document.getElementById("tabcanvas").appendChild(canvas);
+
+}
 
 
 function creaDiv(html, parent) {
@@ -270,6 +314,7 @@ function compra(num) {
 function via() {
 
 
+    if(status==-2)  socket.emit("regolamento", regolam); else
     socket.emit("via", status)
 
 
@@ -379,4 +424,3 @@ function disconn(sid) {
     socket.emit("chiedidisconn", sid)
 
 }
-

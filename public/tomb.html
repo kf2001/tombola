@@ -14,7 +14,20 @@
 </head>
 
 <body>
+
+
     <div id="app">
+        <div id="menu" v-if="status>-1">
+            <template>
+                <el-tabs v-model="activeTab" :tab-position="'left'" @tab-click="handleClick">
+                    <el-tab-pane label="Mie" name="Mie">Mie</el-tab-pane>
+                    <el-tab-pane label="User" name="User">User</el-tab-pane>
+                    <el-tab-pane label="Tabellone" name="Tabellone">Tabellone</el-tab-pane>
+                    <el-tab-pane label="Regolamento" name="Regolamento">Regolamento</el-tab-pane>
+                </el-tabs>
+            </template>
+
+        </div>
 
         <div v-if="loggato">
 
@@ -22,30 +35,6 @@
             <div v-if="amministratore" id="dashboard">
 
 
-                <div v-if="status==-2" id="regolamento">
-
-                    <label for="mincartelle">Cartelle minimo</label> <input name="mincartelle" id="minc" type="number"
-                        min="0" max="4" value="1" />
-                    <label for="maxcartelle">Cartelle massimo</label> <input name="maxcartelle" type="number" id="maxc"
-                        min="1" max="4" value="2" />
-
-                    <label for="prezzocartelle">Cartelle prezzo</label> <input name="prezzocartelle" type="number"
-                        id="cpre" min="1" max="10" value="3" />
-
-                    <label for="autom">Chiamata automatica</label> <input name="autom" type="checkbox" id="cauto"
-                        value="ON" />
-
-                    <label for="ipmult">IP multipli</label> <input name="ipmult" type="checkbox" id="ipmult"
-                        value="ON" />
-
-                    <label for="vincunico">Vincitore unico</label> <input name="vincunico" type="checkbox"
-                        id="vincunico" value="ON" />
-
-                    <el-button type="primary" onclick="InviaRegolamento()">Invia Regolamento</el-button>
-                    <!-- <button onclick="InviaRegolamento()">Invia Regolamento</button> -->
-
-
-                </div>
 
                 <div id="buttons">
 
@@ -85,10 +74,10 @@
 
             </div>
 
-            <div id="mcontainer"></div>
+            <div id="mcontainer" v-show="activeTab=='Mie'"></div>
             <div id="tcontainer" v-if="status<0"></div>
 
-            <div id="gcontainer"></div>
+            <div id="gcontainer" v-show="activeTab=='User'"></div>
 
             <div id="tabpremi" v-html="premitab" v-if="status>=0"></div>
 
@@ -97,21 +86,17 @@
 
         <div v-if="!loggato" id="prelogin">
 
-          <!--   <p><input type="radio" id="r1" v-model="creajoin" value="1"></input> <label for="r1"
-                    class="labelo">CREA</label> </p>
 
-            <p> <input type="radio" id="r2" v-model="creajoin" value="2"></input> <label for="r2"
-                    class="labelo">JOIN</label> </p> -->
 
-                    <div class="radio-toolbar">
-                        <p>  <input type="radio" id="radioApple" v-model="creajoin" value="1" checked>
-                        <label for="radioApple">CREA</label>
-                    
-                        <p>  <input type="radio" id="radioBanana"  v-model="creajoin" value="2">
-                        <label for="radioBanana">JOIN</label>
-                    
-                       
-                    </div>
+            <div class="radio-toolbar">
+                <p> <input type="radio" id="radioApple" v-model="creajoin" value="1" checked>
+                    <label for="radioApple">CREA</label>
+
+                <p> <input type="radio" id="radioBanana" v-model="creajoin" value="2">
+                    <label for="radioBanana">JOIN</label>
+
+
+            </div>
 
         </div>
 
@@ -153,7 +138,11 @@
         </div>
 
 
+        <div id="tabcanvas" v-show="activeTab=='Tabellone'">
 
+
+
+        </div>
 
 
     </div>
@@ -186,6 +175,7 @@
                 tabhtml: "",
                 premitab: "",
                 labelPosition: "left",
+                activeTab: "Regolamento",
                 form: {
 
                     nick: "",
@@ -202,9 +192,14 @@
 
 
             }, methods: {
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                }
 
             }
         })
+
+        tabellone(8)
     </script>
 
 </body>
