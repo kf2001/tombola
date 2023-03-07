@@ -297,8 +297,8 @@ function tessera(num) {
     ctx.textAlign = "center";
     ctx.fillText(num, 100, 100)
 
-    document.getElementById("cpallina").innerHTML = "";
-    document.getElementById("cpallina").appendChild(canvas);
+    document.getElementById("estratta").innerHTML = "";
+    document.getElementById("estratta").appendChild(canvas);
 
 
 }
