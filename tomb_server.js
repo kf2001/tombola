@@ -15,6 +15,8 @@ var ips = []
 var sockamm = {}
 var combfatte = [false, false, false, false, false, false]
 
+
+
 let cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
 let colori = []

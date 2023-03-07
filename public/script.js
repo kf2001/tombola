@@ -75,6 +75,8 @@ function connetti() {
     socket = io.connect();
     socket.nickname = myNick;
 
+    
+
     socket.on('start', function (msg) {
 
         app.finecompera = true
@@ -89,7 +91,7 @@ function connetti() {
 
         let joins = Room;
 
-        socket.emit('join', { nick: socket.nickname, join: joins });
+        socket.emit('join', { nick: socket.nickname, room: joins, amministratore:app.creajoin });
         app.loggato = true
 
         init()
@@ -123,10 +125,12 @@ function connetti() {
     socket.on('amministratore', function (msg) {
 
 
+        console.log(222222)
+
         amministratore = true
         app.amministratore = true
 
-        let tacclk = setInterval(chiedi_tabella, 1000)
+     //   let tacclk = setInterval(chiedi_tabella, 1000)
 
 
     });
