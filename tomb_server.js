@@ -331,10 +331,10 @@ function tabpremi() {
 
 function casuale(n) { return Math.floor(n * Math.random()) }
 
-let portc = casuale(50) + 8040
+let portc = 3000//casuale(50) + 8040
 const port = process.env.PORT || portc;
 
 
-httpServer.listen(portc);
+httpServer.listen(port);
 
 console.log("Server in ascolto alla porta " + port);
