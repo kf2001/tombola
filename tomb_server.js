@@ -331,7 +331,7 @@ function tabpremi() {
 
 function casuale(n) { return Math.floor(n * Math.random()) }
 
-let portc = 3000//casuale(50) + 8040
+let portc = 8040//casuale(50) + 8040
 const port = process.env.PORT || portc;
 
 
