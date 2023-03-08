@@ -21,7 +21,7 @@
         <div v-if="loggato">
             <el-row :gutter="10">
 
-                <div id="menu">
+                <div id="menu" v-if="amministratore">
                     <template>
                         <el-tabs v-model="activeTab" :tab-position="'top'" @tab-click="handleClick">
                             <el-tab-pane label="Mie" name="Mie"></el-tab-pane>
@@ -42,7 +42,6 @@
                 <div v-if="amministratore" id="dashboard">
 
 
-
                     <div id="buttons">
 
                         <div v-if="estrai">
@@ -56,6 +55,10 @@
                         </div>
 
                         <!-- <button id="tabella" onclick="chiedi_tabella()">Tabella</button> -->
+
+
+                    </div>
+                    <div id="tabhtml" v-html="tabhtml">
 
 
                     </div>
@@ -77,14 +80,7 @@
                 </div>
             </el-row>
 
-            <el-row :gutter="10">
 
-                <div id="tabhtml" v-html="tabhtml">
-
-
-                </div>
-
-            </el-row>
 
             <el-row :gutter="10">
 
@@ -98,70 +94,75 @@
             </el-row>
 
             <el-row :gutter="10">
-                <div id="tabcanvas"></div>
+                <div id="tabcanvas" v-show="amministratore"></div>
+            </el-row>
+            <el-row :gutter="10">
+
+               
+
             </el-row>
         </div>
 
 
-    <div v-if="!loggato" id="prelogin">
-        <el-row :gutter="10">
+        <div v-if="!loggato" id="prelogin">
+            <el-row :gutter="10">
 
-            <div class="radio-toolbar">
-                <p> <input type="radio" id="creaTomb" v-model="creajoin" value="1" name="creaTomb">
-                    <label for="creaTomb">CREA</label>
+                <div class="radio-toolbar">
+                    <p> <input type="radio" id="creaTomb" v-model="creajoin" value="1" name="creaTomb">
+                        <label for="creaTomb">CREA</label>
 
-                <p> <input type="radio" id="joinTomb" v-model="creajoin" value="2"  name="creaTomb">
-                    <label for="joinTomb">JOIN</label>
-
-
-            </div>
-
-    </div>
+                    <p> <input type="radio" id="joinTomb" v-model="creajoin" value="2" name="creaTomb">
+                        <label for="joinTomb">JOIN</label>
 
 
-    <div v-if="!loggato" id="login">
+                </div>
 
-        <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
-            <el-form-item label="Nick">
-                <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
-                <el-input v-model="form.nick"></el-input>
-                <!-- </el-tooltip> -->
-            </el-form-item>
+        </div>
 
-            <el-form-item label="Join">
-                <el-input v-model="form.join"></el-input>
-            </el-form-item>
-            <div v-if="creajoin==1">
-                <el-form-item label="Cartelle max">
-                    <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+
+        <div v-if="!loggato" id="login">
+
+            <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
+                <el-form-item label="Nick">
+                    <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
+                    <el-input v-model="form.nick"></el-input>
+                    <!-- </el-tooltip> -->
                 </el-form-item>
 
-                <el-form-item label="Prezzo cartella">
-                    <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                <el-form-item label="Join">
+                    <el-input v-model="form.join"></el-input>
                 </el-form-item>
+                <div v-if="creajoin==1">
+                    <el-form-item label="Cartelle max">
+                        <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+                    </el-form-item>
+
+                    <el-form-item label="Prezzo cartella">
+                        <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                    </el-form-item>
 
 
-                <el-form-item label="Automatico">
-                    <el-switch v-model="form.auto"></el-switch>
-                </el-form-item>
-                <el-form-item label="IP multipli">
-                    <el-switch v-model="form.ipmult"></el-switch>
-                </el-form-item>
-                <el-form-item label="Vinc. Unico">
-                    <el-switch v-model="form.vincunico"></el-switch>
-                </el-form-item>
-            </div>
-        </el-form>
-        <el-button type="primary" onclick="OKRegolam()">OK</el-button>
-    </div>
+                    <el-form-item label="Automatico">
+                        <el-switch v-model="form.auto"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="IP multipli">
+                        <el-switch v-model="form.ipmult"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="Vinc. Unico">
+                        <el-switch v-model="form.vincunico"></el-switch>
+                    </el-form-item>
+                </div>
+            </el-form>
+            <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+        </div>
 
 
 
 
-   
 
 
-    <!--   <el-row :gutter="10">
+
+        <!--   <el-row :gutter="10">
 
             <div id="regolamento">
 
@@ -174,7 +175,7 @@
 
 
 
-    <!-- 
+        <!-- 
     <div v-if="!loggato" id="login">
 
 
@@ -246,7 +247,7 @@
                 tabhtml: "",
                 premitab: "",
                 labelPosition: "left",
-                activeTab: "Regolamento",
+                activeTab: "Mie",
                 form: {
 
                     nick: "",

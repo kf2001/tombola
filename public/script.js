@@ -125,12 +125,12 @@ function connetti() {
     socket.on('amministratore', function (msg) {
 
 
-        console.log(222222)
+  
 
         amministratore = true
         app.amministratore = true
 
-     //   let tacclk = setInterval(chiedi_tabella, 1000)
+        let tacclk = setInterval(chiedi_tabella, 1000)
 
 
     });
