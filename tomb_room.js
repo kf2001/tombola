@@ -14,11 +14,10 @@ var allClients = [];
 var ips = []
 var sockamm = []
 var rooms = []
-var combfatte = [false, false, false, false, false, false]
 
 
+var status = []
 
-let cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
 let colori = []
 for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
@@ -42,9 +41,9 @@ var activeClients = 0;
 
 
 var maxClients = 1000;
-var status = -2
+
 var premi = [1, 2, 3, 4, 10, 5]
-var regolam = []
+
 
 console.log("started")
 
@@ -66,21 +65,21 @@ io.sockets.on('connection', function (socket) {
         socket.on('disconnect', function () {
             activeClients -= 1;
             var i = allClients.indexOf(socket);
-            io.sockets.emit('andato', socket.nickname);
-            io.sockets.emit('message', { clients: activeClients });
+            io.sockets.to(socket.room).emit('andato', socket.nickname);
+            //    io.socketss.emit('message', { clients: activeClients });
             delete allClients[i];
         });
 
         socket.on('chiama', function (msg) {
 
 
-            if (combfatte[status] == false) {
-                io.sockets.emit("combinaz", { comb: msg, nick: socket.nickname });
+            if (socket.sockamm.combfatte[status[socket.room]] == false) {
+                io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
 
-                socket.vincite += vincstr[status]
+                socket.sockamm.vincite += vincstr[status[socket.room]]
 
 
-                if (regolam.vincunico == true) combfatte[status] = true
+                if (socket.sockamm.regolam.vincunico == true) socket.sockamm.combfatte[status[socket.room]] = true
 
             }
 
@@ -92,7 +91,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('compra', function (msg) {
 
-            io.sockets.emit('comprato', msg);
+            io.sockets.in(socket.room).emit('comprato', msg);
 
             comprataCartella(msg.cartella, msg.mynumber, socket)
         });
@@ -100,23 +99,23 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('via', function (msg) {
 
-            if (socket.id != sockamm.id) return;
+            if (socket.id != socket.sockamm.id) return;
 
+            status[socket.room]++
 
-            status++
-
-            if (status < 6) io.sockets.emit('start', status);
+            if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
 
             else {
                 let msgp = calcolaPremi()
                 let tabh = tabpremi()
-                io.sockets.emit('premi', tabh);
+                io.sockets.in(socket.room).emit('premi', tabh);
             }
 
 
         });
 
-        socket.on('miecartelle', function (msg) {it
+        socket.on('miecartelle', function (msg) {
+
 
             socket.emit('miecartelle', { cartelle: socket.cartelle, colori: socket.colori });
 
@@ -124,14 +123,16 @@ io.sockets.on('connection', function (socket) {
         });
         socket.on('tuttecartelle', function (msg) {
 
-            socket.emit('tuttecartelle', { cartelle: cartelle, colori: colori });
+
+
+            io.sockets.in(socket.room).emit('tuttecartelle', { cartelle: socket.sockamm.tuttecartelle, colori: socket.sockamm.tutticolori });
 
 
         });
 
         socket.on('estrai', function () {
 
-            if (socket.id != sockamm.id) return;
+            if (socket.id != socket.sockamm.id) return;
 
 
             let pallina = casuale(rimasti.length)
@@ -140,16 +141,16 @@ io.sockets.on('connection', function (socket) {
 
             estratti.push(pallina)
 
-            allClients.forEach(function (s) {
-                s.emit('estratta', estratta);
-            });
+            //   allClients.forEach(function (s) {
+            io.sockets.in(socket.room).emit('estratta', estratta);
+            //  });
         });
 
         socket.on('tabella', function () {
 
             let strh = "<table class='tbl'>"
             strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th>  "
-            allClients.forEach(function (s, idx) {
+            allClients.filter(x => x.room == socket.room).forEach(function (s, idx) {
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
                 strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
@@ -171,13 +172,16 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('chiedidisconn', function (msg) {
 
-            if (socket.id != sockamm.id) return;
+            if (socket.id != socket.sockamm.id) return;
             allClients[msg].disconnect()
 
         });
         socket.on('togglechat', function (msg) {
 
-            if (socket.id != sockamm.id) return;
+            if (socket.id != socket.sockamm.id) return;
+
+
+            // da modificare
             allClients[msg].chatenable = !allClients[msg].chatenable
 
 
@@ -185,7 +189,7 @@ io.sockets.on('connection', function (socket) {
         socket.on('chiedicartelle', function (msg) {
 
 
-            if (socket.id != sockamm.id) return;
+            if (socket.id != socket.sockamm.id) return;
 
             let sck = allClients[msg]
 
@@ -203,17 +207,16 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('regolamento', function (msg) {
 
+            console.log(888)
+            if (socket.id != socket.sockamm.id) return;
 
-          
-            if (socket.id != sockamm.id) return;
 
-            allClients.forEach(function (s) {
-                s.emit('regolamento', msg);
-            });
+            io.sockets.in(socket.room).emit('regolamento', msg);
 
-            regolam = msg;
-            console.log(regolam)
-            status = -1
+
+            socket.regolam = msg;
+
+            status[socket.room] = -1
 
         });
 
@@ -229,57 +232,63 @@ io.sockets.on('connection', function (socket) {
             socket.vincite = ""
             socket.guadagno = 0
             socket.ip = socket.conn.remoteAddress
-console.log(msg)
 
-            if (ips.indexOf(socket.ip) > -1 && regolam.ipmult == false) socket.disconnect(); else {
+            ips.push(socket.ip)
 
+            if (msg.amministratore == "1") {
 
-                ips.push(socket.ip)
+                let room = socket.joins
+                amministratore[room] = 1;
+                socket.amministratore = socket.nickname;
+                socket.room = room
+                sockamm[room] = socket;
+                socket.sockamm = socket
+                socket.ips = []
+                status[socket.room] = -2
+                socket.combfatte = [false, false, false, false, false, false]
 
-                if (msg.amministratore == "1") {
+                rooms.push(room)
+                socket.join(room)
+                socket.emit("amministratore", 1);
 
-                    let room = socket.joins
-                    amministratore[room] = 1;
-                    socket.amministratore = socket.nickname;
-                    socket.room = room
-                    sockamm[room] = socket;
-                    rooms.push(room)
-                    socket.join(room)
-                    socket.emit("amministratore", 1);
-
-                    socket.cartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
-                    let colori = []
-                    for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
-                    socket.colori = colori
-                    socket.estratti = []
-
-                    let palline = []
+                socket.tuttecartelle = JSON.parse(fs.readFileSync("./cartelle.json", "utf-8"))
 
 
-                    for (let r = 0; r < 90; r++) palline.push(r + 1)
+                let colori = []
+                for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
+                socket.tutticolori = colori
+                socket.estratti = []
 
-                    socket.palline = [...palline]
-                    socket.rimasti = [...palline]
+                let palline = []
 
 
-                    console.log("ammm")
-                    console.log(rooms)
+                for (let r = 0; r < 90; r++) palline.push(r + 1)
 
-                } else {
+                socket.palline = [...palline]
+                socket.rimasti = [...palline]
+                socket.regolam = {}
 
-                    if (rooms.indexOf(socket.joins) < 0) socket.disconnect(); else
 
-                    console.log("cli")
-                    socket.room=socket.joins
-                        socket.join(socket.joins)
+                console.log("ammm")
+                console.log(rooms)
 
-                        console.log(allClients.map(c=>c.room))
-                        console.log(sockamm[socket.joins].id, sockamm[socket.joins].nickname)
+            } else {
 
-                }
+                if (rooms.indexOf(socket.joins) < 0) socket.disconnect();
+
+
+                console.log("cli")
+                socket.sockamm = sockamm[socket.joins]
+                socket.room = socket.joins
+                socket.join(socket.joins)
+                if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
+                socket.sockamm.ips.push(socket.ip)
 
 
             }
+
+
+        
 
         });
     }
@@ -288,13 +297,13 @@ console.log(msg)
 function comprataCartella(numCartella, numGioc, sck) {
 
 
-    let comprata = cartelle.splice(numCartella * 27, 27)
-    let colore = colori.splice(numCartella, 1)[0]
+    let comprata = sck.sockamm.tuttecartelle.splice(numCartella * 27, 27)
+    let colore = sck.sockamm.tutticolori.splice(numCartella, 1)[0]
 
     sck.cartelle = [...sck.cartelle, ...comprata]
     sck.colori.push(colore)
 
-    io.sockets.emit('tuttecartelle', { cartelle: cartelle, colori: colori });
+    io.sockets.in(sck.room).emit('tuttecartelle', { cartelle: sck.sockamm.tuttecartelle, colori: sck.sockamm.tutticolori });
     sck.emit('miecartelle', { cartelle: sck.cartelle, colori: sck.colori });
 
 

@@ -182,7 +182,7 @@ function connetti() {
 
     });
     socket.on('miecartelle', function (msg) {
-
+console.log(msg)
 
         comprate = Math.floor(msg.cartelle.length / 27)
         app.comprate = comprate
