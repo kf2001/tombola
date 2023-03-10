@@ -67,7 +67,15 @@ io.sockets.on('connection', function (socket) {
             var i = allClients.indexOf(socket);
             io.sockets.to(socket.room).emit('andato', socket.nickname);
             //    io.socketss.emit('message', { clients: activeClients });
+            if (socket.amministratore == 1) {
+
+                let roomc = allClients.filter(c => c.room == socket.room)
+                console.log(roomc.length)
+                roomc.forEach(s => s.disconnect())
+
+            }
             delete allClients[i];
+            console.log("rimasti ", allClients.length)
         });
 
         socket.on('chiama', function (msg) {
@@ -76,7 +84,7 @@ io.sockets.on('connection', function (socket) {
             if (socket.sockamm.combfatte[status[socket.room]] == false) {
                 io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
 
-                socket.sockamm.vincite += vincstr[status[socket.room]]
+                socket.vincite += vincstr[status[socket.room]]
 
 
                 if (socket.sockamm.regolam.vincunico == true) socket.sockamm.combfatte[status[socket.room]] = true
@@ -106,7 +114,7 @@ io.sockets.on('connection', function (socket) {
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
 
             else {
-                let msgp = calcolaPremi()
+                let msgp = calcolaPremi(socket)
                 let tabh = tabpremi()
                 io.sockets.in(socket.room).emit('premi', tabh);
             }
@@ -160,9 +168,9 @@ io.sockets.on('connection', function (socket) {
                 strh += "<td>" + s.chatenable + "</td>"
 
 
-                strh += "<td><button onclick='disconn(" + idx + ")'>Disconnetti</button></td>"
-                strh += "<td><button onclick='chat(" + idx + ")'>Toggle chat</button></td>"
-                strh += "<td><button onclick='cartgioc(" + idx + ")'>Cartelle</button></td>"
+                strh += "<td><button onclick=\"disconn('" + s.id + "')\">Disconnetti</button></td>"
+                strh += "<td><button onclick=\"chat('" + s.id + "')\">Toggle chat</button></td>"
+                strh += "<td><button onclick=\"cartgioc('" + s.id + "')\">Cartelle</button></td>"
             });
             strh += "</table>"
 
@@ -173,16 +181,16 @@ io.sockets.on('connection', function (socket) {
         socket.on('chiedidisconn', function (msg) {
 
             if (socket.id != socket.sockamm.id) return;
-            allClients[msg].disconnect()
+            allClients.filter(c => c.id == msg)[0].disconnect()
 
         });
         socket.on('togglechat', function (msg) {
 
             if (socket.id != socket.sockamm.id) return;
 
-
+            let cli = allClients.filter(c => c.id == msg)[0]
             // da modificare
-            allClients[msg].chatenable = !allClients[msg].chatenable
+            cli.chatenable = !cli.chatenable
 
 
         });
@@ -191,7 +199,7 @@ io.sockets.on('connection', function (socket) {
 
             if (socket.id != socket.sockamm.id) return;
 
-            let sck = allClients[msg]
+            let sck = allClients.filter(c => c.id == msg)[0]
 
             socket.emit('cartellegioc', { cartelle: sck.cartelle, colori: sck.colori, fagioli: sck.fagioli });
 
@@ -239,6 +247,7 @@ io.sockets.on('connection', function (socket) {
 
                 let room = socket.joins
                 amministratore[room] = 1;
+                socket.amministratore = 1
                 socket.amministratore = socket.nickname;
                 socket.room = room
                 sockamm[room] = socket;
@@ -276,8 +285,8 @@ io.sockets.on('connection', function (socket) {
 
                 if (rooms.indexOf(socket.joins) < 0) socket.disconnect();
 
+                socket.amministratore = 0
 
-                console.log("cli")
                 socket.sockamm = sockamm[socket.joins]
                 socket.room = socket.joins
                 socket.join(socket.joins)
@@ -288,7 +297,7 @@ io.sockets.on('connection', function (socket) {
             }
 
 
-        
+
 
         });
     }
@@ -309,16 +318,19 @@ function comprataCartella(numCartella, numGioc, sck) {
 
 }
 
-function calcolaPremi() {
+function calcolaPremi(sck) {
 
     let piatto = 0
-    let fatti = [1, 1, 1, 1, 1, 1]
+    let fatti = [0, 0, 0, 0, 0, 0]
     let premi_ = []
 
-    allClients.forEach(function (s) {
+
+    let clients= allClients.filter(c=>c.room==sck.room)
+
+    clients.forEach(function (s) {
 
 
-        piatto += Math.floor(s.cartelle.length / 27) * (regolam.prezzo * 1);
+        piatto += Math.floor(s.cartelle.length / 27) * (sck.regolam.prezzo * 1);
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) fatti[v]++
     });
@@ -328,8 +340,8 @@ function calcolaPremi() {
     for (let v = 0; v < 6; v++)
         valore[v] = premi[v] * piatto / fatti[v]
 
-    console.log(3, valore)
-    allClients.forEach(function (s) {
+  
+    clients.forEach(function (s) {
         let guad = 0
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) guad += valore[v]
