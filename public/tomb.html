@@ -18,7 +18,7 @@
 
     <div id="app">
 
-        <div v-if="loggato">
+        <div v-if="loggato  && accettato">
             <el-row :gutter="10">
 
                 <div id="menu" v-if="amministratore">
@@ -98,65 +98,104 @@
             </el-row>
             <el-row :gutter="10">
 
-               
+
 
             </el-row>
         </div>
 
-
-        <div v-if="!loggato" id="prelogin">
-            <el-row :gutter="10">
-
-                <div class="radio-toolbar">
-                    <p> <input type="radio" id="creaTomb" v-model="creajoin" value="1" name="creaTomb">
-                        <label for="creaTomb">CREA</label>
-
-                    <p> <input type="radio" id="joinTomb" v-model="creajoin" value="2" name="creaTomb">
-                        <label for="joinTomb">JOIN</label>
+        <!-- <div v-if="!loggato" id="Regolamento"> -->
 
 
-                </div>
+        <div id="regolamento" v-if="!accettato && loggato==true">
+
+            <table>
+
+                <tr>
+                    <td>Cartelle max</td>
+                    <td><input v-model="form.maxC" disabled></td>
+                </tr>
+                <tr>
+                    <td>Prezzo cartella</td>
+                    <td><input v-model="form.prezzo" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>Auto</td>
+                    <td><input v-model="form.auto" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>IP multipli</td>
+                    <td><input v-model="form.ipmult" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>Singola chiamata</td>
+                    <td><input v-model="form.vincunico" disabled></input></td>
+                </tr>
+                <tr>
+                    <td> <el-button type="primary" onclick="Accetto()">Accetto</el-button></td>
+                    <td><el-button type="success" onclick="Rifiuto()">Rinuncio</el-button></td>
+                </tr>
+
+
+
+            </table>
+
 
         </div>
 
+        <div v-if="!loggato">
+            <div  id="prelogin">
+                <el-row :gutter="10">
 
-        <div v-if="!loggato" id="login">
+                    <div class="radio-toolbar">
+                        <p> <input type="radio" id="creaTomb" v-model="creajoin" value="1" name="creaTomb">
+                            <label for="creaTomb">CREA</label>
 
-            <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
-                <el-form-item label="Nick">
-                    <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
-                    <el-input v-model="form.nick"></el-input>
-                    <!-- </el-tooltip> -->
-                </el-form-item>
+                        <p> <input type="radio" id="joinTomb" v-model="creajoin" value="2" name="creaTomb">
+                            <label for="joinTomb">JOIN</label>
 
-                <el-form-item label="Join">
-                    <el-input v-model="form.join"></el-input>
-                </el-form-item>
-                <div v-if="creajoin==1">
-                    <el-form-item label="Cartelle max">
-                        <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+
+                    </div>
+
+            </div>
+
+
+            <div id="login">
+
+                <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
+                    <el-form-item label="Nick">
+                        <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
+                        <el-input v-model="form.nick"></el-input>
+                        <!-- </el-tooltip> -->
                     </el-form-item>
 
-                    <el-form-item label="Prezzo cartella">
-                        <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                    <el-form-item label="Join">
+                        <el-input v-model="form.join"></el-input>
                     </el-form-item>
+                    <div v-if="creajoin==1">
+                        <el-form-item label="Cartelle max">
+                            <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+                        </el-form-item>
+
+                        <el-form-item label="Prezzo cartella">
+                            <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
 
 
-                    <el-form-item label="Automatico">
-                        <el-switch v-model="form.auto"></el-switch>
-                    </el-form-item>
-                    <el-form-item label="IP multipli">
-                        <el-switch v-model="form.ipmult"></el-switch>
-                    </el-form-item>
-                    <el-form-item label="Vinc. Unico">
-                        <el-switch v-model="form.vincunico"></el-switch>
-                    </el-form-item>
-                </div>
-            </el-form>
-            <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+                        <el-form-item label="Automatico">
+                            <el-switch v-model="form.auto"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="IP multipli">
+                            <el-switch v-model="form.ipmult"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="Vinc. Unico">
+                            <el-switch v-model="form.vincunico"></el-switch>
+                        </el-form-item>
+                    </div>
+                </el-form>
+                <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+            </div>
+
         </div>
-
-
 
     </div>
 
@@ -188,6 +227,7 @@
                 premitab: "",
                 labelPosition: "left",
                 activeTab: "Mie",
+                accettato: false,
                 form: {
 
                     nick: "",

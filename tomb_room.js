@@ -29,6 +29,10 @@ let vincstr = ["a", "t", "q", "c", "T", "Z"]
 
 app.use(express.static('./public'));
 
+app.get('/', function(req, res){
+    res.redirect('/tomb.html');
+}); 
+
 app.get("/reboot", (req, res) => {
 
     process.exit(1)
@@ -94,6 +98,17 @@ io.sockets.on('connection', function (socket) {
 
         });
 
+
+        socket.on('accetto', function (msg) {
+
+          
+        });
+
+        socket.on('rifiuto', function (msg) {
+
+          socket.disconnect()
+
+        });
 
         socket.on('compra', function (msg) {
 
@@ -321,14 +336,13 @@ function calcolaPremi(sck) {
     let fatti = [0, 0, 0, 0, 0, 0]
     let premi_ = []
 
-// calculate sum of vector's elements
-let sump =premi.reduce((a, b) => a + b, 0);
-   
-  
-    let clients= allClients.filter(c=>c.room==sck.room)
+
+    let sump = premi.reduce((a, b) => a + b, 0);
+
+
+    let clients = allClients.filter(c => c.room == sck.room)
 
     clients.forEach(function (s) {
-
 
         piatto += Math.floor(s.cartelle.length / 27) * (sck.regolam.prezzo * 1);
         for (let v = 0; v < 6; v++)
@@ -340,14 +354,14 @@ let sump =premi.reduce((a, b) => a + b, 0);
     for (let v = 0; v < 6; v++)
         valore[v] = premi[v] * piatto / fatti[v]
 
-  
+
     clients.forEach(function (s) {
         let guad = 0
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) guad += valore[v]
 
-        s.guadagno = guad/sump;
-       
+        s.guadagno = guad / sump;
+
 
         let prem = { nick: s.nickname, vinto: s.guadagno }
         premi_.push(prem)
@@ -363,7 +377,7 @@ function tabpremi(sck) {
 
     let strh = "<table class='tbl'>"
     strh += "<tr><th>nome</th> <th>cartelle</th> <th>tomb</th><th>vincita</th>  "
-    allClients.filter(c=>c.room==sck.room).forEach(s=>{
+    allClients.filter(c => c.room == sck.room).forEach(s => {
         strh += "<tr>"
         strh += "<td>" + s.nickname + "</td>"
         strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"

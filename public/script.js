@@ -11,6 +11,8 @@ var Room = "";
 var colori = []
 var mieicolori = []
 
+
+
 //  var amministratore = 0
 
 var messaggi = ["l'ambo", "il terno", "la quaterna", "la cinquina", " la tombola", "per il tombolino"]
@@ -36,6 +38,17 @@ function InviaRegolamento() {
 
     socket.emit("regolamento", regolam)
 
+}
+
+function Accetto() {
+    
+    app.accettato=true
+
+}
+function Rifiuto() {
+    
+    socket.emit("rifiuto", {})
+    
 }
 function OKRegolam() {
 
