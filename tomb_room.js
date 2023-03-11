@@ -22,12 +22,10 @@ var status = []
 let colori = []
 for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
 
-let estratti = []
-let palline = []
+
 let vincstr = ["a", "t", "q", "c", "T", "Z"]
 
-for (let r = 0; r < 90; r++) palline.push(r + 1)
-let rimasti = [...palline]
+
 
 app.use(express.static('./public'));
 
@@ -115,7 +113,7 @@ io.sockets.on('connection', function (socket) {
 
             else {
                 let msgp = calcolaPremi(socket)
-                let tabh = tabpremi()
+                let tabh = tabpremi(socket)
                 io.sockets.in(socket.room).emit('premi', tabh);
             }
 
@@ -143,11 +141,11 @@ io.sockets.on('connection', function (socket) {
             if (socket.id != socket.sockamm.id) return;
 
 
-            let pallina = casuale(rimasti.length)
+            let pallina = casuale(socket.rimasti.length)
 
-            let estratta = rimasti.splice(pallina, 1)[0]
+            let estratta = socket.rimasti.splice(pallina, 1)[0]
 
-            estratti.push(pallina)
+            socket.estratti.push(pallina)
 
             //   allClients.forEach(function (s) {
             io.sockets.in(socket.room).emit('estratta', estratta);
@@ -270,7 +268,6 @@ io.sockets.on('connection', function (socket) {
 
                 let palline = []
 
-
                 for (let r = 0; r < 90; r++) palline.push(r + 1)
 
                 socket.palline = [...palline]
@@ -324,7 +321,10 @@ function calcolaPremi(sck) {
     let fatti = [0, 0, 0, 0, 0, 0]
     let premi_ = []
 
-
+// calculate sum of vector's elements
+let sump =premi.reduce((a, b) => a + b, 0);
+   
+  
     let clients= allClients.filter(c=>c.room==sck.room)
 
     clients.forEach(function (s) {
@@ -346,8 +346,8 @@ function calcolaPremi(sck) {
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) guad += valore[v]
 
-        s.guadagno = guad
-        console.log(2, guad)
+        s.guadagno = guad/sump;
+       
 
         let prem = { nick: s.nickname, vinto: s.guadagno }
         premi_.push(prem)
@@ -359,11 +359,11 @@ function calcolaPremi(sck) {
 
 }
 
-function tabpremi() {
+function tabpremi(sck) {
 
     let strh = "<table class='tbl'>"
     strh += "<tr><th>nome</th> <th>cartelle</th> <th>tomb</th><th>vincita</th>  "
-    allClients.forEach(function (s, idx) {
+    allClients.filter(c=>c.room==sck.room).forEach(s=>{
         strh += "<tr>"
         strh += "<td>" + s.nickname + "</td>"
         strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
@@ -375,9 +375,6 @@ function tabpremi() {
     strh += "</table>"
 
     return strh
-
-
-
 }
 
 function casuale(n) { return Math.floor(n * Math.random()) }
