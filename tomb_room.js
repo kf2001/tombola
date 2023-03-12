@@ -29,14 +29,34 @@ let vincstr = ["a", "t", "q", "c", "T", "Z"]
 
 app.use(express.static('./public'));
 
-app.get('/', function(req, res){
+app.get('/', function (req, res) {
     res.redirect('/tomb.html');
-}); 
+});
 
 app.get("/reboot", (req, res) => {
 
     process.exit(1)
 })
+
+
+app.get("/monit", (req, res) => {
+
+    //monitor
+    let risp = monitor()
+
+    res.send(risp)
+})
+
+app.get("/stanze", (req, res) => {
+
+    //monitor
+    let risp = stanze()
+
+    res.send(risp)
+})
+
+
+
 var numero = 0
 
 var activeClients = 0;
@@ -101,12 +121,12 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('accetto', function (msg) {
 
-          
+
         });
 
         socket.on('rifiuto', function (msg) {
 
-          socket.disconnect()
+            socket.disconnect()
 
         });
 
@@ -383,6 +403,59 @@ function tabpremi(sck) {
         strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
         strh += "<td>" + s.vincite + "</td>"
         strh += "<td>" + s.guadagno + "</td>"
+
+
+    });
+    strh += "</table>"
+
+    return strh
+}
+
+function monitor(sck) {
+
+    let aC = allClients
+
+    let strh = "<table class='tbl'>"
+    strh += "<tr><th>nome</th> <th> ammin.</th> <th>cartelle</th> <th>tomb</th><th>room</th>  "
+
+    aC.forEach(s => {
+        strh += "<tr>"
+        strh += "<td>" + s.nickname + "</td>"
+
+        strh += "<td>" + s.amministratore + "</td>"
+        strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
+        strh += "<td>" + s.vincite + "</td>"
+        strh += "<td>" + s.room + "</td>"
+
+
+    });
+    strh += "</table>"
+
+    return strh
+}
+
+
+function stanze(sck) {
+
+    let aC = allClients
+
+    let rr = []
+    let rooms_ = aC.filter(c => c.amministratore ).map(c => { return { admin: c.nickname, room: c.room } })
+
+console.log(aC.filter(c => c.amministratore ).map(c => { return { admin: c.nickname, room: c.room } }))
+
+ let strh = "<table class='tbl'>"
+    rooms_.forEach(r => {
+
+       
+        strh += "<tr><th>room</th> <th> ammin.</th> "
+
+
+        strh += "<tr>"
+        strh += "<td>" + r.admin + "</td>"
+
+        strh += "<td>" + r.room + "</td>"
+
 
 
     });
