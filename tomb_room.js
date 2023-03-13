@@ -67,7 +67,7 @@ var maxClients = 1000;
 var premi = [1, 2, 3, 4, 10, 5]
 
 
-console.log("started")
+console.log("started44")
 
 
 io.sockets.on('connection', function (socket) {
@@ -76,7 +76,7 @@ io.sockets.on('connection', function (socket) {
     //  if (status > -1) { socket.disconnect(); return }
 
     numero++
-    console.log("connesso!! ", numero)
+    console.log("connesso!! aaa", numero)
     if (activeClients < maxClients) {
         allClients.push(socket);
 
