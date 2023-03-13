@@ -9,7 +9,6 @@ const io = new Server(httpServer, { /* options */ });
 const fs = require("fs")
 var amministratore = []
 
-var joins = "1010"
 var allClients = [];
 var ips = []
 var sockamm = []
@@ -78,6 +77,8 @@ io.sockets.on('connection', function (socket) {
     numero++
     console.log("connesso!! aaa", numero)
     if (activeClients < maxClients) {
+
+        console.log("allClients ", allClients.length)
         allClients.push(socket);
 
         activeClients += 1;
@@ -85,6 +86,8 @@ io.sockets.on('connection', function (socket) {
         socket.emit('numero', numero);
 
         socket.on('disconnect', function () {
+
+            console.log("disconnected ", socket.nickname)
             activeClients -= 1;
             var i = allClients.indexOf(socket);
             io.sockets.to(socket.room).emit('andato', socket.nickname);
@@ -102,7 +105,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('chiama', function (msg) {
 
-
+            console.log("chiamato ", msg)
             if (socket.sockamm.combfatte[status[socket.room]] == false) {
                 io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
 
@@ -120,7 +123,7 @@ io.sockets.on('connection', function (socket) {
 
 
         socket.on('accetto', function (msg) {
-
+            console.log("accetato ", socket.nickname)
 
         });
 
@@ -140,8 +143,10 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('via', function (msg) {
 
-            if (socket.id != socket.sockamm.id) return;
 
+            console.log("via ", socket.nickname)
+            if (socket.id != socket.sockamm.id) return;
+            console.log("via ", socket.nickname)
             status[socket.room]++
 
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
@@ -173,9 +178,11 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('estrai', function () {
 
+            console.log("estrai ", socket.nickname)
+
             if (socket.id != socket.sockamm.id) return;
 
-
+            console.log("estratto ", socket.nickname)
             let pallina = casuale(socket.rimasti.length)
 
             let estratta = socket.rimasti.splice(pallina, 1)[0]
@@ -470,6 +477,6 @@ let portc = casuale(50) + 8040
 const port = process.env.PORT || portc;
 
 
-httpServer.listen(portc);
+httpServer.listen(port);
 
 console.log("Server in ascolto alla porta " + port);
