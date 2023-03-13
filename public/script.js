@@ -33,6 +33,10 @@ var inviatoregolam = false
 let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
 
 
+Object.keys(io.sockets.sockets).forEach(function(s) {
+    io.sockets.sockets[s].disconnect(true);
+  });
+  
 function InviaRegolamento() {
 
 
