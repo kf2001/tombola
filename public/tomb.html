@@ -3,7 +3,7 @@
 
 <head>
     <title>TOMBOLA</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./stili.css">
@@ -106,7 +106,7 @@
         <!-- <div v-if="!loggato" id="Regolamento"> -->
 
 
-        <div id="regolamento" v-if="!accettato && loggato==true">
+        <div id="regolamento" v-if="!accettato && loggato==true && !amministratore">
 
             <table>
 
@@ -143,7 +143,7 @@
         </div>
 
         <div v-if="!loggato">
-            <div  id="prelogin">
+            <div id="prelogin">
                 <el-row :gutter="10">
 
                     <div class="radio-toolbar">

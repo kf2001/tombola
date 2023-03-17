@@ -38,24 +38,6 @@ app.get("/reboot", (req, res) => {
 })
 
 
-app.get("/monit", (req, res) => {
-
-    //monitor
-    let risp = monitor()
-
-    res.send(risp)
-})
-
-app.get("/stanze", (req, res) => {
-
-    //monitor
-    let risp = stanze()
-
-    res.send(risp)
-})
-
-
-
 var numero = 0
 
 var activeClients = 0;
@@ -76,19 +58,19 @@ io.sockets.on('connection', function (socket) {
 
     numero++
     console.log("connesso!! aaa", numero)
-    if (activeClients < maxClients) {
+    if (allClients.length < maxClients) {
 
         console.log("allClients ", allClients.length)
-        allClients.push(socket);
+        //  allClients.push(socket);
 
-        activeClients += 1;
+        //  activeClients += 1;
 
         socket.emit('numero', numero);
 
         socket.on('disconnect', function () {
 
             console.log("disconnected ", socket.nickname)
-            activeClients -= 1;
+
             var i = allClients.indexOf(socket);
             io.sockets.to(socket.room).emit('andato', socket.nickname);
             //    io.socketss.emit('message', { clients: activeClients });
@@ -117,6 +99,17 @@ io.sockets.on('connection', function (socket) {
             }
 
             //Verifica combinazione
+
+
+        });
+
+        socket.on('monitor', function (msg) {
+
+            let strm = monitor()
+            let strstanze = stanze()
+
+
+            socket.emit("monitor", { strm: strm, stanze: strstanze })
 
 
         });
@@ -270,6 +263,15 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('join', function (msg) {
 
+            if (msg.deus) {
+
+                console.log("deus!!")
+                return
+            }
+
+            allClients.push(socket);
+
+
             socket.nickname = msg.nick;
 
             socket.joins = msg.room
@@ -418,7 +420,7 @@ function tabpremi(sck) {
     return strh
 }
 
-function monitor(sck) {
+function monitor() {
 
     let aC = allClients
 
@@ -442,26 +444,25 @@ function monitor(sck) {
 }
 
 
-function stanze(sck) {
+function stanze() {
 
     let aC = allClients
 
     let rr = []
-    let rooms_ = aC.filter(c => c.amministratore ).map(c => { return { admin: c.nickname, room: c.room } })
+    let rooms_ = aC.filter(c => c.amministratore).map(c => { return { admin: c.nickname, room: c.room } })
 
-console.log(aC.filter(c => c.amministratore ).map(c => { return { admin: c.nickname, room: c.room } }))
 
- let strh = "<table class='tbl'>"
+
+    let strh = "<table class='tbl'>"
+    strh += "<tr><th>room</th> <th> ammin.</th></tr> "
     rooms_.forEach(r => {
 
-       
-        strh += "<tr><th>room</th> <th> ammin.</th> "
 
 
         strh += "<tr>"
         strh += "<td>" + r.admin + "</td>"
 
-        strh += "<td>" + r.room + "</td>"
+        strh += "<td>" + r.room + "</td></tr>"
 
 
 
@@ -473,7 +474,7 @@ console.log(aC.filter(c => c.amministratore ).map(c => { return { admin: c.nickn
 
 function casuale(n) { return Math.floor(n * Math.random()) }
 //let portc = casuale(50) + 8040
-let portc =  8040
+let portc = 8040
 const port = process.env.PORT || portc;
 
 

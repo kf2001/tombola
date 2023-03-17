@@ -33,10 +33,7 @@ var inviatoregolam = false
 let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
 
 
-Object.keys(io.sockets.sockets).forEach(function(s) {
-    io.sockets.sockets[s].disconnect(true);
-  });
-  
+
 function InviaRegolamento() {
 
 
@@ -131,7 +128,7 @@ function connetti() {
         app.status = -1
         regolam = msg
 
-        console.log(999999)
+    
 
         socket.emit('tuttecartelle', {})
 
@@ -141,11 +138,11 @@ function connetti() {
 
     socket.on('amministratore', function (msg) {
 
-
-  
-
+ 
         amministratore = true
         app.amministratore = true
+        app.accettato=true
+
 
         let tacclk = setInterval(chiedi_tabella, 1000)
 
@@ -199,7 +196,7 @@ function connetti() {
 
     });
     socket.on('miecartelle', function (msg) {
-console.log(msg)
+
 
         comprate = Math.floor(msg.cartelle.length / 27)
         app.comprate = comprate
@@ -539,13 +536,12 @@ function chiedi_tabella() {
 function chat(sid) {
 
     socket.emit("togglechat", sid)
-    console.log(888)
+
 }
 
 
 function cartgioc(sid) {
-    console.log(777)
-
+  
     socket.emit("chiedicartelle", sid)
 }
 

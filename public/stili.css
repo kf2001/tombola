@@ -1,34 +1,34 @@
-
 label {
     font-size: 1.5em !important;
     margin: .2em;
-    padding:0 !important;
+    padding: 0 !important;
     line-height: 20px !important;
-  
-} 
+
+}
 
 #login {
- 
-    width:fit-content;
-    height:fit-content;
+
+    width: fit-content;
+    height: fit-content;
     position: absolute;
     top: 20%;
     left: 40%;
-     margin: -50px 0 0 -50px; 
+    margin: -50px 0 0 -50px;
     border: 4px solid royalblue;
-    padding:40px;
+    padding: 40px;
 
 }
- #prelogin{
- 
-    width:fit-content;
-    height:fit-content;
+
+#prelogin {
+
+    width: fit-content;
+    height: fit-content;
     position: absolute;
     top: 20%;
     left: 20%;
-     margin: -50px 0 0 -50px; 
+    margin: -50px 0 0 -50px;
     border: 4px solid forestgreen;
-    padding:40px;
+    padding: 40px;
 
 }
 
@@ -53,12 +53,13 @@ label {
     font-weight: bold;
     border: 2px solid #202020;
     padding: 0.20em;
-height: 200px;
+    height: 200px;
     width: 200px
 }
 
 #tcontainer,
-#mcontainer {
+#mcontainer,
+#gcontainer {
 
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -107,26 +108,26 @@ td {
 
 }
 
-#regolamento  { 
-    width:fit-content;
-    height:fit-content;
+#regolamento {
+    width: fit-content;
+    height: fit-content;
     position: absolute;
     top: 20%;
     left: 40%;
-     margin: -50px 0 0 -50px; 
+    margin: -50px 0 0 -50px;
     border: 4px solid royalblue;
-    padding:40px;
+    padding: 40px;
 
 
 
 }
 
-#regolamento input { 
-    padding:0px;
-font-weight: bold;
-width:40px;
-color:darkblue;
-border: none;
+#regolamento input {
+    padding: 0px;
+    font-weight: bold;
+    width: 40px;
+    color: darkblue;
+    border: none;
 
 }
 

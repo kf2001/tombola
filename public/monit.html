@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TOMBOLA</title>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./stili.css">
+
+
+
+
+</head>
+
+<body>
+
+
+    <div id="app">
+
+
+
+        <div v-if="!loggato">
+
+
+
+            <div id="login">
+
+                <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
+                    <el-form-item label="Nick">
+                        <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
+                        <el-input v-model="form.nick"></el-input>
+                        <!-- </el-tooltip> -->
+                    </el-form-item>
+
+                    <el-form-item label="Join">
+                        <el-input v-model="form.join"></el-input>
+                    </el-form-item>
+
+                </el-form>
+                <el-button type="primary" onclick="OKL()">OK</el-button>
+            </div>
+
+        </div>
+
+        <div id="tabhtml" v-html="tbl1">
+
+
+        </div>
+
+        <div id="tab2" v-html="tbl2">
+
+
+        </div>
+
+    </div>
+
+
+
+    <script src="./script.js"></script>
+
+
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+
+                form: {
+
+                    nick: "hhh",
+                    join: "hhh",
+
+                },
+
+                tbl1:"", 
+                tbl2:""
+
+
+
+            },
+            methods: {
+                handleClick(tab, event) {
+
+                }
+              
+            }
+        })
+
+
+
+      function  OKL() {
+
+socket = io.connect();
+socket.deus = 1;
+
+socket.on('numero', function (msg) {
+
+    socket.emit('join', { deus: 1 });
+
+    socket.emit("monitor","ciao" )
+
+
+});
+
+socket.on('monitor', function (msg) {
+
+app.tbl1=msg.strm
+app.tbl2=msg.stanze
+
+});
+
+
+}
+    </script>
+
+</body>
+
+</html>
