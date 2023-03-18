@@ -3,6 +3,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 
 const app = express();
+const md5_=require("./md5.js").md5
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
 
@@ -14,9 +15,8 @@ var ips = []
 var sockamm = []
 var rooms = []
 
-
 var status = []
-
+var deus=undefined;
 
 let colori = []
 for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
@@ -48,7 +48,7 @@ var maxClients = 1000;
 var premi = [1, 2, 3, 4, 10, 5]
 
 
-console.log("started44")
+console.log("started")
 
 
 io.sockets.on('connection', function (socket) {
@@ -57,7 +57,7 @@ io.sockets.on('connection', function (socket) {
     //  if (status > -1) { socket.disconnect(); return }
 
     numero++
-    console.log("connesso!! aaa", numero)
+    console.log("connesso!!", numero)
     if (allClients.length < maxClients) {
 
         console.log("allClients ", allClients.length)
@@ -69,7 +69,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('disconnect', function () {
 
-            console.log("disconnected ", socket.nickname)
+        
 
             var i = allClients.indexOf(socket);
             io.sockets.to(socket.room).emit('andato', socket.nickname);
@@ -77,17 +77,17 @@ io.sockets.on('connection', function (socket) {
             if (socket.amministratore == 1) {
 
                 let roomc = allClients.filter(c => c.room == socket.room)
-                console.log(roomc.length)
+               
                 roomc.forEach(s => s.disconnect())
 
             }
             delete allClients[i];
-            console.log("rimasti ", allClients.length)
+         
         });
 
         socket.on('chiama', function (msg) {
 
-            console.log("chiamato ", msg)
+          
             if (socket.sockamm.combfatte[status[socket.room]] == false) {
                 io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
 
@@ -105,6 +105,11 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('monitor', function (msg) {
 
+          
+            if(!deus) return;
+
+            if (socket.id!=deus.id) return;
+
             let strm = monitor()
             let strstanze = stanze()
 
@@ -116,7 +121,7 @@ io.sockets.on('connection', function (socket) {
 
 
         socket.on('accetto', function (msg) {
-            console.log("accetato ", socket.nickname)
+          
 
         });
 
@@ -137,9 +142,9 @@ io.sockets.on('connection', function (socket) {
         socket.on('via', function (msg) {
 
 
-            console.log("via ", socket.nickname)
+           
             if (socket.id != socket.sockamm.id) return;
-            console.log("via ", socket.nickname)
+            
             status[socket.room]++
 
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
@@ -171,11 +176,11 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('estrai', function () {
 
-            console.log("estrai ", socket.nickname)
+        
 
             if (socket.id != socket.sockamm.id) return;
 
-            console.log("estratto ", socket.nickname)
+          
             let pallina = casuale(socket.rimasti.length)
 
             let estratta = socket.rimasti.splice(pallina, 1)[0]
@@ -248,7 +253,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('regolamento', function (msg) {
 
-            console.log(888)
+         
             if (socket.id != socket.sockamm.id) return;
 
 
@@ -264,10 +269,16 @@ io.sockets.on('connection', function (socket) {
         socket.on('join', function (msg) {
 
             if (msg.deus) {
+               
+                if((md5_(msg.nick)).substr(0,5)!="44082")  return
+               
+                deus=socket
 
-                console.log("deus!!")
+                socket.emit("loggato", {})
                 return
             }
+
+        
 
             allClients.push(socket);
 
@@ -317,10 +328,6 @@ io.sockets.on('connection', function (socket) {
                 socket.palline = [...palline]
                 socket.rimasti = [...palline]
                 socket.regolam = {}
-
-
-                console.log("ammm")
-                console.log(rooms)
 
             } else {
 

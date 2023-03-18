@@ -43,13 +43,20 @@
 
         </div>
 
-        <div id="tabhtml" v-html="tbl1">
+        <div v-if="loggato">
 
 
-        </div>
 
-        <div id="tab2" v-html="tbl2">
 
+            <div id="tabhtml" v-html="tbl1">
+
+
+            </div>
+
+            <div id="tab2" v-html="tbl2">
+
+
+            </div>
 
         </div>
 
@@ -68,16 +75,17 @@
         var app = new Vue({
             el: '#app',
             data: {
+                loggato: false,
 
                 form: {
 
-                    nick: "hhh",
+                    nick: "ennio",
                     join: "hhh",
 
                 },
 
-                tbl1:"", 
-                tbl2:""
+                tbl1: "",
+                tbl2: ""
 
 
 
@@ -86,35 +94,51 @@
                 handleClick(tab, event) {
 
                 }
-              
+
             }
         })
 
+        let intervallo;
 
 
-      function  OKL() {
+        function OKL() {
 
-socket = io.connect();
-socket.deus = 1;
+            socket = io.connect();
+            socket.deus = 1;
+            console.log(app.form.nick)
 
-socket.on('numero', function (msg) {
+            socket.on('numero', function (msg) {
 
-    socket.emit('join', { deus: 1 });
+                socket.emit('join', { deus: 1, nick: app.form.nick });
 
-    socket.emit("monitor","ciao" )
+             //   socket.emit("monitor", "ciao")
+
+              
+
+
+            });
+
+            socket.on('monitor', function (msg) {
+
+                app.tbl1 = msg.strm
+                app.tbl2 = msg.stanze
+
+            });
+
+            socket.on('loggato', function (msg) {
+
+app.loggato=true
+intervallo=setInterval(aggiorna,1000)
 
 
 });
 
-socket.on('monitor', function (msg) {
-
-app.tbl1=msg.strm
-app.tbl2=msg.stanze
-
-});
 
 
-}
+
+        }
+
+        function aggiorna(){socket.emit("monitor", "ciao")}
     </script>
 
 </body>
