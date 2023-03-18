@@ -8,7 +8,28 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" href="./stili.css">
 
+    <style>
+     
 
+        #container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            justify-content: left;
+            align-items: flex-start;
+
+
+
+        }
+
+        #container div {
+
+            display: flex;
+            width: 450px;
+            border: 1px solid green
+        }
+    </style>
 
 
 </head>
@@ -17,6 +38,9 @@
 
 
     <div id="app">
+
+
+
 
 
 
@@ -45,21 +69,21 @@
 
         <div v-if="loggato">
 
+            <div id="container">
 
 
+                <div id="tabhtml" v-html="tbl1">
 
-            <div id="tabhtml" v-html="tbl1">
 
+                </div>
+
+                <div id="tab2" v-html="tbl2">
+
+
+                </div>
 
             </div>
-
-            <div id="tab2" v-html="tbl2">
-
-
-            </div>
-
         </div>
-
     </div>
 
 
@@ -111,9 +135,9 @@
 
                 socket.emit('join', { deus: 1, nick: app.form.nick });
 
-             //   socket.emit("monitor", "ciao")
+                //   socket.emit("monitor", "ciao")
 
-              
+
 
 
             });
@@ -127,18 +151,18 @@
 
             socket.on('loggato', function (msg) {
 
-app.loggato=true
-intervallo=setInterval(aggiorna,1000)
+                app.loggato = true
+                intervallo = setInterval(aggiorna, 1000)
 
 
-});
+            });
 
 
 
 
         }
 
-        function aggiorna(){socket.emit("monitor", "ciao")}
+        function aggiorna() { socket.emit("monitor", "ciao") }
     </script>
 
 </body>
