@@ -79,8 +79,8 @@ function OKRegolam() {
 
 function init() {
 
-    $(document).attr('title', mynick);
-
+  //  $(document).attr('title', mynick);
+  document.title=myNick;
 }
 
 function connetti() {

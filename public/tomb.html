@@ -18,8 +18,14 @@
 
     <div id="app">
 
-        <div v-if="loggato  && accettato">
-            <el-row :gutter="10">
+        <div>
+
+            <div id="tabhtml" v-html="tabhtml">
+
+
+            </div>
+
+            <div v-if="loggato  && accettato" id="container">
 
                 <div id="menu" v-if="amministratore">
                     <template>
@@ -35,9 +41,7 @@
 
 
 
-            </el-row>
 
-            <el-row :gutter="10">
 
                 <div v-if="amministratore" id="dashboard">
 
@@ -58,31 +62,32 @@
 
 
                     </div>
-                    <div id="tabhtml" v-html="tabhtml">
 
+
+
+
+
+                    <div id="messaggio_">
+
+                        {{messaggio}}
+
+                    </div>
+
+                    <div id="estratta">
+
+                        {{pallina}}
+
+                    </div>
+
+                    <div id="chat">
+
+                     dghdgdjdgkj
 
                     </div>
                 </div>
 
-            </el-row>
-            <el-row :gutter="10">
-                <div id="messaggio_">
-
-                    {{messaggio}}
-
-                </div>
-            </el-row>
-            <el-row :gutter="10">
-                <div id="estratta">
-
-                    {{pallina}}
-
-                </div>
-            </el-row>
 
 
-
-            <el-row :gutter="10">
 
                 <div id="mcontainer" v-show="activeTab=='Mie'"></div>
                 <div id="tcontainer" v-if="status<0"></div>
@@ -91,21 +96,13 @@
 
                 <div id="tabpremi" v-html="premitab" v-if="status>=0"></div>
 
-            </el-row>
-
-            <el-row :gutter="10">
                 <div id="tabcanvas" v-show="amministratore"></div>
-            </el-row>
-            <el-row :gutter="10">
 
+            </div>
 
+            <!-- <div v-if="!loggato" id="Regolamento"> -->
 
-            </el-row>
         </div>
-
-        <!-- <div v-if="!loggato" id="Regolamento"> -->
-
-
         <div id="regolamento" v-if="!accettato && loggato==true && !amministratore">
 
             <table>
@@ -144,17 +141,17 @@
 
         <div v-if="!loggato">
             <div id="prelogin">
-                <el-row :gutter="10">
-
-                    <div class="radio-toolbar">
-                        <p> <input type="radio" id="creaTomb" v-model="creajoin" value="1" name="creaTomb">
-                            <label for="creaTomb">CREA</label>
-
-                        <p> <input type="radio" id="joinTomb" v-model="creajoin" value="2" name="creaTomb">
-                            <label for="joinTomb">JOIN</label>
 
 
-                    </div>
+                <div class="radio-toolbar">
+                    <p> <input type="radio" id="creaTomb" v-model="creajoin" value="1" name="creaTomb">
+                        <label for="creaTomb">CREA</label>
+
+                    <p> <input type="radio" id="joinTomb" v-model="creajoin" value="2" name="creaTomb">
+                        <label for="joinTomb">JOIN</label>
+
+
+                </div>
 
             </div>
 
