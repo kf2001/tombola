@@ -21,10 +21,7 @@ var deus=undefined;
 let colori = []
 for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
 
-
 let vincstr = ["a", "t", "q", "c", "T", "Z"]
-
-
 
 app.use(express.static('./public'));
 
@@ -338,8 +335,8 @@ io.sockets.on('connection', function (socket) {
                 socket.sockamm = sockamm[socket.joins]
                 socket.room = socket.joins
                 socket.join(socket.joins)
-                if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
-                socket.sockamm.ips.push(socket.ip)
+             //   if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
+//                socket.sockamm.ips.push(socket.ip)
 
 
             }

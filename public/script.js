@@ -280,13 +280,13 @@ function tessera(num) {
 
     var canvas = document.createElement('canvas');
 
-    canvas.width = "200";
-    canvas.height = "200";
+    canvas.width = "100";
+    canvas.height = "100";
 
 
     canvas.style.zIndex = 8;
-    canvas.style.position = "absolute";
-    canvas.style.border = "1px solid";
+   // canvas.style.position = "absolute";
+    canvas.style.border = "0px solid";
 
 
     var ctx = canvas.getContext("2d");
@@ -298,7 +298,7 @@ function tessera(num) {
     ctx.lineWidth = lato / 3
 
         ;
-     ctx.ellipse(100, 100, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+     ctx.ellipse(100-50, 100-50, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke() 
 
 
@@ -313,7 +313,7 @@ function tessera(num) {
     ctx.font = "bold 32px mono";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.fillText(num, 100, 100)
+    ctx.fillText(num, 100-50, 100-50)
 
     document.getElementById("estratta").innerHTML = "";
     document.getElementById("estratta").appendChild(canvas);
