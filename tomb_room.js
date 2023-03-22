@@ -3,7 +3,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 
 const app = express();
-const md5_=require("./md5.js").md5
+const md5_ = require("./md5.js").md5
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
 
@@ -16,7 +16,7 @@ var sockamm = []
 var rooms = []
 
 var status = []
-var deus=undefined;
+var deus = undefined;
 
 let colori = []
 for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
@@ -66,7 +66,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('disconnect', function () {
 
-        
+
 
             var i = allClients.indexOf(socket);
             io.sockets.to(socket.room).emit('andato', socket.nickname);
@@ -74,17 +74,17 @@ io.sockets.on('connection', function (socket) {
             if (socket.amministratore == 1) {
 
                 let roomc = allClients.filter(c => c.room == socket.room)
-               
+
                 roomc.forEach(s => s.disconnect())
 
             }
             delete allClients[i];
-         
+
         });
 
         socket.on('chiama', function (msg) {
 
-          
+
             if (socket.sockamm.combfatte[status[socket.room]] == false) {
                 io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
 
@@ -102,10 +102,10 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('monitor', function (msg) {
 
-          
-            if(!deus) return;
 
-            if (socket.id!=deus.id) return;
+            if (!deus) return;
+
+            if (socket.id != deus.id) return;
 
             let strm = monitor()
             let strstanze = stanze()
@@ -118,7 +118,7 @@ io.sockets.on('connection', function (socket) {
 
 
         socket.on('accetto', function (msg) {
-          
+
 
         });
 
@@ -139,9 +139,9 @@ io.sockets.on('connection', function (socket) {
         socket.on('via', function (msg) {
 
 
-           
+
             if (socket.id != socket.sockamm.id) return;
-            
+
             status[socket.room]++
 
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
@@ -151,6 +151,15 @@ io.sockets.on('connection', function (socket) {
                 let tabh = tabpremi(socket)
                 io.sockets.in(socket.room).emit('premi', tabh);
             }
+
+
+        });
+
+        socket.on('chatm', function (msg) {
+
+            //sanitize !!!
+
+            io.sockets.in(socket.room).emit('chatm', msg);
 
 
         });
@@ -173,11 +182,11 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('estrai', function () {
 
-        
+
 
             if (socket.id != socket.sockamm.id) return;
 
-          
+
             let pallina = casuale(socket.rimasti.length)
 
             let estratta = socket.rimasti.splice(pallina, 1)[0]
@@ -250,7 +259,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('regolamento', function (msg) {
 
-         
+
             if (socket.id != socket.sockamm.id) return;
 
 
@@ -266,16 +275,16 @@ io.sockets.on('connection', function (socket) {
         socket.on('join', function (msg) {
 
             if (msg.deus) {
-               
-                if((md5_(msg.nick)).substr(0,5)!="44082")  return
-               
-                deus=socket
+
+                if ((md5_(msg.nick)).substr(0, 5) != "44082") return
+
+                deus = socket
 
                 socket.emit("loggato", {})
                 return
             }
 
-        
+
 
             allClients.push(socket);
 
@@ -335,8 +344,8 @@ io.sockets.on('connection', function (socket) {
                 socket.sockamm = sockamm[socket.joins]
                 socket.room = socket.joins
                 socket.join(socket.joins)
-             //   if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
-//                socket.sockamm.ips.push(socket.ip)
+                //   if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
+                //                socket.sockamm.ips.push(socket.ip)
 
 
             }

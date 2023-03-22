@@ -10,6 +10,7 @@ var Room = "";
 
 var colori = []
 var mieicolori = []
+var messaggi_chat=[]
 
 
 
@@ -216,11 +217,37 @@ function connetti() {
 
     });
 
+    socket.on('chatm', function (msg) {
+
+
+      messaggi_chat.push(msg)
+      messaggi_chat=messaggi_chat.slice(-10)
+      mostrachat(messaggi_chat)
+
+    });
+
+
 
 
     mynick = socket.nickname;
 }
+function mostrachat(mess) {
 
+    let divchat=document.getElementById("mchat")
+    divchat.innerHTML=""
+
+    mess.forEach(m=>{
+         let nodo=document.createElement("div")
+         let nnick=document.createElement("span")
+         let nmess=document.createElement("span")
+         nnick.innerHTML=m.nick
+         nmess.innerHTML=m.messaggio
+         nodo.append(nnick)
+         nodo.append(nmess)
+
+        divchat.append(nodo)})
+
+}
 
 function mostraCartelle(cartelle, colori_, fagg_, mie) {
 
@@ -549,4 +576,9 @@ function disconn(sid) {
 
     socket.emit("chiedidisconn", sid)
 
+}
+
+function chatm() {
+
+    socket.emit("chatm",{messaggio: app.mchat,nick:myNick})
 }

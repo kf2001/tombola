@@ -71,9 +71,11 @@
                         </div>
                     </div>
                     <div id="chat">
+                        <div id="mchat"></div>
 
-                        dghdgdjdgkj
-
+                        <div>
+                            <input type="text" value="" v-model="mchat">  <el-button type="success" onclick="chatm()">></el-button>
+                        </div>
                     </div>
                 </div>
 
@@ -222,6 +224,7 @@
                 labelPosition: "left",
                 activeTab: "Mie",
                 accettato: false,
+                mchat:"",
                 form: {
 
                     nick: "",
