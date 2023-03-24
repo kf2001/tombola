@@ -589,4 +589,6 @@ function chatm() {
     socket.emit("chatm", { messaggio: app.mchat, nick: myNick })
     app.mchat = ""
 
+   document.getElementById("inputchat").focus()
+
 }
