@@ -75,21 +75,38 @@ label {
 
 #chat{
 
-    width: 400px;
-    height: 400px;
+    width: 250px;
+    height: 250px;
     margin-left:auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
     
     
+}
+#chat div {
+    text-align: left;
+}
+
+.chatspannick {
+
+    font-weight: bold;
+    margin-right: 1.6em;
+}
+
+.chatspanmess {
+
+    font-weight: normal;
+    font-style: italic;
+    margin-right: 1em;
 }
 #chat input{
 
-    width: 400px;
-    
+    width: 100%;    
 background-color: aqua;
-    
+    margin-top: 2em;
     
 }
-
 
 
 #tcontainer,

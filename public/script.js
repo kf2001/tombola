@@ -10,7 +10,7 @@ var Room = "";
 
 var colori = []
 var mieicolori = []
-var messaggi_chat=[]
+var messaggi_chat = []
 
 
 
@@ -43,14 +43,14 @@ function InviaRegolamento() {
 }
 
 function Accetto() {
-    
-    app.accettato=true
+
+    app.accettato = true
 
 }
 function Rifiuto() {
-    
+
     socket.emit("rifiuto", {})
-    
+
 }
 function OKRegolam() {
 
@@ -80,8 +80,8 @@ function OKRegolam() {
 
 function init() {
 
-  //  $(document).attr('title', mynick);
-  document.title=myNick;
+    //  $(document).attr('title', mynick);
+    document.title = myNick;
 }
 
 function connetti() {
@@ -90,7 +90,7 @@ function connetti() {
     socket = io.connect();
     socket.nickname = myNick;
 
-    
+
 
     socket.on('start', function (msg) {
 
@@ -106,7 +106,7 @@ function connetti() {
 
         let joins = Room;
 
-        socket.emit('join', { nick: socket.nickname, room: joins, amministratore:app.creajoin });
+        socket.emit('join', { nick: socket.nickname, room: joins, amministratore: app.creajoin });
         app.loggato = true
 
         init()
@@ -129,7 +129,7 @@ function connetti() {
         app.status = -1
         regolam = msg
 
-    
+
 
         socket.emit('tuttecartelle', {})
 
@@ -139,10 +139,10 @@ function connetti() {
 
     socket.on('amministratore', function (msg) {
 
- 
+
         amministratore = true
         app.amministratore = true
-        app.accettato=true
+        app.accettato = true
 
 
         let tacclk = setInterval(chiedi_tabella, 1000)
@@ -176,7 +176,7 @@ function connetti() {
 
         app.pallina = pallina
         let comb = status * 1 + 2
-      if(status>-1)  tabellone(estratte)
+        if (status > -1) tabellone(estratte)
 
         tessera(pallina)
 
@@ -220,9 +220,9 @@ function connetti() {
     socket.on('chatm', function (msg) {
 
 
-      messaggi_chat.push(msg)
-      messaggi_chat=messaggi_chat.slice(-10)
-      mostrachat(messaggi_chat)
+        messaggi_chat.push(msg)
+        messaggi_chat = messaggi_chat.slice(-20)
+        mostrachat(messaggi_chat)
 
     });
 
@@ -233,19 +233,25 @@ function connetti() {
 }
 function mostrachat(mess) {
 
-    let divchat=document.getElementById("mchat")
-    divchat.innerHTML=""
+    let divchat = document.getElementById("mchat")
+    let pdivchat=divchat.parentNode
+    divchat.innerHTML = ""
 
-    mess.forEach(m=>{
-         let nodo=document.createElement("div")
-         let nnick=document.createElement("span")
-         let nmess=document.createElement("span")
-         nnick.innerHTML=m.nick
-         nmess.innerHTML=m.messaggio
-         nodo.append(nnick)
-         nodo.append(nmess)
+    mess.forEach(m => {
+        let nodo = document.createElement("div")
+        let nnick = document.createElement("span")
+        let nmess = document.createElement("span")
+        nnick.classList.add("chatspannick")
+        nnick.innerHTML = m.nick
+        nmess.innerHTML = m.messaggio
+        nmess.classList.add("chatspanmess")
+        nodo.append(nnick)
+        nodo.append(nmess)
 
-        divchat.append(nodo)})
+        divchat.append(nodo)
+    })
+
+    pdivchat.scrollTop = pdivchat.scrollHeight - pdivchat.clientHeight;
 
 }
 
@@ -312,35 +318,35 @@ function tessera(num) {
 
 
     canvas.style.zIndex = 8;
-   // canvas.style.position = "absolute";
+    // canvas.style.position = "absolute";
     canvas.style.border = "0px solid";
 
 
     var ctx = canvas.getContext("2d");
 
-    let lato = 7* 100/ 16
+    let lato = 7 * 100 / 16
     ctx.beginPath()
     ctx.fillStyle = "red";
     ctx.strokeStyle = "#cc0000"
     ctx.lineWidth = lato / 3
 
         ;
-     ctx.ellipse(100-50, 100-50, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
-    ctx.stroke() 
+    ctx.ellipse(100 - 50, 100 - 50, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+    ctx.stroke()
 
 
     ctx.fill()
 
     ctx.fillStyle = "beige";
-   
+
     ctx.fill()
 
     ctx.fillStyle = "#cc0000";
-   
+
     ctx.font = "bold 32px mono";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.fillText(num, 100-50, 100-50)
+    ctx.fillText(num, 100 - 50, 100 - 50)
 
     document.getElementById("estratta").innerHTML = "";
     document.getElementById("estratta").appendChild(canvas);
@@ -354,17 +360,17 @@ function disegna_tessera(ctx, x, y, lato, num) {
 
 
     var canvas = document.createElement('canvas');
-    lato = 7*lato / 16
+    lato = 7 * lato / 16
     ctx.beginPath()
     ctx.fillStyle = "red";
     ctx.strokeStyle = "#cc0000"
     ctx.lineWidth = lato / 3
 
         ;
-     ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
-    ctx.stroke() 
-   /*  ctx.fillStyle = "blue";
-    ctx.ellipse(x, y, lato * .6, lato * .6, 0, 0, 2 * Math.PI) */
+    ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+    ctx.stroke()
+    /*  ctx.fillStyle = "blue";
+     ctx.ellipse(x, y, lato * .6, lato * .6, 0, 0, 2 * Math.PI) */
 
     ctx.fill()
 
@@ -435,8 +441,8 @@ function tabellone(estratte_) {
 
 
         } else {
-          
-             ctx.fillText((i + 1), lato * colonna + lato / 2, lato * riga + lato / 2)
+
+            ctx.fillText((i + 1), lato * colonna + lato / 2, lato * riga + lato / 2)
 
 
         }
@@ -568,7 +574,7 @@ function chat(sid) {
 
 
 function cartgioc(sid) {
-  
+
     socket.emit("chiedicartelle", sid)
 }
 
@@ -580,5 +586,7 @@ function disconn(sid) {
 
 function chatm() {
 
-    socket.emit("chatm",{messaggio: app.mchat,nick:myNick})
+    socket.emit("chatm", { messaggio: app.mchat, nick: myNick })
+    app.mchat = ""
+
 }
