@@ -6,33 +6,6 @@ label {
 
 }
 
-#login {
-
-    width: fit-content;
-    height: fit-content;
-    position: absolute;
-    top: 20%;
-    left: 40%;
-    margin: -50px 0 0 -50px;
-    border: 4px solid royalblue;
-    padding: 40px;
-
-}
-
-#prelogin {
-
-    width: fit-content;
-    height: fit-content;
-    position: absolute;
-    top: 20%;
-    left: 20%;
-    margin: -50px 0 0 -50px;
-    border: 4px solid forestgreen;
-    padding: 40px;
-
-}
-
-
 
 #dashboard { 
     display: flex;
@@ -68,10 +41,7 @@ label {
   
 }
 
-#container>div{
 
-    
-}
 
 #chat{
 
@@ -103,7 +73,7 @@ label {
 #chat input{
 
     width: 100%;    
-background-color: aqua;
+
     margin-top: 2em;
     
 }
@@ -125,6 +95,24 @@ background-color: aqua;
     text-align: center;
 }
 
+
+#logincontainer {
+    display: flex;
+    flex-wrap: wrap;
+     flex-direction: row;
+ 
+   justify-content: center;
+   column-gap: 4em;
+   align-items:flex-start;
+   
+}
+
+#logincontainer>div {
+
+     
+     border: 1px solid black; 
+
+}
 
 
 #board {

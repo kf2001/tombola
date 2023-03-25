@@ -23,7 +23,7 @@ var comprate = 0
 var estratte = []
 var pallina
 var mieCartelle = []
-//  var fagioli = []
+
 var fagioli = new Array(36 * 27).fill(0);
 var rbruc = new Array(20).fill(0)
 var tbruc = new Array(12).fill(0)
@@ -260,6 +260,10 @@ function mostraCartelle(cartelle, colori_, fagg_, mie) {
     let cont = "tcontainer"
     if (mie == 1) cont = "mcontainer"
     if (mie == 2) cont = "gcontainer"
+
+    console.log(cont)
+
+    if( !document.getElementById(cont)) return;
     document.getElementById(cont).innerHTML = ""
 
 
@@ -513,7 +517,7 @@ function verifica(comb) {
         riga += 3 * cart
 
 
-        if (c > 0 && fagioli[idx] == 1) {
+        if (c > 0 && fagioli[idx] >= 1) {
             righe[riga]++
             fag[cart]++
         }
@@ -523,12 +527,13 @@ function verifica(comb) {
 
 
     let verif = 0
+    let brucr=0
+    let bruct=0
 
-    if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && rbruc[r] == 0) { verif = 1; rbruc[r] = 1; };
-    if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && tbruc[r] == 0) { verif = 1; tbruc[r] = 1; }
+    if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && rbruc[r] == 0) { verif = 1; rbruc[r] = 1; brucr=1;};
+    if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && tbruc[r] == 0) { verif = 1; tbruc[r] = 1;bruct=1; }
 
-
-
+   
     return verif
 
 }

@@ -85,18 +85,22 @@ io.sockets.on('connection', function (socket) {
         socket.on('chiama', function (msg) {
 
 
-            if (socket.sockamm.combfatte[status[socket.room]] == false) {
-                io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
+            console.log("chiamato !!")
 
-                socket.vincite += vincstr[status[socket.room]]
+            let comb = status[socket.room] * 1 + 2
+
+            if (verifica(comb, socket)) {
+
+                if (socket.sockamm.combfatte[status[socket.room]] == false) {
+                    io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
+
+                    socket.vincite += vincstr[status[socket.room]]
 
 
-                if (socket.sockamm.regolam.vincunico == true) socket.sockamm.combfatte[status[socket.room]] = true
+                    if (socket.sockamm.regolam.vincunico == true) socket.sockamm.combfatte[status[socket.room]] = true
 
+                }
             }
-
-            //Verifica combinazione
-
 
         });
 
@@ -294,7 +298,11 @@ io.sockets.on('connection', function (socket) {
             socket.joins = msg.room
             socket.cartelle = []
             socket.fagioli = new Array(36 * 27).fill(0);
+
             socket.colori = []
+            socket.rbruc = new Array(20).fill(0)
+            socket.tbruc = new Array(12).fill(0)
+
             socket.chatenable = true
             socket.vincite = ""
             socket.guadagno = 0
@@ -483,6 +491,46 @@ function stanze() {
     strh += "</table>"
 
     return strh
+}
+
+
+function verifica(comb, sck) {
+
+
+    let righe = new Array(Math.floor(sck.cartelle.length / 27) * 3).fill(0);
+
+    let fag = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    sck.cartelle.forEach((c, idx) => {
+
+
+       
+        let riga = Math.floor((idx % 27) / 9)
+        let cart = Math.floor((idx / 27))
+        riga += 3 * cart
+
+
+        if (c > 0 && sck.fagioli[idx] == 1) {
+            righe[riga]++
+            fag[cart]++
+          
+        }
+
+
+    })
+
+
+    let verif = 0
+    let brucr = 0
+    let bruct = 0
+
+
+
+    if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && sck.rbruc[r] == 0) { verif = 1; sck.rbruc[r] = 1; brucr = 1; };
+    if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && sck.tbruc[r] == 0) { verif = 1; sck.tbruc[r] = 1; bruct = 1; }
+    console.log(verif,1)
+
+    return verif
+
 }
 
 function casuale(n) { return Math.floor(n * Math.random()) }
