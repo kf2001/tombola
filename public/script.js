@@ -563,7 +563,6 @@ function check(riga_, ncart_) {
 }
 
 
-
 function chiedi_tabella() {
 
     socket.emit("tabella", {})

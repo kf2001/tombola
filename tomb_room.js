@@ -84,9 +84,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('chiama', function (msg) {
 
-
-            console.log("chiamato !!")
-
+           
             let comb = status[socket.room] * 1 + 2
 
             if (verifica(comb, socket)) {
@@ -162,6 +160,8 @@ io.sockets.on('connection', function (socket) {
         socket.on('chatm', function (msg) {
 
             //sanitize !!!
+
+            if(socket.chatenable)
 
             io.sockets.in(socket.room).emit('chatm', msg);
 
