@@ -162,7 +162,11 @@ function connetti() {
 
     socket.on('combinaz', function (msg) {
 
-        messaggia(msg.nick + " ha fatto " + msg.comb + "!! ", 1)
+        if (msg.primo == 1)
+
+            messaggia(msg.nick + " ha fatto " + msg.comb + "!! ", 1)
+        else
+            messaggia("anche " + msg.nick + "!", 1)
         app.estrai = false
 
     });
@@ -333,7 +337,7 @@ function tessera(num) {
     ctx.fillStyle = "red";
     ctx.strokeStyle = "#cc0000"
     ctx.lineWidth = lato / 3
-    
+
     ctx.ellipse(100 - 50, 100 - 50, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke()
 
@@ -371,7 +375,7 @@ function disegna_tessera(ctx, x, y, lato, num) {
 
     ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke()
-  
+
 
     ctx.fill()
 
@@ -380,7 +384,7 @@ function disegna_tessera(ctx, x, y, lato, num) {
     ctx.fill()
 
     ctx.fillStyle = "#cc0000";
-   
+
     ctx.font = "bold 32px mono";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";

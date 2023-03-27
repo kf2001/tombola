@@ -89,8 +89,11 @@ io.sockets.on('connection', function (socket) {
 
             if (verifica(comb, socket)) {
 
+
                 if (socket.sockamm.combfatte[status[socket.room]] == false) {
-                    io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname });
+
+                    socket.sockamm.vincitori++
+                    io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname , primo:socket.sockamm.vincitori});
 
                     socket.vincite += vincstr[status[socket.room]]
 
@@ -145,6 +148,7 @@ io.sockets.on('connection', function (socket) {
             if (socket.id != socket.sockamm.id) return;
 
             status[socket.room]++
+            socket.vincitori=0
 
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
 
@@ -321,6 +325,8 @@ io.sockets.on('connection', function (socket) {
                 socket.room = room
                 sockamm[room] = socket;
                 socket.sockamm = socket
+                socket.vincitori=0
+             
                 socket.ips = []
                 status[socket.room] = -2
                 socket.combfatte = [false, false, false, false, false, false]
@@ -529,7 +535,7 @@ function verifica(comb, sck) {
 
     if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && sck.rbruc[r] == 0) { verif = 1; sck.rbruc[r] = 1; brucr = 1; };
     if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && sck.tbruc[r] == 0) { verif = 1; sck.tbruc[r] = 1; bruct = 1; }
-    console.log(verif,1)
+
 
     return verif
 
