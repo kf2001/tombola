@@ -183,10 +183,10 @@ io.sockets.on('connection', function (socket) {
         });
         socket.on('tuttecartelle', function (msg) {
 
-
+            if (socket.id != socket.sockamm.id) return;
 
             io.sockets.in(socket.room).emit('tuttecartelle', { cartelle: socket.sockamm.tuttecartelle, colori: socket.sockamm.tutticolori });
-
+            status[socket.room]=-1
 
         });
 
@@ -273,14 +273,31 @@ io.sockets.on('connection', function (socket) {
             if (socket.id != socket.sockamm.id) return;
 
 
-            io.sockets.in(socket.room).emit('regolamento', msg);
+           // io.sockets.in(socket.room).emit('regolamento', msg);
 
-
+           
             socket.regolam = msg;
 
             status[socket.room] = -1
 
         });
+
+
+        socket.on('setregolamento', function (msg) 
+
+        {
+
+            if (socket.id != socket.sockamm.id) return;
+            
+                  socket.regolam=msg
+
+                  console.log(socket.regolam)
+                  console.log("quiiiii")
+
+
+        });
+
+
 
         socket.on('join', function (msg) {
 
@@ -353,13 +370,15 @@ io.sockets.on('connection', function (socket) {
 
             } else {
 
-                if (rooms.indexOf(socket.joins) < 0) socket.disconnect();
+                if (rooms.indexOf(socket.joins) < 0) {socket.disconnect();return;}
 
                 socket.amministratore = 0
 
                 socket.sockamm = sockamm[socket.joins]
                 socket.room = socket.joins
                 socket.join(socket.joins)
+
+                socket.sockamm.in(socket.room).emit('regolamento',socket.sockamm.regolam );
                 //   if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
                 //                socket.sockamm.ips.push(socket.ip)
 

@@ -45,6 +45,7 @@ function InviaRegolamento() {
 function Accetto() {
 
     app.accettato = true
+    //   socket.emit("tuttecartelle",{})
 
 }
 function Rifiuto() {
@@ -69,7 +70,10 @@ function OKRegolam() {
 
     regolam = {
         maxC: app.form.maxC,
-        prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult: app.form.ipmult
+        prezzo: app.form.prezzo, auto: app.form.auto, vincunico: app.form.vincunico, ipmult: app.form.ipmult,
+        ambo: app.form.ambo, terno: app.form.terno,
+        quaterna: app.form.quaterna, cinquina: app.form.cinquina,
+        tombola: app.form.tombola, tombolino: app.form.tombolino,
 
     }
 
@@ -107,6 +111,10 @@ function connetti() {
         let joins = Room;
 
         socket.emit('join', { nick: socket.nickname, room: joins, amministratore: app.creajoin });
+
+
+
+        if (app.creajoin) socket.emit('setregolamento', regolam);
         app.loggato = true
 
         init()
@@ -129,10 +137,19 @@ function connetti() {
         app.status = -1
         regolam = msg
 
+        app.loggato = true
 
-
-        socket.emit('tuttecartelle', {})
-
+        app.form.maxC = regolam.maxC
+        app.form.prezzo = regolam.prezzo
+        app.form.auto = regolam.auto
+        app.form.vincunico = regolam.vincunico
+        app.form.ipmult = regolam.ipmult
+        app.form.ambo = regolam.ambo
+        app.form.terno = regolam.terno
+        app.form.quaterna = regolam.quaterna
+        app.form.cinquina = regolam.cinquina
+        app.form.tombola = regolam.tombola
+        app.form.tombolino = regolam.tombolino
 
 
     });
@@ -474,8 +491,9 @@ function compra(num) {
 function via() {
 
 
-    if (status == -2) socket.emit("regolamento", regolam); else
-        socket.emit("via", status)
+    if (status == -2) {socket.emit("tuttecartelle", {});status=-1}
+   //  socket.emit("regolamento", regolam); else
+    else  socket.emit("via", status)
 
 
 }

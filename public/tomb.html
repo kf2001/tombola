@@ -122,14 +122,42 @@
                     <td>Auto</td>
                     <td><input v-model="form.auto" disabled></input></td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>IP multipli</td>
                     <td><input v-model="form.ipmult" disabled></input></td>
                 </tr>
                 <tr>
                     <td>Singola chiamata</td>
                     <td><input v-model="form.vincunico" disabled></input></td>
+                </tr> -->
+
+
+                <tr>
+                    <td>Ambo</td>
+                    <td><input v-model="form.ambo" disabled></input></td>
                 </tr>
+                <tr>
+                    <td>Terno</td>
+                    <td><input v-model="form.terno" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>Quaterna</td>
+                    <td><input v-model="form.quaterna" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>Cinquina</td>
+                    <td><input v-model="form.cinquina" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>Tombola</td>
+                    <td><input v-model="form.tombola" disabled></input></td>
+                </tr>
+                <tr>
+                    <td>Tombolino</td>
+                    <td><input v-model="form.tombolino" disabled></input></td>
+                </tr>
+
+
                 <tr>
                     <td> <el-button type="primary" onclick="Accetto()">Accetto</el-button></td>
                     <td><el-button type="success" onclick="Rifiuto()">Rinuncio</el-button></td>
@@ -184,12 +212,38 @@
                         <el-form-item label="Automatico">
                             <el-switch v-model="form.auto"></el-switch>
                         </el-form-item>
-                        <el-form-item label="IP multipli">
+
+                        <el-form-item label="ambo">
+                            <el-input-number v-model="form.ambo" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+
+                        <el-form-item label="terno">
+                            <el-input-number v-model="form.terno" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+
+                        <el-form-item label="quaterna">
+                            <el-input-number v-model="form.quaterna" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+
+                        <el-form-item label="cinquina">
+                            <el-input-number v-model="form.cinquina" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+
+                        <el-form-item label="tombola">
+                            <el-input-number v-model="form.tombola" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+
+                        <el-form-item label="tombolino">
+                            <el-input-number v-model="form.tombolino" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+
+
+                        <!-- <el-form-item label="IP multipli">
                             <el-switch v-model="form.ipmult"></el-switch>
                         </el-form-item>
                         <el-form-item label="Vinc. Unico">
                             <el-switch v-model="form.vincunico"></el-switch>
-                        </el-form-item>
+                        </el-form-item> -->
                     </div>
                 </el-form>
                 <el-button type="primary" onclick="OKRegolam()">OK</el-button>
@@ -237,9 +291,13 @@
                     prezzo: 3,
                     auto: false,
                     ipmult: true,
-                    vincunico: false
-
-
+                    vincunico: false, 
+                    ambo:1, 
+                    terno:2, 
+                    quaterna:3, 
+                    cinquina:4, 
+                    tombola:10, 
+                    tombolino:5
                 },
 
 
