@@ -15,7 +15,7 @@ label {
      }
 
      #dashboard>div{ 
-        border: 4px solid forestgreen;
+        /* border: 4px solid forestgreen; */
          }
     
 
@@ -82,12 +82,18 @@ label {
 
 
 #tcontainer,
-#mcontainer,
 #gcontainer {
     display: flex;
     flex-wrap: wrap;
      flex-direction: row;
    
+}
+
+#mcontainer {
+    display: flex;
+    flex-wrap: wrap;
+     flex-direction: column;
+
 }
 
 #tcontainer>div,
@@ -121,7 +127,7 @@ label {
     display: flex;
     flex-wrap: wrap;
      flex-direction: row;
-     border: 1px solid maroon;
+     /* border: 1px solid maroon; */
    
 }
 
@@ -129,13 +135,13 @@ label {
 
     padding: 20px;
     text-align: center;
-    border: 1px solid aqua;
+    /* border: 1px solid aqua; */
 }
 #msgcontainer {
     display: flex;
     flex-wrap: wrap;
      flex-direction: row;
-     border: 4px solid salmon;
+     /* border: 4px solid salmon; */
      justify-content:space-between;
    
 }
@@ -144,7 +150,7 @@ label {
 
     padding: 20px;
     text-align: center;
-    border: 1px solid aqua;
+    /* border: 1px solid aqua; */
 }
 
 
@@ -176,7 +182,7 @@ td {
     font-size: 1em;
 
     height: 1em;
-    border: 1px solid green;
+    /* border: 1px solid green; */
     text-align: left;
     vertical-align: middle;
 

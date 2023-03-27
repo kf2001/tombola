@@ -57,7 +57,9 @@
                     </div>
                 </div>
                 <div id="msgcontainer">
-                    <div>vuotoooo</div>
+                  <div>
+                    <div id="mcontainer" v-show="activeTab=='Mie'"></div>
+                  </div>
                     <div>
                         <div id="messaggio_">
 
@@ -86,7 +88,7 @@
 
             <div id="board">
 
-                <div id="mcontainer" v-show="activeTab=='Mie'"></div>
+           
                 <div id="tcontainer" v-if="status<0 && comprate<form.maxC"></div>
 
                 <div id="gcontainer" v-show="activeTab=='User'"></div>

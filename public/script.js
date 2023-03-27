@@ -234,7 +234,7 @@ function connetti() {
 function mostrachat(mess) {
 
     let divchat = document.getElementById("mchat")
-    let pdivchat=divchat.parentNode
+    let pdivchat = divchat.parentNode
     divchat.innerHTML = ""
 
     mess.forEach(m => {
@@ -263,7 +263,7 @@ function mostraCartelle(cartelle, colori_, fagg_, mie) {
 
     console.log(cont)
 
-    if( !document.getElementById(cont)) return;
+    if (!document.getElementById(cont)) return;
     document.getElementById(cont).innerHTML = ""
 
 
@@ -527,13 +527,13 @@ function verifica(comb) {
 
 
     let verif = 0
-    let brucr=0
-    let bruct=0
+    let brucr = 0
+    let bruct = 0
 
-    if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && rbruc[r] == 0) { verif = 1; rbruc[r] = 1; brucr=1;};
-    if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && tbruc[r] == 0) { verif = 1; tbruc[r] = 1;bruct=1; }
+    if (comb < 6) for (let r = 0; r < righe.length; r++) if (righe[r] == comb && rbruc[r] == 0) { verif = 1; rbruc[r] = 1; brucr = 1; };
+    if (comb >= 6) for (let r = 0; r < fag.length; r++) if (fag[r] == 15 && tbruc[r] == 0) { verif = 1; tbruc[r] = 1; bruct = 1; }
 
-   
+
     return verif
 
 }
@@ -591,9 +591,18 @@ function disconn(sid) {
 
 function chatm() {
 
-    socket.emit("chatm", { messaggio: app.mchat, nick: myNick })
+    let mess = sanitizeInput(app.mchat).trim().substr(0, 22)
+
+    if (mess.length > 1)
+
+        socket.emit("chatm", { messaggio: mess, nick: myNick })
     app.mchat = ""
 
-   document.getElementById("inputchat").focus()
+    document.getElementById("inputchat").focus()
 
 }
+
+
+function sanitizeInput(input) {
+    return input.replaceAll(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
+}g
