@@ -160,6 +160,8 @@ io.sockets.on('connection', function (socket) {
         socket.on('chatm', function (msg) {
 
             //sanitize !!!
+            msg.messaggio=sanitizeInput(msg.messaggio).trim().substr(0,22)
+            
 
             if(socket.chatenable)
 
@@ -534,6 +536,11 @@ function verifica(comb, sck) {
 }
 
 function casuale(n) { return Math.floor(n * Math.random()) }
+
+
+function sanitizeInput(input) {
+    return input.replaceAll(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
+}
 //let portc = casuale(50) + 8040
 let portc = 8040
 const port = process.env.PORT || portc;

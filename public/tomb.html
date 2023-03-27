@@ -57,9 +57,9 @@
                     </div>
                 </div>
                 <div id="msgcontainer">
-                  <div>
-                    <div id="mcontainer" v-show="activeTab=='Mie'"></div>
-                  </div>
+                    <div>
+                        <div id="mcontainer" v-show="activeTab=='Mie'"></div>
+                    </div>
                     <div>
                         <div id="messaggio_">
 
@@ -77,7 +77,8 @@
                         <div id="mchat"></div>
 
                         <div>
-                            <input type="text" value="" v-model="mchat" id="inputchat">  <el-button type="success" onclick="chatm()">></el-button>
+                            <input type="text" value="" v-model="mchat" id="inputchat" @keypress="press"> <el-button type="success"
+                                onclick="chatm()">></el-button>
                         </div>
                     </div>
                 </div>
@@ -88,7 +89,7 @@
 
             <div id="board">
 
-           
+
                 <div id="tcontainer" v-if="status<0 && comprate<form.maxC"></div>
 
                 <div id="gcontainer" v-show="activeTab=='User'"></div>
@@ -227,7 +228,7 @@
                 labelPosition: "left",
                 activeTab: "Mie",
                 accettato: false,
-                mchat:"",
+                mchat: "",
                 form: {
 
                     nick: "",
@@ -246,11 +247,30 @@
             }, methods: {
                 handleClick(tab, event) {
 
+                }, 
+
+                press(evt) {
+
+                    if(evt.key=="Enter") chatm()
                 }
 
             }
         })
 
+        // var input = document.getElementById("inputchat");
+
+        // console.log(input)
+        // input.addEventListener("keypress", function (event) {
+
+
+        //     // If the user presses the "Enter" key on the keyboard
+        //     if (event.key === "Enter") {
+        //         console.log(88)
+        //         event.preventDefault();
+
+        //         chatm();
+        //     }
+        // });
 
     </script>
 

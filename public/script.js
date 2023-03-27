@@ -333,8 +333,7 @@ function tessera(num) {
     ctx.fillStyle = "red";
     ctx.strokeStyle = "#cc0000"
     ctx.lineWidth = lato / 3
-
-        ;
+    
     ctx.ellipse(100 - 50, 100 - 50, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke()
 
@@ -370,25 +369,18 @@ function disegna_tessera(ctx, x, y, lato, num) {
     ctx.strokeStyle = "#cc0000"
     ctx.lineWidth = lato / 3
 
-        ;
     ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke()
-    /*  ctx.fillStyle = "blue";
-     ctx.ellipse(x, y, lato * .6, lato * .6, 0, 0, 2 * Math.PI) */
+  
 
     ctx.fill()
 
     ctx.fillStyle = "beige";
-    //ctx.strokeStyle = "beige"
 
-    //ctx.ellipse(x, y, lato * .4, lato * .4, 0, 0, 2 * Math.PI)
     ctx.fill()
 
     ctx.fillStyle = "#cc0000";
-    /* ctx.shadowColor = '#808080';
-    ctx.shadowBlur = 10;
-    ctx.shadowOffsetX = -2;
-    ctx.shadowOffsetY = -2; */
+   
     ctx.font = "bold 32px mono";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
@@ -428,7 +420,7 @@ function tabellone(estratte_) {
     for (let i = 0; i < 90; i++) {
         ctx.strokeStyle = "#40404"
         ctx.fillStyle = "#40404";
-        ctx.font = "40px Arial bold";
+        ctx.font = "40px Arial bold"
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
         ctx.lineWidth = 1
