@@ -42,7 +42,7 @@ var activeClients = 0;
 
 var maxClients = 1000;
 
-var premi = [1, 2, 3, 4, 10, 5]
+// var premi = [1, 2, 3, 4, 10, 5]
 
 
 console.log("started")
@@ -413,9 +413,10 @@ function calcolaPremi(sck) {
     let fatti = [0, 0, 0, 0, 0, 0]
     let premi_ = []
 
+    let premi = [sck.regolam.ambo, sck.regolam.terno,sck.regolam.quaterna, sck.regolam.cinquina, sck.regolam.tombola, sck.regolam.tombolino]
+
 
     let sump = premi.reduce((a, b) => a + b, 0);
-
 
     let clients = allClients.filter(c => c.room == sck.room)
 

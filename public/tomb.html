@@ -16,7 +16,7 @@
     <div id="app">
 
         <div>
-            <div id="menu" v-if="amministratore">
+            <!-- <div id="menu" v-if="amministratore">
                 <template>
                     <el-tabs v-model="activeTab" :tab-position="'top'" @tab-click="handleClick">
                         <el-tab-pane label="Mie" name="Mie"></el-tab-pane>
@@ -26,7 +26,7 @@
                     </el-tabs>
                 </template>
 
-            </div>
+            </div> -->
 
             <div id="tabhtml" v-html="tabhtml">
 
@@ -77,8 +77,8 @@
                         <div id="mchat"></div>
 
                         <div>
-                            <input type="text" value="" v-model="mchat" id="inputchat" @keypress="press"> <el-button type="success"
-                                onclick="chatm()">></el-button>
+                            <input type="text" value="" v-model="mchat" id="inputchat" @keypress="press"> <el-button
+                                type="success" onclick="chatm()">></el-button>
                         </div>
                     </div>
                 </div>
@@ -189,135 +189,154 @@
 
             <div id="login">
 
-                <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
-                    <el-form-item label="Nick">
-                        <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
-                        <el-input v-model="form.nick"></el-input>
-                        <!-- </el-tooltip> -->
-                    </el-form-item>
+                <div>
 
-                    <el-form-item label="Join">
-                        <el-input v-model="form.join"></el-input>
-                    </el-form-item>
+                    <div>
+                        <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
+                            <el-form-item label="Nick">
+                                <!-- <el-tooltip class="item" effect="dark" content="3-10 lettere [a-zA-Z]" placement="bottom-start"> -->
+                                <el-input v-model="form.nick"></el-input>
+                                <!-- </el-tooltip> -->
+                            </el-form-item>
+
+                            <el-form-item label="Join">
+                                <el-input v-model="form.join"></el-input>
+                            </el-form-item>
+
+                            <div v-if="creajoin==1"> 
+
+
+                            <el-form-item label="Cartelle max">
+                                <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+                            </el-form-item>
+
+                            <el-form-item label="Prezzo cartella">
+                                <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
+
+
+                            <el-form-item label="Automatico">
+                                <el-switch v-model="form.auto"></el-switch>
+                            </el-form-item>
+
+</div>
+
+
+                            <!-- </div> -->
+                        </el-form>
+                    </div>
+
                     <div v-if="creajoin==1">
-                        <el-form-item label="Cartelle max">
-                            <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
-                        </el-form-item>
+                        <el-form ref="form" :model="form" :label-position="labelPosition" label-width="180px">
+                            <el-form-item label="ambo">
+                                <el-input-number v-model="form.ambo" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
 
-                        <el-form-item label="Prezzo cartella">
-                            <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
+                            <el-form-item label="terno">
+                                <el-input-number v-model="form.terno" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
 
+                            <el-form-item label="quaterna">
+                                <el-input-number v-model="form.quaterna" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
 
-                        <el-form-item label="Automatico">
-                            <el-switch v-model="form.auto"></el-switch>
-                        </el-form-item>
+                            <el-form-item label="cinquina">
+                                <el-input-number v-model="form.cinquina" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
 
-                        <el-form-item label="ambo">
-                            <el-input-number v-model="form.ambo" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
+                            <el-form-item label="tombola">
+                                <el-input-number v-model="form.tombola" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
 
-                        <el-form-item label="terno">
-                            <el-input-number v-model="form.terno" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
-
-                        <el-form-item label="quaterna">
-                            <el-input-number v-model="form.quaterna" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
-
-                        <el-form-item label="cinquina">
-                            <el-input-number v-model="form.cinquina" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
-
-                        <el-form-item label="tombola">
-                            <el-input-number v-model="form.tombola" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
-
-                        <el-form-item label="tombolino">
-                            <el-input-number v-model="form.tombolino" :min="1" :max="100"></el-input-number>
-                        </el-form-item>
+                            <el-form-item label="tombolino">
+                                <el-input-number v-model="form.tombolino" :min="1" :max="100"></el-input-number>
+                            </el-form-item>
 
 
-                        <!-- <el-form-item label="IP multipli">
+
+                            <!-- <el-form-item label="IP multipli">
                             <el-switch v-model="form.ipmult"></el-switch>
                         </el-form-item>
                         <el-form-item label="Vinc. Unico">
                             <el-switch v-model="form.vincunico"></el-switch>
                         </el-form-item> -->
-                    </div>
-                </el-form>
-                <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+
+
+
+
+                        
+
+                        </el-form>  
+                    </div> 
+                </div> <el-button type="primary" onclick="OKRegolam()">OK</el-button>
             </div>
 
         </div>
-
     </div>
 
+        <script src="./script.js"></script>
 
 
-    <script src="./script.js"></script>
+        <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+        <!-- import JavaScript -->
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello Vue!',
+                    loggato: false,
+                    preloggato: false,
+                    creajoin: "2",
+                    status: -2,
+                    comprate: 0,
+                    amministratore: false,
+                    finecompera: false,
+                    estrai: false,
+                    messaggio: "",
+                    pallina: "",
+                    tabhtml: "",
+                    premitab: "",
+                    labelPosition: "left",
+                    activeTab: "Mie",
+                    accettato: false,
+                    mchat: "",
+                    form: {
 
-    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-    <!-- import JavaScript -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                message: 'Hello Vue!',
-                loggato: false,
-                preloggato: false,
-                creajoin: "2",
-                status: -2,
-                comprate: 0,
-                amministratore: false,
-                finecompera: false,
-                estrai: false,
-                messaggio: "",
-                pallina: "",
-                tabhtml: "",
-                premitab: "",
-                labelPosition: "left",
-                activeTab: "Mie",
-                accettato: false,
-                mchat: "",
-                form: {
-
-                    nick: "",
-                    join: "",
-                    maxC: 2,
-                    prezzo: 3,
-                    auto: false,
-                    ipmult: true,
-                    vincunico: false, 
-                    ambo:1, 
-                    terno:2, 
-                    quaterna:3, 
-                    cinquina:4, 
-                    tombola:10, 
-                    tombolino:5
-                },
+                        nick: "",
+                        join: "",
+                        maxC: 2,
+                        prezzo: 3,
+                        auto: false,
+                        ipmult: true,
+                        vincunico: false,
+                        ambo: 1,
+                        terno: 2,
+                        quaterna: 3,
+                        cinquina: 4,
+                        tombola: 10,
+                        tombolino: 5
+                    },
 
 
 
-            }, methods: {
-                handleClick(tab, event) {
+                }, methods: {
+                    handleClick(tab, event) {
 
-                }, 
+                    },
 
-                press(evt) {
+                    press(evt) {
 
-                    if(evt.key=="Enter") chatm()
+                        if (evt.key == "Enter") chatm()
+                    }
+
                 }
+            })
 
-            }
-        })
 
-      
 
-    </script>
+        </script>
 
 </body>
 

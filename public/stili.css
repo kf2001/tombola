@@ -1,6 +1,6 @@
 label {
     font-size: 1.5em !important;
-    margin: .2em;
+    /* margin: .2em; */
     padding: 0 !important;
     line-height: 20px !important;
 
@@ -105,6 +105,15 @@ label {
     text-align: center;
 }
 
+#login>div {
+    display: flex;
+    flex-wrap: wrap;
+     flex-direction: row;
+       column-gap: 4em;
+ 
+   
+}
+
 
 #logincontainer {
     display: flex;
@@ -119,9 +128,11 @@ label {
 
 #logincontainer>div {
 
-     
+     padding: 2em;
      border: 1px solid black; 
-
+     display: flex;
+     flex-direction: column;
+     flex-wrap: wrap;
 }
 
 
