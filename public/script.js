@@ -126,7 +126,7 @@ function connetti() {
 
 
 
-        app.premitab ="<h2>Riepilogo</h2>"+ msg
+        app.premitab ="<h2>Riepilogo</h2>"+ tabpremi(msg)
 
       
         status=6
@@ -620,7 +620,25 @@ function chatm() {
 }
 
 
+function tabpremi(premi) {
 
+    let strh = "<table class='tblpremi'>"
+    strh += "<tr><th>nome</th>  <th>tomb</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
+   premi.forEach(s => {
+        strh += "<tr>"
+        strh += "<td>" + s.nick + "</td>"
+     
+        strh += "<td>" + s.vincite + "</td>"
+        strh += "<td>" + s.vinto + "</td>"
+        strh += "<td>" + s.pagato + "</td>"
+        strh += "<td>" + s.guadagnato + "</td>"
+
+
+    });
+    strh += "</table>"
+
+    return strh
+}
 
 function sanitizeInput(input) {
     return input.replaceAll(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");

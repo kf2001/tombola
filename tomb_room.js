@@ -157,8 +157,8 @@ io.sockets.on('connection', function (socket) {
 console.log(msgp)
           
          //       let tabh = tabpremi(socket)
-                let tabh = tabpremi2(msgp)
-                io.sockets.in(socket.room).emit('premi', tabh);
+              //  let tabh = tabpremi2(msgp)
+                io.sockets.in(socket.room).emit('premi', msgp);
             }
 
 
@@ -443,9 +443,9 @@ function calcolaPremi(sck) {
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) guad += valore[v]
 
-        s.vinto = guad / sump;
+        s.vinto = arrotonda(guad / sump,2);
         s.pagato=Math.floor(s.cartelle.length / 27)*sck.regolam.prezzo
-        s.guadagnato=s.vinto-s.pagato
+        s.guadagnato= arrotonda(s.vinto-s.pagato,2)
 
         let prem = { nick: s.nickname, vincite: s.vincite,vinto: s.vinto, pagato: s.pagato, guadagnato: s.guadagnato}
         premi_.push(prem)
@@ -457,46 +457,46 @@ function calcolaPremi(sck) {
 
 }
 
-function tabpremi(sck) {
+// function tabpremi(sck) {
 
-    let strh = "<table class='tblpremi'>"
-    strh += "<tr><th>nome</th>  <th>tomb</th><th>combinazioni</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
-    allClients.filter(c => c.room == sck.room).forEach(s => {
-        strh += "<tr>"
-        strh += "<td>" + s.nickname + "</td>"
+//     let strh = "<table class='tblpremi'>"
+//     strh += "<tr><th>nome</th>  <th>tomb</th><th>combinazioni</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
+//     allClients.filter(c => c.room == sck.room).forEach(s => {
+//         strh += "<tr>"
+//         strh += "<td>" + s.nickname + "</td>"
      
-        strh += "<td>" + s.vincite + "</td>"
-        strh += "<td>" + s.vinto + "</td>"
-        strh += "<td>" + s.pagato + "</td>"
-        strh += "<td>" + s.guadagnato + "</td>"
+//         strh += "<td>" + s.vincite + "</td>"
+//         strh += "<td>" + s.vinto + "</td>"
+//         strh += "<td>" + s.pagato + "</td>"
+//         strh += "<td>" + s.guadagnato + "</td>"
 
 
-    });
-    strh += "</table>"
+//     });
+//     strh += "</table>"
 
-    return strh
-}
+//     return strh
+// }
 
 
-function tabpremi2(premi) {
+// function tabpremi2(premi) {
 
-    let strh = "<table class='tblpremi'>"
-    strh += "<tr><th>nome</th>  <th>tomb</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
-   premi.forEach(s => {
-        strh += "<tr>"
-        strh += "<td>" + s.nickname + "</td>"
+//     let strh = "<table class='tblpremi'>"
+//     strh += "<tr><th>nome</th>  <th>tomb</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
+//    premi.forEach(s => {
+//         strh += "<tr>"
+//         strh += "<td>" + s.nickname + "</td>"
      
-        strh += "<td>" + s.vincite + "</td>"
-        strh += "<td>" + s.vinto + "</td>"
-        strh += "<td>" + s.pagato + "</td>"
-        strh += "<td>" + s.guadagnato + "</td>"
+//         strh += "<td>" + s.vincite + "</td>"
+//         strh += "<td>" + s.vinto + "</td>"
+//         strh += "<td>" + s.pagato + "</td>"
+//         strh += "<td>" + s.guadagnato + "</td>"
 
 
-    });
-    strh += "</table>"
+//     });
+//     strh += "</table>"
 
-    return strh
-}
+//     return strh
+// }
 
 function monitor() {
 
@@ -591,7 +591,7 @@ function verifica(comb, sck) {
 }
 
 function casuale(n) { return Math.floor(n * Math.random()) }
-
+function arrotonda(n,c){return Math.floor(n*10**c+0.5)/(10**c)}
 
 function sanitizeInput(input) {
     return input.replaceAll(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
