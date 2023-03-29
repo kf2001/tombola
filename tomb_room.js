@@ -154,9 +154,10 @@ io.sockets.on('connection', function (socket) {
 
             else {
                 let msgp = calcolaPremi(socket)
-
+console.log(msgp)
           
-                let tabh = tabpremi(socket)
+         //       let tabh = tabpremi(socket)
+                let tabh = tabpremi2(msgp)
                 io.sockets.in(socket.room).emit('premi', tabh);
             }
 
@@ -446,7 +447,7 @@ function calcolaPremi(sck) {
         s.pagato=Math.floor(s.cartelle.length / 27)*sck.regolam.prezzo
         s.guadagnato=s.vinto-s.pagato
 
-        let prem = { nick: s.nickname, vinto: s.vinti, pagato: s.pagati, guadagnato: s.guadagnati}
+        let prem = { nick: s.nickname, vincite: s.vincite,vinto: s.vinto, pagato: s.pagato, guadagnato: s.guadagnato}
         premi_.push(prem)
 
     });
@@ -459,8 +460,29 @@ function calcolaPremi(sck) {
 function tabpremi(sck) {
 
     let strh = "<table class='tblpremi'>"
-    strh += "<tr><th>nome</th>  <th>tomb</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
+    strh += "<tr><th>nome</th>  <th>tomb</th><th>combinazioni</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
     allClients.filter(c => c.room == sck.room).forEach(s => {
+        strh += "<tr>"
+        strh += "<td>" + s.nickname + "</td>"
+     
+        strh += "<td>" + s.vincite + "</td>"
+        strh += "<td>" + s.vinto + "</td>"
+        strh += "<td>" + s.pagato + "</td>"
+        strh += "<td>" + s.guadagnato + "</td>"
+
+
+    });
+    strh += "</table>"
+
+    return strh
+}
+
+
+function tabpremi2(premi) {
+
+    let strh = "<table class='tblpremi'>"
+    strh += "<tr><th>nome</th>  <th>tomb</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
+   premi.forEach(s => {
         strh += "<tr>"
         strh += "<td>" + s.nickname + "</td>"
      
