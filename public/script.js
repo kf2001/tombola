@@ -126,7 +126,11 @@ function connetti() {
 
 
 
-        app.premitab = msg
+        app.premitab ="<h2>Riepilogo</h2>"+ msg
+
+      
+        status=6
+        app.status = 6
 
 
     });
@@ -614,6 +618,8 @@ function chatm() {
     document.getElementById("inputchat").focus()
 
 }
+
+
 
 
 function sanitizeInput(input) {

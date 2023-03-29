@@ -15,18 +15,8 @@
 
     <div id="app">
 
-        <div>
-            <!-- <div id="menu" v-if="amministratore">
-                <template>
-                    <el-tabs v-model="activeTab" :tab-position="'top'" @tab-click="handleClick">
-                        <el-tab-pane label="Mie" name="Mie"></el-tab-pane>
-                        <el-tab-pane label="User" name="User"></el-tab-pane>
-                        <el-tab-pane label="Tabellone" name="Tabellone"></el-tab-pane>
-                        <el-tab-pane label="Regolamento" name="Regolamento"></el-tab-pane>
-                    </el-tabs>
-                </template>
+        <div v-show="status!=6">
 
-            </div> -->
 
             <div id="tabhtml" v-html="tabhtml">
 
@@ -77,8 +67,8 @@
                         <div id="mchat"></div>
 
                         <div>
-                            <input type="text" value="" v-model="mchat" id="inputchat" @keypress="press"> <el-button
-                                type="success" onclick="chatm()">></el-button>
+                            <input type="text" value="" v-model="mchat" id="inputchat" @keypress="press">
+                            <el-button type="success" onclick="chatm()">></el-button>
                         </div>
                     </div>
                 </div>
@@ -97,14 +87,14 @@
 
             </div>
 
-            <div id="tabpremi" v-html="premitab" v-if="status>=0"></div>
+
 
             <div id="tabcanvas" v-show="amministratore"></div>
 
         </div>
 
         <!-- <div v-if="!loggato" id="Regolamento"> -->
-
+        <div id="tabpremi" v-html="premitab" v-show="status==6"></div>
 
         <div id="regolamento" v-if="!accettato && loggato==true && !amministratore">
 
@@ -159,8 +149,12 @@
 
 
                 <tr>
-                    <td> <el-button type="primary" onclick="Accetto()">Accetto</el-button></td>
-                    <td><el-button type="success" onclick="Rifiuto()">Rinuncio</el-button></td>
+                    <td>
+                        <el-button type="primary" onclick="Accetto()">Accetto</el-button>
+                    </td>
+                    <td>
+                        <el-button type="success" onclick="Rifiuto()">Rinuncio</el-button>
+                    </td>
                 </tr>
 
 
@@ -203,23 +197,23 @@
                                 <el-input v-model="form.join"></el-input>
                             </el-form-item>
 
-                            <div v-if="creajoin==1"> 
+                            <div v-if="creajoin==1">
 
 
-                            <el-form-item label="Cartelle max">
-                                <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
-                            </el-form-item>
+                                <el-form-item label="Cartelle max">
+                                    <el-input-number v-model="form.maxC" :min="1" :max="6"></el-input-number>
+                                </el-form-item>
 
-                            <el-form-item label="Prezzo cartella">
-                                <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
-                            </el-form-item>
+                                <el-form-item label="Prezzo cartella">
+                                    <el-input-number v-model="form.prezzo" :min="1" :max="100"></el-input-number>
+                                </el-form-item>
 
 
-                            <el-form-item label="Automatico">
-                                <el-switch v-model="form.auto"></el-switch>
-                            </el-form-item>
+                                <el-form-item label="Automatico">
+                                    <el-switch v-model="form.auto"></el-switch>
+                                </el-form-item>
 
-</div>
+                            </div>
 
 
                             <!-- </div> -->
@@ -264,79 +258,80 @@
 
 
 
-                        
 
-                        </el-form>  
-                    </div> 
-                </div> <el-button type="primary" onclick="OKRegolam()">OK</el-button>
+
+                        </el-form>
+                    </div>
+                </div>
+                <el-button type="primary" onclick="OKRegolam()">OK</el-button>
             </div>
 
         </div>
     </div>
 
-        <script src="./script.js"></script>
+    <script src="./script.js"></script>
 
 
-        <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-        <!-- import JavaScript -->
-        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
-        <script>
-            var app = new Vue({
-                el: '#app',
-                data: {
-                    message: 'Hello Vue!',
-                    loggato: false,
-                    preloggato: false,
-                    creajoin: "2",
-                    status: -2,
-                    comprate: 0,
-                    amministratore: false,
-                    finecompera: false,
-                    estrai: false,
-                    messaggio: "",
-                    pallina: "",
-                    tabhtml: "",
-                    premitab: "",
-                    labelPosition: "left",
-                    activeTab: "Mie",
-                    accettato: false,
-                    mchat: "",
-                    form: {
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                loggato: false,
+                preloggato: false,
+                creajoin: "2",
+                status: -2,
+                comprate: 0,
+                amministratore: false,
+                finecompera: false,
+                estrai: false,
+                messaggio: "",
+                pallina: "",
+                tabhtml: "",
+                premitab: "",
+                labelPosition: "left",
+                activeTab: "Mie",
+                accettato: false,
+                mchat: "",
+                form: {
 
-                        nick: "",
-                        join: "",
-                        maxC: 2,
-                        prezzo: 3,
-                        auto: false,
-                        ipmult: true,
-                        vincunico: false,
-                        ambo: 1,
-                        terno: 2,
-                        quaterna: 3,
-                        cinquina: 4,
-                        tombola: 10,
-                        tombolino: 5
-                    },
+                    nick: "",
+                    join: "",
+                    maxC: 2,
+                    prezzo: 3,
+                    auto: false,
+                    ipmult: true,
+                    vincunico: false,
+                    ambo: 1,
+                    terno: 2,
+                    quaterna: 3,
+                    cinquina: 4,
+                    tombola: 10,
+                    tombolino: 5
+                },
 
 
 
-                }, methods: {
-                    handleClick(tab, event) {
+            }, methods: {
+                handleClick(tab, event) {
 
-                    },
+                },
 
-                    press(evt) {
+                press(evt) {
 
-                        if (evt.key == "Enter") chatm()
-                    }
-
+                    if (evt.key == "Enter") chatm()
                 }
-            })
+
+            }
+        })
 
 
 
-        </script>
+    </script>
 
 </body>
 
