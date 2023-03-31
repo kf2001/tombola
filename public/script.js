@@ -5,6 +5,8 @@ var socket;
 var myNumber = 0;
 var status = -2
 
+
+
 var myNick = "";
 var Room = "";
 
@@ -32,7 +34,7 @@ var inviatoregolam = false
 
 
 let combinaz = ["", "", "ambo", "terno", "quaterna", "cinquina", "tombola", "tombolino"]
-
+//let lblvia=["Chiudi iscrizioni","Distribuzione Cartelle",  "Via", "Avanti", "Avanti", "Avanti",  "Avanti",  "Avanti", "Riepilogo" ]
 
 
 function InviaRegolamento() {
@@ -44,6 +46,7 @@ function InviaRegolamento() {
 
 function Accetto() {
 
+    app.status=-2
     app.accettato = true
     //   socket.emit("tuttecartelle",{})
 
@@ -55,7 +58,7 @@ function Rifiuto() {
 }
 function OKRegolam() {
 
-
+    app.status=-1
     myNick = app.form.nick
     Room = app.form.join
 
@@ -84,8 +87,7 @@ function OKRegolam() {
 
 function init() {
 
-    //  $(document).attr('title', mynick);
-    document.title = myNick;
+      document.title = myNick;
 }
 
 function connetti() {
@@ -102,7 +104,9 @@ function connetti() {
         status = msg
         app.status = msg
         messaggia("Si va per " + messaggi[status], 0)
-        app.estrai = true
+       
+        app.estrai = true 
+      
 
     });
     socket.on('numero', function (msg) {
@@ -286,7 +290,6 @@ function mostraCartelle(cartelle, colori_, fagg_, mie) {
     if (mie == 1) cont = "mcontainer"
     if (mie == 2) cont = "gcontainer"
 
-    console.log(cont)
 
     if (!document.getElementById(cont)) return;
     document.getElementById(cont).innerHTML = ""
@@ -641,5 +644,5 @@ function tabpremi(premi) {
 }
 
 function sanitizeInput(input) {
-    return input.replaceAll(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
+    return input.replace(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
 }

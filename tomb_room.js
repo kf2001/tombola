@@ -22,6 +22,7 @@ let colori = []
 for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
 
 let vincstr = ["a", "t", "q", "c", "T", "Z"]
+let lblvia=["Chiudi iscrizioni", "Via", "Avanti", "Avanti", "Avanti",  "Avanti",  "Avanti", "Riepilogo" ]
 
 app.use(express.static('./public'));
 
@@ -154,10 +155,7 @@ io.sockets.on('connection', function (socket) {
 
             else {
                 let msgp = calcolaPremi(socket)
-console.log(msgp)
-          
-         //       let tabh = tabpremi(socket)
-              //  let tabh = tabpremi2(msgp)
+
                 io.sockets.in(socket.room).emit('premi', msgp);
             }
 
@@ -594,7 +592,7 @@ function casuale(n) { return Math.floor(n * Math.random()) }
 function arrotonda(n,c){return Math.floor(n*10**c+0.5)/(10**c)}
 
 function sanitizeInput(input) {
-    return input.replaceAll(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
+    return input.replace(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
 }
 //let portc = casuale(50) + 8040
 let portc = 8040
