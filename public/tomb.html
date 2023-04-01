@@ -23,7 +23,7 @@
 
             </div>
 
-            <div v-if="loggato  && accettato" id="container">
+            <div v-if="loggato && accettato" id="container">
 
 
 
@@ -34,16 +34,16 @@
 
                     
 
-                         <div v-if="estrai"> 
+                         <div > 
                         <!-- <div v-if="estrai"> -->
                            
 
-                            <button type="danger" onclick="estraiNumero()" id="cmdEstrai">Estrai Numero</button>
+                            <el-button type="danger" onclick="estraiNumero()" id="cmdEstrai">Estrai Numero</el-button>
 
                         </div>
-                        <div v-if="!estrai"> 
+                        <div > 
                         
-                            <button type="success" onclick="via()" id="cmdVia"></button>
+                            <el-button type="success" onclick="via()" id="cmdVia">Chiudi Iscrizioni</el-button>
 
                         </div>
 
@@ -284,7 +284,7 @@
             el: '#app',
             data: {
                 message: 'Hello Vue!',
-                lblvia: ["Chiudi iscrizioni", "Distribuzione Cartelle", "Via", "Avanti", "Avanti", "Avanti", "Avanti", "Avanti", "Riepilogo"],
+                lblvia: ["Via!", "Avanti", "Avanti", "Avanti","Avanti", "Avanti", "Riepilogo"],
                 loggato: false,
                 preloggato: false,
                 creajoin: "2",
@@ -333,8 +333,28 @@
             }, watch: {
                 'status': function (val, oldVal) {
                    
+                    console.log("status", val, oldVal)
+                document.getElementById("cmdVia").innerText = this.lblvia[status*1+1]
+                },
+                'estrai': function (val, oldVal) {
                    
-                if(  document.getElementById("cmdVia"))    document.getElementById("cmdVia").innerText = this.lblvia[status*1 + 2]
+                   
+               console.log("estrai", val, oldVal)
+             
+               if(val)  {
+                document.getElementById("cmdVia").style.visibility="hidden"
+                document.getElementById("cmdEstrai").style.visibility="visible"
+
+
+               } 
+               else
+               {
+                document.getElementById("cmdVia").style.visibility="visible"
+                document.getElementById("cmdEstrai").style.visibility="hidden"
+
+
+               } 
+
                 }
             }
         })
