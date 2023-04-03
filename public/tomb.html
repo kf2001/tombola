@@ -115,16 +115,7 @@
                     <td>Auto</td>
                     <td><input v-model="form.auto" disabled></input></td>
                 </tr>
-                <!-- <tr>
-                    <td>IP multipli</td>
-                    <td><input v-model="form.ipmult" disabled></input></td>
-                </tr>
-                <tr>
-                    <td>Singola chiamata</td>
-                    <td><input v-model="form.vincunico" disabled></input></td>
-                </tr> -->
-
-
+             
                 <tr>
                     <td>Ambo</td>
                     <td><input v-model="form.ambo" disabled></input></td>
@@ -150,13 +141,18 @@
                     <td><input v-model="form.tombolino" disabled></input></td>
                 </tr>
 
-
+<tr> <td>
+   
+</td>
+<td>
+    
+</td></tr>
                 <tr>
                     <td>
-                        <el-button type="primary" onclick="Accetto()">Accetto</el-button>
+                        <el-button type="primary" round onclick="Accetto()">Accetto</el-button>
                     </td>
                     <td>
-                        <el-button type="success" onclick="Rifiuto()">Rinuncio</el-button>
+                        <el-button type="danger" round onclick="Rifiuto()">Rinuncio</el-button>
                     </td>
                 </tr>
 
@@ -218,8 +214,6 @@
 
                             </div>
 
-
-                            <!-- </div> -->
                         </el-form>
                     </div>
 
@@ -248,17 +242,6 @@
                             <el-form-item label="tombolino">
                                 <el-input-number v-model="form.tombolino" :min="1" :max="100"></el-input-number>
                             </el-form-item>
-
-
-
-                            <!-- <el-form-item label="IP multipli">
-                            <el-switch v-model="form.ipmult"></el-switch>
-                        </el-form-item>
-                        <el-form-item label="Vinc. Unico">
-                            <el-switch v-model="form.vincunico"></el-switch>
-                        </el-form-item> -->
-
-
 
 
 

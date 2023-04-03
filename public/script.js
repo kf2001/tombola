@@ -313,7 +313,7 @@ function mostraCartelle(cartelle, colori_, fagg_, mie) {
 function toHTML(tabella, n, idx, fag, bruc) {
 
 
-    let strh = "<table>"
+    let strh = "<table class='cartelle'>"
 
     for (let r = 0; r < 3; r++) {
         if (bruc[r] == 10)

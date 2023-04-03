@@ -18,8 +18,9 @@ var rooms = []
 var status = []
 var deus = undefined;
 
+
 let colori = []
-for (let c = 0; c < 6; c++)for (let d = 0; d < 6; d++)colori.push(c)
+for (let c = 0; c < 6; c++) colori.push(c)
 
 let vincstr = ["a", "t", "q", "c", "T", "Z"]
 let lblvia=["Chiudi iscrizioni", "Via", "Avanti", "Avanti", "Avanti",  "Avanti",  "Avanti", "Riepilogo" ]
@@ -52,8 +53,7 @@ console.log("started")
 io.sockets.on('connection', function (socket) {
 
 
-    //  if (status > -1) { socket.disconnect(); return }
-
+   
     numero++
     console.log("connesso!!", numero)
     if (allClients.length < maxClients) {
@@ -382,9 +382,7 @@ io.sockets.on('connection', function (socket) {
                 socket.join(socket.joins)
 
                 socket.sockamm.in(socket.room).emit('regolamento',socket.sockamm.regolam );
-                //   if (socket.sockamm.ips.indexOf(socket.ip) > -1 && socket.sockamm.regolam.ipmult == false) socket.disconnect();
-                //                socket.sockamm.ips.push(socket.ip)
-
+          
 
             }
 
@@ -455,46 +453,7 @@ function calcolaPremi(sck) {
 
 }
 
-// function tabpremi(sck) {
 
-//     let strh = "<table class='tblpremi'>"
-//     strh += "<tr><th>nome</th>  <th>tomb</th><th>combinazioni</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
-//     allClients.filter(c => c.room == sck.room).forEach(s => {
-//         strh += "<tr>"
-//         strh += "<td>" + s.nickname + "</td>"
-     
-//         strh += "<td>" + s.vincite + "</td>"
-//         strh += "<td>" + s.vinto + "</td>"
-//         strh += "<td>" + s.pagato + "</td>"
-//         strh += "<td>" + s.guadagnato + "</td>"
-
-
-//     });
-//     strh += "</table>"
-
-//     return strh
-// }
-
-
-// function tabpremi2(premi) {
-
-//     let strh = "<table class='tblpremi'>"
-//     strh += "<tr><th>nome</th>  <th>tomb</th><th>vinti</th><th>pagati</th><th>guadagno</th>  "
-//    premi.forEach(s => {
-//         strh += "<tr>"
-//         strh += "<td>" + s.nickname + "</td>"
-     
-//         strh += "<td>" + s.vincite + "</td>"
-//         strh += "<td>" + s.vinto + "</td>"
-//         strh += "<td>" + s.pagato + "</td>"
-//         strh += "<td>" + s.guadagnato + "</td>"
-
-
-//     });
-//     strh += "</table>"
-
-//     return strh
-// }
 
 function monitor() {
 
@@ -530,7 +489,7 @@ function stanze() {
 
 
     let strh = "<table class='tbl'>"
-    strh += "<tr><th>room</th> <th> ammin.</th></tr> "
+    strh += "<tr><th>admin</th> <th> room</th></tr> "
     rooms_.forEach(r => {
 
 
