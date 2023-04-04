@@ -23,7 +23,7 @@ let colori = []
 for (let c = 0; c < 6; c++) colori.push(c)
 
 let vincstr = ["a", "t", "q", "c", "T", "Z"]
-let lblvia=["Chiudi iscrizioni", "Via", "Avanti", "Avanti", "Avanti",  "Avanti",  "Avanti", "Riepilogo" ]
+let lblvia = ["Chiudi iscrizioni", "Via", "Avanti", "Avanti", "Avanti", "Avanti", "Avanti", "Riepilogo"]
 
 app.use(express.static('./public'));
 
@@ -53,7 +53,7 @@ console.log("started")
 io.sockets.on('connection', function (socket) {
 
 
-   
+
     numero++
     console.log("connesso!!", numero)
     if (allClients.length < maxClients) {
@@ -85,7 +85,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('chiama', function (msg) {
 
-           
+
             let comb = status[socket.room] * 1 + 2
 
             if (verifica(comb, socket)) {
@@ -94,7 +94,7 @@ io.sockets.on('connection', function (socket) {
                 if (socket.sockamm.combfatte[status[socket.room]] == false) {
 
                     socket.sockamm.vincitori++
-                    io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname , primo:socket.sockamm.vincitori});
+                    io.sockets.in(socket.room).emit("combinaz", { comb: msg, nick: socket.nickname, primo: socket.sockamm.vincitori });
 
                     socket.vincite += vincstr[status[socket.room]]
 
@@ -149,9 +149,9 @@ io.sockets.on('connection', function (socket) {
             if (socket.id != socket.sockamm.id) return;
 
             status[socket.room]++
-            socket.vincitori=0
+            socket.vincitori = 0
 
-          
+
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
 
             else {
@@ -166,12 +166,12 @@ io.sockets.on('connection', function (socket) {
         socket.on('chatm', function (msg) {
 
             //sanitize !!!
-            msg.messaggio=sanitizeInput(msg.messaggio).trim().substr(0,22)
-            
+            msg.messaggio = sanitizeInput(msg.messaggio).trim().substr(0, 22)
 
-            if(socket.chatenable)
 
-            io.sockets.in(socket.room).emit('chatm', msg);
+            if (socket.chatenable)
+
+                io.sockets.in(socket.room).emit('chatm', msg);
 
 
         });
@@ -188,7 +188,7 @@ io.sockets.on('connection', function (socket) {
             if (socket.id != socket.sockamm.id) return;
 
             io.sockets.in(socket.room).emit('tuttecartelle', { cartelle: socket.sockamm.tuttecartelle, colori: socket.sockamm.tutticolori });
-            status[socket.room]=-1
+            status[socket.room] = -1
 
         });
 
@@ -212,9 +212,12 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('tabella', function () {
 
+            let manc=mancanti()
+
             let strh = "<table class='tbl'>"
             strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th>  "
             allClients.filter(x => x.room == socket.room).forEach(function (s, idx) {
+             //   let manc=mancanti(s)
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
                 strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
@@ -222,6 +225,7 @@ io.sockets.on('connection', function (socket) {
                 strh += "<td>" + s.vincite + "</td>"
                 strh += "<td>" + s.ip.replace(/f/g, "").replace(/:/g, ""); + "</td>"
                 strh += "<td>" + s.chatenable + "</td>"
+           //     strh += "<td>" + mancanti.join("-") + "</td>"
 
 
                 strh += "<td><button onclick=\"disconn('" + s.id + "')\">Disconnetti</button></td>"
@@ -275,9 +279,9 @@ io.sockets.on('connection', function (socket) {
             if (socket.id != socket.sockamm.id) return;
 
 
-           // io.sockets.in(socket.room).emit('regolamento', msg);
+            // io.sockets.in(socket.room).emit('regolamento', msg);
 
-           
+
             socket.regolam = msg;
 
             status[socket.room] = -1
@@ -285,16 +289,14 @@ io.sockets.on('connection', function (socket) {
         });
 
 
-        socket.on('setregolamento', function (msg) 
-
-        {
+        socket.on('setregolamento', function (msg) {
 
             if (socket.id != socket.sockamm.id) return;
-            
-                  socket.regolam=msg
 
-                  console.log(socket.regolam)
-                  console.log("quiiiii")
+            socket.regolam = msg
+
+            console.log(socket.regolam)
+            console.log("quiiiii")
 
 
         });
@@ -346,8 +348,8 @@ io.sockets.on('connection', function (socket) {
                 socket.room = room
                 sockamm[room] = socket;
                 socket.sockamm = socket
-                socket.vincitori=0
-             
+                socket.vincitori = 0
+
                 socket.ips = []
                 status[socket.room] = -2
                 socket.combfatte = [false, false, false, false, false, false]
@@ -374,7 +376,7 @@ io.sockets.on('connection', function (socket) {
 
             } else {
 
-                if (rooms.indexOf(socket.joins) < 0) {socket.disconnect();return;}
+                if (rooms.indexOf(socket.joins) < 0) { socket.disconnect(); return; }
 
                 socket.amministratore = 0
 
@@ -382,8 +384,8 @@ io.sockets.on('connection', function (socket) {
                 socket.room = socket.joins
                 socket.join(socket.joins)
 
-                socket.sockamm.in(socket.room).emit('regolamento',socket.sockamm.regolam );
-          
+                socket.sockamm.in(socket.room).emit('regolamento', socket.sockamm.regolam);
+
 
             }
 
@@ -415,7 +417,7 @@ function calcolaPremi(sck) {
     let fatti = [0, 0, 0, 0, 0, 0]
     let premi_ = []
 
-    let premi = [sck.regolam.ambo, sck.regolam.terno,sck.regolam.quaterna, sck.regolam.cinquina, sck.regolam.tombola, sck.regolam.tombolino]
+    let premi = [sck.regolam.ambo, sck.regolam.terno, sck.regolam.quaterna, sck.regolam.cinquina, sck.regolam.tombola, sck.regolam.tombolino]
 
 
     let sump = premi.reduce((a, b) => a + b, 0);
@@ -440,11 +442,11 @@ function calcolaPremi(sck) {
         for (let v = 0; v < 6; v++)
             if (s.vincite.indexOf(vincstr[v]) > -1) guad += valore[v]
 
-        s.vinto = arrotonda(guad / sump,2);
-        s.pagato=Math.floor(s.cartelle.length / 27)*sck.regolam.prezzo
-        s.guadagnato= arrotonda(s.vinto-s.pagato,2)
+        s.vinto = arrotonda(guad / sump, 2);
+        s.pagato = Math.floor(s.cartelle.length / 27) * sck.regolam.prezzo
+        s.guadagnato = arrotonda(s.vinto - s.pagato, 2)
 
-        let prem = { nick: s.nickname, vincite: s.vincite,vinto: s.vinto, pagato: s.pagato, guadagnato: s.guadagnato}
+        let prem = { nick: s.nickname, vincite: s.vincite, vinto: s.vinto, pagato: s.pagato, guadagnato: s.guadagnato }
         premi_.push(prem)
 
     });
@@ -518,7 +520,7 @@ function verifica(comb, sck) {
     sck.cartelle.forEach((c, idx) => {
 
 
-       
+
         let riga = Math.floor((idx % 27) / 9)
         let cart = Math.floor((idx / 27))
         riga += 3 * cart
@@ -527,7 +529,7 @@ function verifica(comb, sck) {
         if (c > 0 && sck.fagioli[idx] == 1) {
             righe[riga]++
             fag[cart]++
-          
+
         }
 
 
@@ -548,8 +550,44 @@ function verifica(comb, sck) {
 
 }
 
+function mancanti(sck) {
+
+    console.log(sck)
+    console.log(33333)
+   
+if (sck.cartelle==undefined) return [0]
+
+    let righe = new Array(Math.floor(sck.cartelle.length / 27) * 3).fill(0);
+
+    let fag = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    sck.cartelle.forEach((c, idx) => {
+
+        let riga = Math.floor((idx % 27) / 9)
+        let cart = Math.floor((idx / 27))
+        riga += 3 * cart
+
+
+        if (c > 0 && sck.fagioli[idx] == 1) {
+            righe[riga]++
+            fag[cart]++
+
+        }
+
+
+    })
+
+
+    let manc = new Array(Math.floor(sck.cartelle.length / 27)).fill(15);
+
+    for (let r = 0; r < manc.length; r++) manc[r] = 15 - fag[r]
+
+
+    return [...manc]
+
+}
+
 function casuale(n) { return Math.floor(n * Math.random()) }
-function arrotonda(n,c){return Math.floor(n*10**c+0.5)/(10**c)}
+function arrotonda(n, c) { return Math.floor(n * 10 ** c + 0.5) / (10 ** c) }
 
 function sanitizeInput(input) {
     return input.replace(/[&/\\#,+()$~%.^'":*?<>{}]/g, "");
