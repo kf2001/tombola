@@ -640,7 +640,7 @@ function tabpremi(premi) {
         strh += "<td>" + s.vincite + "</td>"
         strh += "<td>" + s.vinto + "</td>"
         strh += "<td>" + s.pagato + "</td>"
-        strh += "<td>" + s.guadagnato + "</td>"
+       s.guadagnato>=0? strh += "<td class='green'>" + s.guadagnato + "</td>":strh += "<td class='red'>" + s.guadagnato + "</td>"
 
 
     });

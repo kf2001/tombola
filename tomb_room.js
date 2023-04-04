@@ -151,8 +151,7 @@ io.sockets.on('connection', function (socket) {
             status[socket.room]++
             socket.vincitori=0
 
-            console.log(8888)
-
+          
             if (status[socket.room] < 6) io.sockets.in(socket.room).emit('start', status[socket.room]);
 
             else {

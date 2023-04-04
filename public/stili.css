@@ -194,28 +194,6 @@ label {
 
 }
 
-
-#tcontainer, #mcontainer table {
-    /* border: 2px solid gray; */
-  
-    border-collapse: collapse !important;
-    margin: 10px
-}
-
-td {
-
-    color: #303030;
-    font-weight: bolder;
-    font-size: 1.5em;
-    width: 1.8em !important;
-    height: 1.8em !important;
-    border: 2px solid black !important;
-    text-align: center;
-    vertical-align: middle;
-   
-
-}
-
 .tbl td {
 
     color: #303030;
@@ -229,6 +207,29 @@ td {
 
 }
 
+.tblpremi {
+
+   border: 2px solid gray;
+   border-collapse: collapse;
+    color: #303030;
+}
+
+.tblpremi td {
+
+
+    font-weight: bold;
+    font-size: 1.3em;
+
+    height: 1.5em;
+    /* border: 1px solid green; */
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid gray;
+    padding:1em;
+
+}
+
+
 #regolamento {
     width: fit-content;
     height: fit-content;
@@ -240,6 +241,21 @@ td {
     padding: 40px;
 
 
+
+}
+
+.cartelle {border-collapse: collapse; margin: 10px}
+.cartelle td {
+
+    color: #303030;
+    font-weight: bolder;
+    font-size: 1.5em;
+    width: 1.8em !important;
+    height: 1.8em !important;
+    border: 2px solid black !important;
+    text-align: center;
+    vertical-align: middle;
+   
 
 }
 
@@ -262,6 +278,17 @@ border:none !important;
     font-size: 1.5em;
     height: 1.8em;
     padding: 0 1em;
+ }
+
+ .red {
+
+    color: red;
+    font-weight: 800;
+ }
+ .green {
+
+    color:green;
+    font-weight: 800;
  }
 
 .back0 {
