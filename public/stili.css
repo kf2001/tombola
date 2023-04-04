@@ -173,7 +173,7 @@ label {
 }
 
 #tabhtml table {
-    border: 2px solid gray;
+    /* border: 2px solid gray; */
 
     border-collapse: collapse;
     margin: 10px
@@ -190,13 +190,13 @@ label {
     border: 2px solid black;
     text-align: center;
     vertical-align: middle;
-   padding: 0.6em; 
+   padding: 0.6em;
 
 }
 
 
 #tcontainer, #mcontainer table {
-    border: 2px solid gray;
+    /* border: 2px solid gray; */
   
     border-collapse: collapse !important;
     margin: 10px

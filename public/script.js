@@ -47,6 +47,7 @@ function InviaRegolamento() {
 function Accetto() {
 
     app.status=-2
+    status=-2
     app.accettato = true
     //   socket.emit("tuttecartelle",{})
 
@@ -58,7 +59,8 @@ function Rifiuto() {
 }
 function OKRegolam() {
 
-    app.status=-1
+    app.status=-2
+    status=-2
     myNick = app.form.nick
     Room = app.form.join
 
@@ -100,6 +102,7 @@ function connetti() {
 
     socket.on('start', function (msg) {
 
+        console.log("9999999")
         app.finecompera = true
         status = msg
         app.status = msg
@@ -141,8 +144,8 @@ function connetti() {
 
     socket.on('regolamento', function (msg) {
 
-        status = -1
-        app.status = -1
+        status = -2
+        app.status = -2
         regolam = msg
 
         app.loggato = true
@@ -181,6 +184,7 @@ function connetti() {
 
 
         mostraCartelle(msg.cartelle, msg.colori, new Array(36 * 27).fill(0), 0)
+        app.status=-1
 
 
     });
@@ -498,9 +502,11 @@ function compra(num) {
 function via() {
 
 
-    if (status == -2) {socket.emit("tuttecartelle", {});status=-1}
+
+
+    if (app.status == -2) {socket.emit("tuttecartelle", {});}
    //  socket.emit("regolamento", regolam); else
-    else  socket.emit("via", status)
+    else  socket.emit("via", {})
 
 
 }

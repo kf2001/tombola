@@ -32,17 +32,17 @@
 
                     <div id="buttons">
 
-                    
 
-                         <div > 
-                        <!-- <div v-if="estrai"> -->
-                           
+
+                        <div>
+                            <!-- <div v-if="estrai"> -->
+
 
                             <el-button type="danger" onclick="estraiNumero()" id="cmdEstrai">Estrai Numero</el-button>
 
                         </div>
-                        <div > 
-                        
+                        <div>
+
                             <el-button type="success" onclick="via()" id="cmdVia">Chiudi Iscrizioni</el-button>
 
                         </div>
@@ -115,7 +115,7 @@
                     <td>Auto</td>
                     <td><input v-model="form.auto" disabled></input></td>
                 </tr>
-             
+
                 <tr>
                     <td>Ambo</td>
                     <td><input v-model="form.ambo" disabled></input></td>
@@ -141,12 +141,14 @@
                     <td><input v-model="form.tombolino" disabled></input></td>
                 </tr>
 
-<tr> <td>
-   
-</td>
-<td>
-    
-</td></tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <el-button type="primary" round onclick="Accetto()">Accetto</el-button>
@@ -267,7 +269,7 @@
             el: '#app',
             data: {
                 message: 'Hello Vue!',
-                lblvia: ["Via!", "Avanti", "Avanti", "Avanti","Avanti", "Avanti", "Riepilogo"],
+                lblvia: ["Via!", "Avanti", "Avanti", "Avanti", "Avanti", "Avanti", "Riepilogo"],
                 loggato: false,
                 preloggato: false,
                 creajoin: "2",
@@ -315,28 +317,27 @@
 
             }, watch: {
                 'status': function (val, oldVal) {
-                   
+
                     console.log("status", val, oldVal)
-                document.getElementById("cmdVia").innerText = this.lblvia[status*1+1]
+                    document.getElementById("cmdVia").innerText = this.lblvia[this.status * 1 + 1]
                 },
                 'estrai': function (val, oldVal) {
-                   
-                   
-               console.log("estrai", val, oldVal)
-             
-               if(val)  {
-                document.getElementById("cmdVia").style.visibility="hidden"
-                document.getElementById("cmdEstrai").style.visibility="visible"
 
 
-               } 
-               else
-               {
-                document.getElementById("cmdVia").style.visibility="visible"
-                document.getElementById("cmdEstrai").style.visibility="hidden"
+                    console.log("estrai", val, oldVal)
+
+                    if (val) {
+                        document.getElementById("cmdVia").style.visibility = "hidden"
+                        document.getElementById("cmdEstrai").style.visibility = "visible"
 
 
-               } 
+                    }
+                    else {
+                        document.getElementById("cmdVia").style.visibility = "visible"
+                        document.getElementById("cmdEstrai").style.visibility = "hidden"
+
+
+                    }
 
                 }
             }
