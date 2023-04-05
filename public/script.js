@@ -102,7 +102,7 @@ function connetti() {
 
     socket.on('start', function (msg) {
 
-        console.log("9999999")
+      
         app.finecompera = true
         status = msg
         app.status = msg
@@ -344,13 +344,13 @@ function toHTML(tabella, n, idx, fag, bruc) {
 
 
 
-function tessera(num) {
+function tessera_(num) {
 
 
     var canvas = document.createElement('canvas');
 
-    canvas.width = "100";
-    canvas.height = "100";
+    canvas.width = "120";
+    canvas.height = "120";
 
 
     canvas.style.zIndex = 8;
@@ -360,15 +360,16 @@ function tessera(num) {
 
     var ctx = canvas.getContext("2d");
 
-    let lato = 7 * 100 / 16
+    let lato = 7 * canvas.width / 16
     ctx.beginPath()
     ctx.fillStyle = "red";
     ctx.strokeStyle = "#cc0000"
     ctx.lineWidth = lato / 3
 
-    ctx.ellipse(100 - 50, 100 - 50, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+    ctx.ellipse(canvas.width - canvas.width/2, canvas.width - canvas.width/2, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke()
-
+    ctx.ellipse(canvas.width - canvas.width/2, canvas.width - canvas.width/2, lato * 1.2, lato * 1.2, 0, 0, 2 * Math.PI)
+    ctx.stroke()
 
     ctx.fill()
 
@@ -381,10 +382,62 @@ function tessera(num) {
     ctx.font = "bold 32px mono";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.fillText(num, 100 - 50, 100 - 50)
+    ctx.fillText(num,canvas.width/2, canvas.width/2)
 
     document.getElementById("estratta").innerHTML = "";
     document.getElementById("estratta").appendChild(canvas);
+
+
+
+
+}
+
+function tessera(num) {
+
+
+    var canvas = document.createElement('canvas');
+
+    canvas.width = 120;
+    canvas.height = 120;
+
+    colore = "#cc0000"
+
+    canvas.style.zIndex = 8;
+
+    canvas.style.border = "0px solid";
+
+
+    var ctx = canvas.getContext("2d");
+
+    let lato = 6 * canvas.width / 16
+    ctx.beginPath()
+
+    ctx.strokeStyle = colore
+    ctx.lineWidth = lato / 6
+
+    ctx.ellipse(canvas.width - canvas.width / 2, canvas.width - canvas.width / 2, lato * 1.0, lato * 1.0, 0, 0, 2 * Math.PI)
+    ctx.fillStyle = "beige";
+
+    ctx.fill()
+    ctx.stroke()
+
+    ctx.beginPath()
+    ctx.strokeStyle = colore
+    ctx.lineWidth = lato / 12
+    ctx.ellipse(canvas.width - canvas.width / 2, canvas.width - canvas.width / 2, lato * 0.8, lato * 0.8, 0, 0, 2 * Math.PI)
+    ctx.stroke()
+
+    ctx.fillStyle = colore;
+
+    ctx.font = "bold 48px helvetica, arial, sans-serif";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.lineWidth = lato / 12
+    ctx.strokeText(num, canvas.width / 2, canvas.width / 2)
+
+    document.getElementById("estratta").innerHTML = "";
+    document.getElementById("estratta").appendChild(canvas);
+
 
 
 }
@@ -402,6 +455,8 @@ function disegna_tessera(ctx, x, y, lato, num) {
     ctx.lineWidth = lato / 3
 
     ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
+    ctx.stroke()
+    ctx.ellipse(x, y, lato * 1.0, lato * 1.0, 0, 0, 2 * Math.PI)
     ctx.stroke()
 
 
@@ -425,8 +480,6 @@ function disegna_tessera(ctx, x, y, lato, num) {
 
 
 function tabellone(estratte_) {
-
-
 
 
     if (estratte_.length == 0) return;
