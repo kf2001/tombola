@@ -212,7 +212,7 @@ io.sockets.on('connection', function (socket) {
 
         socket.on('tabella', function () {
 
-            let manc=mancanti()
+      //      let manc=mancanti()
 
             let strh = "<table class='tbl'>"
             strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th>  "
@@ -551,6 +551,8 @@ function verifica(comb, sck) {
 }
 
 function mancanti(sck) {
+
+    return
 
     console.log(sck)
     console.log(33333)
