@@ -7,7 +7,8 @@ const md5_ = require("./md5.js").md5
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
 
-const fs = require("fs")
+const fs = require("fs");
+const { SocketAddress } = require("net");
 var amministratore = []
 
 var allClients = [];
@@ -215,9 +216,9 @@ io.sockets.on('connection', function (socket) {
       //      let manc=mancanti()
 
             let strh = "<table class='tbl'>"
-            strh += "<tr><th>nome</th> <th>cartelle</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th>  "
+            strh += "<tr><th>nome</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th> <th>mancanti</th> "
             allClients.filter(x => x.room == socket.room).forEach(function (s, idx) {
-             //   let manc=mancanti(s)
+           
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
                 strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
@@ -225,12 +226,12 @@ io.sockets.on('connection', function (socket) {
                 strh += "<td>" + s.vincite + "</td>"
                 strh += "<td>" + s.ip.replace(/f/g, "").replace(/:/g, ""); + "</td>"
                 strh += "<td>" + s.chatenable + "</td>"
-           //     strh += "<td>" + mancanti.join("-") + "</td>"
+              strh += "<td>" + s.mancanti.join(" ") + "</td>"
 
 
-                strh += "<td><button onclick=\"disconn('" + s.id + "')\">Disconnetti</button></td>"
-                strh += "<td><button onclick=\"chat('" + s.id + "')\">Toggle chat</button></td>"
-                strh += "<td><button onclick=\"cartgioc('" + s.id + "')\">Cartelle</button></td>"
+                strh += "<td><button class='btn btn-secondary' onclick=\"disconn('" + s.id + "')\">Disconnetti</button></td>"
+                strh += "<td><button class='btn btn-danger' onclick=\"chat('" + s.id + "')\">Toggle chat</button></td>"
+               // strh += "<td><button onclick=\"cartgioc('" + s.id + "')\">Cartelle</button></td>"
             });
             strh += "</table>"
 
@@ -270,6 +271,7 @@ io.sockets.on('connection', function (socket) {
         socket.on('fagioli', function (msg) {
 
             socket.fagioli = [...msg]
+            socket.mancanti=mancanti(socket)
 
         });
 
@@ -329,7 +331,7 @@ io.sockets.on('connection', function (socket) {
             socket.colori = []
             socket.rbruc = new Array(20).fill(0)
             socket.tbruc = new Array(12).fill(0)
-
+socket.mancanti=[0,0,0]
             socket.chatenable = true
             socket.vincite = ""
             socket.guadagno = 0
@@ -552,10 +554,7 @@ function verifica(comb, sck) {
 
 function mancanti(sck) {
 
-    return
 
-    console.log(sck)
-    console.log(33333)
    
 if (sck.cartelle==undefined) return [0]
 
