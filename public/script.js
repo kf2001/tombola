@@ -106,7 +106,8 @@ function connetti() {
         app.finecompera = true
         status = msg
         app.status = msg
-        messaggia("Si va per " + messaggi[status], 0)
+        messaggia("Si va per " + messaggi[app.status], 0)
+        document.getElementById("estratta").innerHTML = "";
        
         app.estrai = true 
       
@@ -343,64 +344,17 @@ function toHTML(tabella, n, idx, fag, bruc) {
 }
 
 
-
-function tessera_(num) {
-
-
-    var canvas = document.createElement('canvas');
-
-    canvas.width = "120";
-    canvas.height = "120";
-
-
-    canvas.style.zIndex = 8;
-    // canvas.style.position = "absolute";
-    canvas.style.border = "0px solid";
-
-
-    var ctx = canvas.getContext("2d");
-
-    let lato = 7 * canvas.width / 16
-    ctx.beginPath()
-    ctx.fillStyle = "red";
-    ctx.strokeStyle = "#cc0000"
-    ctx.lineWidth = lato / 3
-
-    ctx.ellipse(canvas.width - canvas.width/2, canvas.width - canvas.width/2, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
-    ctx.stroke()
-    ctx.ellipse(canvas.width - canvas.width/2, canvas.width - canvas.width/2, lato * 1.2, lato * 1.2, 0, 0, 2 * Math.PI)
-    ctx.stroke()
-
-    ctx.fill()
-
-    ctx.fillStyle = "beige";
-
-    ctx.fill()
-
-    ctx.fillStyle = "#cc0000";
-
-    ctx.font = "bold 32px mono";
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-    ctx.fillText(num,canvas.width/2, canvas.width/2)
-
-    document.getElementById("estratta").innerHTML = "";
-    document.getElementById("estratta").appendChild(canvas);
-
-
-
-
-}
+ù
 
 function tessera(num) {
 
 
     var canvas = document.createElement('canvas');
 
-    canvas.width = 120;
-    canvas.height = 120;
+    canvas.width = 160;
+    canvas.height = 160;
 
-    colore = "#cc0000"
+   let  colore = "#cc0000"
 
     canvas.style.zIndex = 8;
 
@@ -444,10 +398,46 @@ function tessera(num) {
 
 
 
+function disegna_tessera__(ctx, x, y, lato, num) {
+
+    let  colore = "#cc0000"
+
+    lato = 6 * lato / 16
+ 
+ 
+    ctx.beginPath()
+
+    ctx.strokeStyle = colore
+    ctx.lineWidth = lato / 6
+
+    ctx.ellipse(x, y, lato * 1.0, lato * 1.0, 0, 0, 2 * Math.PI)
+    ctx.fillStyle = "beige";
+
+    ctx.fill()
+    ctx.stroke()
+
+    // ctx.beginPath()
+    // ctx.strokeStyle = colore
+    // ctx.lineWidth = lato / 12
+    // ctx.ellipse(x,y, lato * 0.8, lato * 0.8, 0, 0, 2 * Math.PI)
+    // ctx.stroke()
+
+    ctx.fillStyle = colore;
+
+    ctx.font = "bold 32px helvetica, arial, sans-serif";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.lineWidth = lato / 12
+    ctx.fillText(num,x, y)
+
+
+}
+
+
 function disegna_tessera(ctx, x, y, lato, num) {
 
 
-    var canvas = document.createElement('canvas');
+
     lato = 7 * lato / 16
     ctx.beginPath()
     ctx.fillStyle = "red";
@@ -456,8 +446,8 @@ function disegna_tessera(ctx, x, y, lato, num) {
 
     ctx.ellipse(x, y, lato * .8, lato * .8, 0, 0, 2 * Math.PI)
     ctx.stroke()
-    ctx.ellipse(x, y, lato * 1.0, lato * 1.0, 0, 0, 2 * Math.PI)
-    ctx.stroke()
+    // ctx.ellipse(x, y, lato * 1.0, lato * 1.0, 0, 0, 2 * Math.PI)
+    // ctx.stroke()
 
 
     ctx.fill()
