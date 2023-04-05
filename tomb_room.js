@@ -216,21 +216,24 @@ io.sockets.on('connection', function (socket) {
       //      let manc=mancanti()
 
             let strh = "<table class='tbl'>"
-            strh += "<tr><th>nome</th><th>id</th> <th>vincite</th><th>ip</th><th>chat</th> <th>mancanti</th> "
+            strh += "<tr><th>nome</th><th>id</th><th>cartelle</th> <th>vincite</th><th>ip</th><th>chat</th> <th>mancanti</th> "
             allClients.filter(x => x.room == socket.room).forEach(function (s, idx) {
            
                 strh += "<tr>"
                 strh += "<td>" + s.nickname + "</td>"
+                  strh += "<td>" + s.id.substr(0, 5) + "</td>"
                 strh += "<td>" + Math.floor(s.cartelle.length / 27) + "</td>"
-                strh += "<td>" + s.id.substr(0, 5) + "</td>"
+              
                 strh += "<td>" + s.vincite + "</td>"
                 strh += "<td>" + s.ip.replace(/f/g, "").replace(/:/g, ""); + "</td>"
-                strh += "<td>" + s.chatenable + "</td>"
+              s.chatenable? strh += "<td class='green'>SI</td>":strh += "<td class='red'>NO</td>"
+
+                //strh += "<td>" +( s.chatenable?'SI':'NO') + "</td>"
               strh += "<td>" + s.mancanti.join(" ") + "</td>"
 
 
                 strh += "<td><button class='btn btn-secondary' onclick=\"disconn('" + s.id + "')\">Disconnetti</button></td>"
-                strh += "<td><button class='btn btn-danger' onclick=\"chat('" + s.id + "')\">Toggle chat</button></td>"
+                strh += "<td><button class='btn btn-info' onclick=\"chat('" + s.id + "')\">Toggle Chat</button></td>"
                // strh += "<td><button onclick=\"cartgioc('" + s.id + "')\">Cartelle</button></td>"
             });
             strh += "</table>"
